@@ -95,6 +95,24 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!--mybatis generator-->
+            <!--<plugin>-->
+                <!--<groupId>org.mybatis.generator</groupId>-->
+                <!--<artifactId>mybatis-generator-maven-plugin</artifactId>-->
+                <!--<version>1.3.6</version>-->
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; 是否覆盖，true表示会替换生成的JAVA文件，false则不覆盖 &ndash;&gt;-->
+                    <!--<overwrite>true</overwrite>-->
+                <!--</configuration>-->
+                <!--<dependencies>-->
+                    <!--&lt;!&ndash;mysql驱动包&ndash;&gt;-->
+                    <!--<dependency>-->
+                        <!--<groupId>mysql</groupId>-->
+                        <!--<artifactId>mysql-connector-java</artifactId>-->
+                        <!--<version>5.1.45</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 
