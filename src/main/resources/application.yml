@@ -1,5 +1,7 @@
 server:
   port: 8888
+#  servlet:
+#    context-path: /cams
 #spring
 spring:
   datasource:
@@ -8,11 +10,21 @@ spring:
     url: jdbc:mysql://localhost:3306/cams?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
     username: root
     password: 1009
+    type: com.alibaba.druid.pool.DruidDataSource
+      #druid setting
+    druid:
+      filter: stat
+      #other info
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      #wait time
+      max-wait: 60000
 
 #mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.springboot.domain
+  type-aliases-package: com.springboot.demo.entity
 
 #mybaatis分页插件pagehelper设置
 pagehelper:
