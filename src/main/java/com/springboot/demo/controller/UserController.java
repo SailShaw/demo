@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
  * Create By SINYA
  * Create Date 2019/2/27
- * Description:
+ * Description: Controller For User
  */
 
 @RestController
@@ -25,7 +26,11 @@ public class UserController {
     @Resource
     private IUserService userService;
 
-
+    /**
+     * 根据账号获取用户信息
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "/getUserByAccount",method = RequestMethod.GET)
 
     public List<User> getUserByAccount(User user){
@@ -33,26 +38,53 @@ public class UserController {
         return resultList;
     }
 
+    /**
+     * 获取所有用户信息
+     * @return
+     */
     @RequestMapping(value = "/getAllUserInfo",method = RequestMethod.GET)
     public List<User> getAllUserInfo(){
         List<User> list = userService.getAllUserInfo();
         return list;
     }
 
-    @RequestMapping(value = "/createUser",method = RequestMethod.GET)
-    public void createUser(User user){
-        userService.addUser(user);
+    /**
+     * 注册
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/createUser")
+    public String createUser(User user){
+        userService.createUser(user);
+        return "test";
     }
 
-    @RequestMapping(value = "/updateUser",method = RequestMethod.GET)
-    public void updateUser(User user){
+    /**
+     * 根据账号修改用户信息
+     * @param user
+     */
+    @RequestMapping(value = "/updateUser",method = RequestMethod.POST)
+     public void updateUser(User user){
         userService.updateUser(user);
     }
 
-    @RequestMapping(value = "/deleteUser",method = RequestMethod.GET)
+    /**
+     * 删除用户
+     * @param id
+     */
+    @RequestMapping(value = "/deleteUser",method = RequestMethod.POST)
     public void deleteUser(String id){
         userService.deleteUser(id);
     }
 
+    /**
+     * 获取邮箱发送重置密码链接以及验证码
+     */
+
+    @RequestMapping(value = "/modifyPasswordByEmail",method = RequestMethod.POST)
+    public void modifyPasswordByEmail(User user){
+
+//        userService.ModifyPassWordByEmail(user);
+    }
 
 }

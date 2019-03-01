@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Create By SINYA
  * Create Date 2019/2/27
- * Description:
+ * Description: Mapper For User
  */
 
 @Mapper
@@ -23,7 +23,7 @@ public interface UserMapper {
     List<User> getAllUserInfo();
 
     //添加
-    void addUser(User user);
+    void createUser(User user);
 
     //更新
     void updateUser(User user);

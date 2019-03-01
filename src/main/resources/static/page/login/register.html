@@ -18,6 +18,8 @@
   <!-- Custom styles for this template-->
   <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
+  <script src="../../js/common.js"></script>
+
 </head>
 
 <body class="bg-gradient-primary">
@@ -35,31 +37,28 @@
                 <h1 class="h4 text-gray-900 mb-4">注册一个账户!</h1>
               </div>
               <form class="user">
-                <div class="form-group">
+                <!--<div class="form-group">
                   <input type="text" class="form-control form-control-user" id="account" placeholder="Enter Your Account">
-                </div>
-                <!--<div class="form-group row">
+                </div>-->
+                <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="text" class="form-control form-control-user" id="exampleFirstName" placeholder="First Name">
+                    <input type="text" class="form-control form-control-user" id="account" placeholder="Enter Your Account">
                   </div>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Last Name">
+                    <input type="text" class="form-control form-control-user" id="group_desc" placeholder="Enter Your Group Desc">
                   </div>
-                </div>-->
+                </div>
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-user" id="exampleInputEmail" placeholder="Email Address">
+                  <input type="email" class="form-control form-control-user" id="email" placeholder="Enter Your Email Address">
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+                    <input type="password" class="form-control form-control-user" id="passcode" placeholder="Enter Your Password">
                   </div>
-                  <div class="col-sm-6">
-                    <input type="password" class="form-control form-control-user" id="exampleRepeatPassword" placeholder="Repeat Password">
-                  </div>
+                  <!--<div class="col-sm-6">
+                    <input type="password" class="form-control form-control-user" id="repeat-password" placeholder="Enter Your Repeat Password">
+                  </div>-->
                 </div>
-                <a href="login.html" class="btn btn-primary btn-user btn-block">
-                  注册
-                </a>
                 <!--<hr>
                 <a href="../index.html" class="btn btn-google btn-user btn-block">
                   <i class="fab fa-google fa-fw"></i> Register with Google
@@ -68,6 +67,10 @@
                   <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
                 </a>-->
               </form>
+              <!--按钮带有onclick,不能放在form表单内，否则会影响请求的传递-->
+              <button onclick="register()" class="btn btn-primary btn-user btn-block">
+                注册
+              </button>
 
               <hr>
               <div class="text-center">
@@ -93,6 +96,57 @@
 
   <!-- Custom scripts for all pages-->
   <script src="../../js/sb-admin-2.min.js"></script>
+
+  <script type="text/javascript">
+    // $("#reg").on("click", function () {
+    //   register();
+    // });
+
+    function register() {
+      //获取输入内容
+      var account = $("#account").val();
+      var groupDesc = $("#group_desc").val();
+      var email = $("#email").val();
+      var passcode = $("#passcode").val();
+      var rpassword = $("#repeat-password").val();
+      debugger;
+      var ajaxdata = {
+        "account": account,
+        "group_desc": groupDesc,
+        "email": email,
+        "passcode": passcode
+      };
+
+      // ajaxdata = {account: "imgods", group_desc: "大数据与智能工程学院", email: "god@live.cn", passcode: "2345"};
+
+      debugger;
+      $.ajax({
+        url: baseUrl + 'cams/user/createUser',
+        type: "post",
+        data: ajaxdata,
+        dataType: "json",
+        success: function (data) {
+          if (data.message=="success"){
+            alert("注册成功")
+          }
+        }
+      });
+
+      // debugger
+      // $.ajax({
+      //   url: baseUrl + 'cams/user/createUser',
+      //   type: 'post',
+      //   async: true,
+      //   data: ajaxdata,
+      //   beforeSend:function(){
+      //     debugger
+      //   },
+      //   success: function (result) {
+      //     debugger
+      //   }
+      // });
+    }
+  </script>
 
 </body>
 

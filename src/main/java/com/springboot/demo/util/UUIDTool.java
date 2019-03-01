@@ -2,6 +2,12 @@ package com.springboot.demo.util;
 
 import java.util.UUID;
 
+/**
+ * Create By SINYA
+ * Create Date 2019/2/27
+ * Description:Tools For UUID
+ */
+
 public class UUIDTool {
 
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.demo.mapper.UserMapper">
+    <resultMap id="authorMap" type="com.springboot.demo.entity.User">
+        <result column="user_id" jdbcType="VARCHAR" />
+        <result column="account" jdbcType="VARCHAR" />
+        <result column="passcode" jdbcType="VARCHAR" />
+        <result column="full_name" jdbcType="VARCHAR" />
+        <result column="email" jdbcType="VARCHAR" />
+        <result column="phone_number" jdbcType="VARCHAR" />
+        <result column="valid_flag" jdbcType="VARCHAR" />
+        <result column="create_time" jdbcType="VARCHAR" />
+        <result column="group_desc" jdbcType="VARCHAR" />
+    </resultMap>
+    <insert id="createUser">
+        insert into t_user(user_id,account,group_desc,email,passcode)
+        values (#{userId},#{account},#{groupDesc},#{email},#{passcode})
+    </insert>
+    <update id="updateUser">
+        update t_user set
+        zn_name=#{znName},
+        email=#{email},
+        telphone=#{telphone},
+        where account=#{account}
+    </update>
+    <delete id="deleteUser">
+        delete from t_user where user_id=#{user_id}
+    </delete>
+    <!--根据ID查找-->
+    <select id="getUserByAccount" resultType="com.springboot.demo.entity.User">
+        select
+            tu.user_id as userId,
+            tu.account as account,
+            tu.zn_name as znName,
+            tu.email as email,
+            tu.telphone as telphone,
+            tg.group_name as groupName,
+            tr.role_name as roleName
+        from t_user as tu
+        left join t_user_group as tug on tu.user_id = tug.user_id
+        left join t_group as tg on tug.group_id = tg.group_id
+        left join t_user_role as tur on tu.user_id = tur.user_id
+        left join t_role as tr on tur.role_id = tr.role_id
+        where tu.account = #{account}
+    </select>
+    <select id="getAllUserInfo" resultType="com.springboot.demo.entity.User">
+        select
+            tu.user_id as userId,
+            tu.account as account,
+            tu.zn_name as znName,
+            tu.email as email,
+            tu.telphone as telphone,
+            tr.role_name as roleName,
+            tg.group_name as groupName
+        from t_user as tu
+        left join t_user_group as tug on tu.user_id = tug.user_id
+        left join t_group as tg on tug.group_id = tg.group_id
+        left join t_user_role as tur on tu.user_id = tur.user_id
+        left join t_role as tr on tur.role_id = tr.role_id
+    </select>
+</mapper>
+

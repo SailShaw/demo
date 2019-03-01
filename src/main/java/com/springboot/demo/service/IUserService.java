@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Create By SINYA
  * Create Date 2019/2/27
- * Description:
+ * Description:Service For User
  */
 
 public interface IUserService {
@@ -20,7 +20,7 @@ public interface IUserService {
     List<User> getAllUserInfo();
 
     //添加
-    void addUser(User user);
+    void createUser(User user);
 
     //更新
     void updateUser(User user);
