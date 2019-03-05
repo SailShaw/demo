@@ -22,27 +22,63 @@ public class UserServiceImpl implements IUserService {
 
 
     /**
-     * 根据账号获取用户信息
+     * 查询用户信息
      * @param user
      * @return
      */
     @Override
     public List<User> getUserByAccount(User user) {
-        List<User> resultList = userMapper.getUserByAccount(user);
-        return resultList;
+        List<User> result = userMapper.getUserByAccount(user);
+        return result;
     }
 
     /**
-     * 获取用户、角色、组织关系列表
+     * 根据ID修改用户信息
+     * @param user
+     */
+    @Override
+    public void modifyUserInfoById(User user) {
+        userMapper.modifyUserInfoById(user);
+    }
+
+    /**
+     * 用户管理查询
      * @param user
      * @return
      */
     @Override
     public List<User> getURGInfoListByPage(User user) {
         List<User> result = userMapper.getURGInfoListByPage(user);
-        return  result;
+        return result;
     }
 
+    /**
+     * 删除用户
+     * @param user
+     */
+    @Override
+    public void deleteUserByID(User user) {
+        userMapper.deleteUserByID(user);
+    }
+
+    /**
+     * 修改用户部门
+     * @param user
+     */
+    @Override
+    public void modifyGroupByUser(User user) {
+
+        userMapper.modifyGroupByUser(user);
+    }
+
+    /**
+     * 用该用户角色
+     * @param user
+     */
+    @Override
+    public void modifyRoleByUser(User user) {
+        userMapper.modifyRoleByUser(user);
+    }
 
     /**
      * 注册
@@ -61,39 +97,5 @@ public class UserServiceImpl implements IUserService {
         userMapper.addUserGroup(id);
     }
 
-    /**
-     * 修改用户信息
-     * @param user
-     */
-    @Override
-    public void modifyUserInfoByAccount(User user) {
-        userMapper.modifyUserInfoByAccount(user);
-    }
 
-    /**
-     * 删除用户
-     * @param user
-     */
-    @Override
-    public void deleteUserByAccount(User user) {
-        userMapper.deleteUserByAccount(user);
-    }
-
-    /**
-     * 修改用户所属组织
-     * @param user
-     */
-    @Override
-    public void modifyGroupByUser(User user) {
-        userMapper.modifyGroupByUser(user);
-    }
-
-    /**
-     * 修改用户所属角色
-     * @param user
-     */
-    @Override
-    public void modifyRoleByUser(User user) {
-        userMapper.modifyRoleByUser(user);
-    }
 }

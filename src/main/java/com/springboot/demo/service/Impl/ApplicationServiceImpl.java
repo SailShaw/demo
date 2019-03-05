@@ -79,8 +79,8 @@ public class ApplicationServiceImpl implements IApplicationService {
         //表单ID自动生成
         application.setFormId(UUIDTool.getUUID());
         //用户、部门ID直接获取当前用户的数据
-//        application.setUserId();
-//        application.setGroupId();
+//        session.getuserId();
+//        session.getgroupId();
         //内容校验框架
 
         //执行新增操作

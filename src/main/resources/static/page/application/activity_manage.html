@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 <head>
 
@@ -421,38 +421,62 @@
         </div>
         <div class="modal-body">
           <form class="form-horizontal" id="modal_edit">
+            <!--id-->
+            <div class="form-group">
+              <label class="col-sm-10 control-label">表单ID</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="formId"  placeholder="" readonly>
+              </div>
+            </div>
             <!--title-->
             <div class="form-group">
-              <label class="col-sm-2 control-label">活动标题</label>
+              <label class="col-sm-10 control-label">活动标题</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" name="app_title" placeholder="">
+                <input type="text" class="form-control" name="appTitle" placeholder="">
               </div>
             </div>
 
             <!--date-->
             <div class="form-group">
-              <label for="starttime" class="col-sm-2 control-label">开始日期</label>
+              <label class="col-sm-10 control-label">开始日期</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" id="starttime" placeholder="xxxx-xx-xx">
+                <input type='text' name="startTime" class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
               </div>
             </div>
             <div class="form-group">
-              <label for="endtime" class="col-sm-2 control-label">结束日期</label>
+              <label class="col-sm-10 control-label">结束日期</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control" id="endtime" placeholder="xxxx-xx-xx">
+                <input type='text' name="endTime" class="form-control" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
               </div>
             </div>
             <!--attendance-->
             <div class="form-group">
-              <label class="col-sm-2 control-label">参与人数</label>
+              <label class="col-sm-10 control-label">参与人数</label>
               <div class="col-sm-10">
                 <input type="email" class="form-control" name="attendance" placeholder="输入人数">
               </div>
             </div>
+            <!--place-->
             <div class="form-group">
-              <label for="actdesc" class="col-sm-2 control-label">活动描述</label>
+              <label class="col-sm-10 control-label">占用场地</label>
               <div class="col-sm-10">
-                <textarea type="text" class="form-control" id="actdesc" rows="3"></textarea>
+                <select class="form-control">
+                  <option value="1">篮球场（东二院）</option>
+                  <option value="2">篮球场（新校区）</option>
+                  <option value="3">篮球场（老校区）</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-10 control-label">活动描述</label>
+              <div class="col-sm-10">
+                <textarea type="text" class="form-control" id="appDesc" rows="3"></textarea>
               </div>
             </div>
           </form>
@@ -479,87 +503,60 @@
     $(function () {
       $.ajax({
         url: baseUrl + 'cams/app/getAllFormByUser',
-        type:'get',
-        dataType:'json',
-        success:function (data) {
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
           //获取数据集
           var trs = $("#dataTable").find("tr");
           //取出第一行
           var th = trs[0];
           //判断数据集是否有值
-          if(trs.length>1){
+          if (trs.length > 1) {
             //先去除模板空行,再加入表头；
             $("#dataTable").empty().append(th);
           }
           //动态生成表格
-          for (i in data){
+          for (i in data) {
             var tr;
-            tr=
-                    '<td data-target="formId">'+data[i].formId+'</td>'+
-                    '<td data-target="appTitle">'+data[i].appTitle+'</td>'+
-                    '<td data-target="startTime">'+data[i].startTime+'</td>'+
-                    '<td data-target="endTime">'+data[i].endTime+'</td>'+
-                    '<td data-target="placeName">'+data[i].placeName+'</td>'+
-                    '<td data-target="attendance">'+data[i].attendance+'</td>'+
-                    '<td data-target="verifyStatus">'+data[i].verifyStatus+'</td>'+
-                    '<td data-target="createTime">'+data[i].createTime+'</td>'+
-                    '<td data-target="createTime">'+data[i].createTime+'</td>'+
+            tr =
+                    '<td data-tag="formId">' + data[i].formId + '</td>' +
+                    '<td data-tag="appTitle">' + data[i].appTitle + '</td>' +
+                    '<td data-tag="startTime">' + data[i].startTime + '</td>' +
+                    '<td data-tag="endTime">' + data[i].endTime + '</td>' +
+                    '<td data-tag="placeName">' + data[i].placeName + '</td>' +
+                    '<td data-tag="attendance">' + data[i].attendance + '</td>' +
+                    '<td data-tag="verifyStatus">' + data[i].verifyStatus + '</td>' +
+                    '<td data-tag="createTime">' + data[i].createTime + '</td>' +
                     '<td>' + '<button type="button" onclick="editForm(this)" class="btn btn-primary " data-toggle="modal" data-target="#editModal">编辑</button>' + '</td>'
-            $("#dataTable").append('<tr>'+tr+'</tr>')
+            $("#dataTable").append('<tr>' + tr + '</tr>')
           }
         }
       })
     })
     function editForm(btn) {
-      $.ajax({
-        url: baseUrl + 'cams/app/getAllFormByUser',
-        type:'get',
-        dataType:'json',
-        success:function (data) {
-          //获取数据集
-          var trs = $("#dataTable").find("tr");
-          //取出第一行
-          var th = trs[0];
-          //判断数据集是否有值
-          if(trs.length>1){
-            //先去除模板空行,再加入表头；
-            $("#dataTable").empty().append(th);
-          }
-          //动态生成表格
-          for (i in data){
-            var tr;
-            tr=
-                    '<td data-target="formId">'+data[i].formId+'</td>'+
-                    '<td data-target="appTitle">'+data[i].appTitle+'</td>'+
-                    '<td data-target="startTime">'+data[i].startTime+'</td>'+
-                    '<td data-target="endTime">'+data[i].endTime+'</td>'+
-                    '<td data-target="placeName">'+data[i].placeName+'</td>'+
-                    '<td data-target="attendance">'+data[i].attendance+'</td>'+
-                    '<td data-target="verifyStatus">'+data[i].verifyStatus+'</td>'+
-                    '<td data-target="createTime">'+data[i].createTime+'</td>'+
-                    '<td data-target="createTime">'+data[i].createTime+'</td>'+
-                    '<td>' + '<button type="button" onclick="editForm(this)" class="btn btn-primary " data-toggle="modal" data-target="#editModal">编辑</button>' + '</td>'
-            $("#dataTable").append('<tr>'+tr+'</tr>')
-          }
-        }
-      })
-    }
+      $("#editModal").modal('show');
+      //找父节点
 
+      var currnet_row = $(btn).parents('tr');
+      //定义数组
 
-
-
-
-
-
-
-      $("#editModal").modal("show");
-      //父节点
-      var current_row = $(btn).parents('tr');
-      //集合
       var application = {};
-      application.id = current_row.find("td[data-tag='id']").html();
-      application.id = current_row.find("td[data-tag='id']").html();
-      application.id = current_row.find("td[data-tag='id']").html();
+
+      application.formId = currnet_row.find("td[data-tag='formId']").html();
+      alert(application.formId)
+
+      $.ajax({
+          url: baseUrl + 'cams/app/getFormInfoByFormId',
+          type: 'get',
+          data: application,
+          dataType: 'json',
+          success: function (data) {
+            debugger;
+            $.each(data[0],function (key,val) {
+                $("#modal_edit").find("input[name='" + key + "']").val(val);
+            })
+          }
+      })
     }
   </script>
 </body>

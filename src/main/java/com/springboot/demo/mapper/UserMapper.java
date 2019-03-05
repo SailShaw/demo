@@ -34,13 +34,13 @@ public interface UserMapper {
      * 修改账号信息
      * @param user
      */
-    void modifyUserInfoByAccount(User user);
+    void modifyUserInfoById(User user);
 
     /**
      * 删除用户
      * @param user
      */
-    void deleteUserByAccount(User user);
+    void deleteUserByID(User user);
 
     /**
      * 修改用户所属部门

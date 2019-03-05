@@ -45,6 +45,11 @@ public class ApplicationController {
         return resultList;
     }
 
+    /**
+     * 根据ID获取表单信息
+     * @param application
+     * @return
+     */
     @RequestMapping(value = "/getFormInfoByFormId",method = RequestMethod.GET)
     public List<Application> getFormInfoByFormId(Application application){
         List<Application> resultList = applicationService.getFormInfoByFormId(application);

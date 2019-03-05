@@ -93,8 +93,7 @@ where ta.group_id = 14
              else '未通过'
             end )  as verifyStatus,
             DATE_FORMAT(ta.create_time,'%Y-%m-%d')
-            as createTime,
-            ta.app_desc as appDesc
+            as createTime
         from t_applications as ta
           left join t_user as tu on ta.user_id = tu.user_id
           left join t_place as tp on ta.place_id = tp.place_id
@@ -112,7 +111,7 @@ where ta.group_id = 14
           ta.app_desc as appDesc
         from t_applications as ta
           left join t_place as tp on ta.place_id = tp.place_id
-        where form_id = 1
+        where form_id = #{formId}
     </select>
 
 </mapper>

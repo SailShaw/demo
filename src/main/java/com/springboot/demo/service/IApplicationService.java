@@ -20,7 +20,9 @@ public interface IApplicationService {
 
 
     /**
-     * 根据ID获取表信息
+     * 根据ID获取表单信息
+     * @param application
+     * @return
      */
 
     List<Application> getFormInfoByFormId(Application application);

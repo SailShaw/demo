@@ -22,7 +22,7 @@
         <result column="group_status" jdbcType="VARCHAR" />
     </resultMap>
     <!--修改用户信息-->
-    <update id="modifyUserInfoByAccount">
+    <update id="modifyUserInfoById">
         update t_user set
             zn_name=#{znName},
             email=#{email},
@@ -40,7 +40,7 @@
             role_id=#{roleId}
         where user_id=#{userId}
     </update>
-    <delete id="deleteUserByAccount">
+    <delete id="deleteUserByID">
         delete from t_user where account=#{account}
     </delete>
     <!--获取用户信息-->

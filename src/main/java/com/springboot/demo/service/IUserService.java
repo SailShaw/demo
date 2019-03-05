@@ -13,8 +13,10 @@ import java.util.List;
 
 public interface IUserService {
 
+    /*个人中心接口*/
 
     /**
+     * 个人中心资料查询
      * 根据账号获取用户信息
      * @param user
      * @return
@@ -22,6 +24,17 @@ public interface IUserService {
     List<User> getUserByAccount(User user);
 
     /**
+     * 个人中心资料修改
+     * 根据ID修改
+     * @param user
+     */
+    void modifyUserInfoById(User user);
+
+
+    /*用户管理接口*/
+
+    /**
+     * 用户管理查询
      * 获取用户、角色、部门信息
      * @param user
      * @return
@@ -29,22 +42,10 @@ public interface IUserService {
     List<User> getURGInfoListByPage(User user);
 
     /**
-     * 注册
-     * @param user
-     */
-    void createUser(User user);
-
-    /**
-     * 修改账号信息
-     * @param user
-     */
-    void modifyUserInfoByAccount(User user);
-
-    /**
      * 删除用户
      * @param user
      */
-    void deleteUserByAccount(User user);
+    void deleteUserByID(User user);
 
     /**
      * 修改用户所属部门
@@ -58,5 +59,9 @@ public interface IUserService {
      */
     void modifyRoleByUser(User user);
 
-
+    /**
+     * 注册
+     * @param user
+     */
+    void createUser(User user);
 }

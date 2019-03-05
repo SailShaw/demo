@@ -26,6 +26,7 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+
     /**
      * 根据账号获取用户信息
      * @param user
@@ -37,15 +38,6 @@ public class UserController {
         return resultList;
     }
 
-//    /**
-//     * 获取所有用户信息
-//     * @return
-//     */
-//    @RequestMapping(value = "/getAllUserInfo",method = RequestMethod.GET)
-//    public List<User> getAllUserInfo(){
-//        List<User> list = userService.getAllUserInfo();
-//        return list;
-//    }
 
     /**
      * 注册
@@ -58,28 +50,28 @@ public class UserController {
         return "test";
     }
 
-//    /**
-//     * 根据账号修改用户信息
-//     * @param user
-//     */
-//    @RequestMapping(value = "/updateUser",method = RequestMethod.POST)
-//     public void updateUser(User user){
-//        userService.updateUser(user);
-//    }
-//
-//    /**
-//     * 删除用户
-//     * @param id
-//     */
-//    @RequestMapping(value = "/deleteUser",method = RequestMethod.POST)
-//    public void deleteUser(String id){
-//        userService.deleteUser(id);
-//    }
+    /**
+     * 根据ID修改用户信息
+     * @param user
+     */
+    @RequestMapping(value = "/modifyUserInfoById",method = RequestMethod.POST)
+     public void modifyUserInfoById(User user){
+        userService.modifyUserInfoById(user);
+    }
+
+    /**
+     * 删除用户
+     * @param user
+     */
+    @RequestMapping(value = "/deleteUserByID",method = RequestMethod.POST)
+    public void deleteUserByID(User user){
+        userService.deleteUserByID(user);
+    }
+
 
     /**
      * 获取邮箱发送重置密码链接以及验证码
      */
-
     @RequestMapping(value = "/modifyPasswordByEmail",method = RequestMethod.POST)
     public void modifyPasswordByEmail(User user){
 

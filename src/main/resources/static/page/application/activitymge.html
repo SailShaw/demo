@@ -105,6 +105,7 @@
 <!--<script type="text/javascript" src="../../js/public/footer.js" charset="utf-8"></script>-->
 <script type="text/javascript">
     $(function () {
+        debugger;
         $.ajax({
             url: baseUrl + 'cams/app/getAllFormByUser',
             type: 'get',
@@ -112,6 +113,7 @@
             success: function (data) {
                 //获取数据集
                 var trs = $("#dataTable").find("tr");
+                debugger;
                 //取出第一行
                 var th = trs[0];
                 //判断数据集是否有值
