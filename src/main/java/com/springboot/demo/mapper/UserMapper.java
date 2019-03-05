@@ -16,19 +16,60 @@ import java.util.Map;
 public interface UserMapper {
 
 
-    //根据ID查询
+    /**
+     * 根据账号获取用户信息
+     * @param user
+     * @return
+     */
     List<User> getUserByAccount(User user);
 
-    //根据名称查询
-    List<User> getAllUserInfo();
+    /**
+     * 获取用户、角色、部门信息
+     * @param user
+     * @return
+     */
+    List<User> getURGInfoListByPage(User user);
 
-    //添加
+    /**
+     * 修改账号信息
+     * @param user
+     */
+    void modifyUserInfoByAccount(User user);
+
+    /**
+     * 删除用户
+     * @param user
+     */
+    void deleteUserByAccount(User user);
+
+    /**
+     * 修改用户所属部门
+     * @param user
+     */
+    void modifyGroupByUser(User user);
+
+    /**
+     * 修改用户所属角色
+     * @param user
+     */
+    void modifyRoleByUser(User user);
+
+    /**
+     * 注册-用户表
+     * @param user
+     */
     void createUser(User user);
 
-    //更新
-    void updateUser(User user);
+    /**
+     * 注册-用户组织关系表
+     * @param id
+     */
+    void addUserGroup(String id);
 
-    //删除
-    void deleteUser(int id);
+    /**
+     * 注册-用户角色关系表
+     * @param id
+     */
+    void addUserRole(String id);
 
 }

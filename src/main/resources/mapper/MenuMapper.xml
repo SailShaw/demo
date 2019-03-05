@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.demo.mapper.MenuMapper">
+    <resultMap id="authorMap" type="com.springboot.demo.entity.Menu">
+        <result column="permitId" jdbcType="VARCHAR" />
+        <result column="permitName" jdbcType="VARCHAR" />
+        <result column="permitUrl" jdbcType="VARCHAR" />
+        <result column="permitType" jdbcType="VARCHAR" />
+        <result column="createTime" jdbcType="VARCHAR" />
+        <result column="updateTime" jdbcType="VARCHAR" />
+        <result column="roleId" jdbcType="VARCHAR" />
+        <result column="roleName" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="getMenuListByRole" resultType="com.springboot.demo.entity.Menu">
+        select
+           trp.role_id as roleId,
+           trp.permit_id as permitId,
+           tr.role_name as roleName,
+           tp.permit_name as permitName,
+           tp.permit_url as permitUrl,
+           tp.permit_type as permitType
+        from t_role_permit as trp
+        left join t_permit as tp on trp.permit_id = tp.permit_id
+        left join t_role as tr on trp.role_id = tr.role_id
+        where trp.role_id=#{roleId}
+    </select>
+
+
+</mapper>

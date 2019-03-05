@@ -5,37 +5,54 @@
         <result column="user_id" jdbcType="VARCHAR" />
         <result column="account" jdbcType="VARCHAR" />
         <result column="passcode" jdbcType="VARCHAR" />
-        <result column="full_name" jdbcType="VARCHAR" />
+        <result column="zn_name" jdbcType="VARCHAR" />
         <result column="email" jdbcType="VARCHAR" />
-        <result column="phone_number" jdbcType="VARCHAR" />
+        <result column="telphone" jdbcType="VARCHAR" />
         <result column="valid_flag" jdbcType="VARCHAR" />
-        <result column="create_time" jdbcType="VARCHAR" />
         <result column="group_desc" jdbcType="VARCHAR" />
+        <result column="create_by" jdbcType="VARCHAR" />
+        <result column="create_time" jdbcType="VARCHAR" />
+        <result column="update_by" jdbcType="VARCHAR" />
+        <result column="update_time" jdbcType="VARCHAR" />
+        <result column="role_id" jdbcType="VARCHAR" />
+        <result column="role_name" jdbcType="VARCHAR" />
+        <result column="role_status" jdbcType="VARCHAR" />
+        <result column="group_id" jdbcType="VARCHAR" />
+        <result column="group_name" jdbcType="VARCHAR" />
+        <result column="group_status" jdbcType="VARCHAR" />
     </resultMap>
-    <insert id="createUser">
-        insert into t_user(user_id,account,group_desc,email,passcode)
-        values (#{userId},#{account},#{groupDesc},#{email},#{passcode})
-    </insert>
-    <update id="updateUser">
+    <!--修改用户信息-->
+    <update id="modifyUserInfoByAccount">
         update t_user set
-        zn_name=#{znName},
-        email=#{email},
-        telphone=#{telphone},
+            zn_name=#{znName},
+            email=#{email},
+            telphone=#{telphone},
         where account=#{account}
     </update>
-    <delete id="deleteUser">
-        delete from t_user where user_id=#{user_id}
+    <!--修改用户所属部门-->
+    <update id="modifyGroupByUser">
+        update t_user_group set
+            group_id=#{groupId}
+        where user_id=#{userId}
+    </update>
+    <update id="modifyRoleByUser">
+        update t_user_role set
+            role_id=#{roleId}
+        where user_id=#{userId}
+    </update>
+    <delete id="deleteUserByAccount">
+        delete from t_user where account=#{account}
     </delete>
-    <!--根据ID查找-->
+    <!--获取用户信息-->
     <select id="getUserByAccount" resultType="com.springboot.demo.entity.User">
         select
             tu.user_id as userId,
             tu.account as account,
+            tr.role_name as roleName,
             tu.zn_name as znName,
             tu.email as email,
             tu.telphone as telphone,
-            tg.group_name as groupName,
-            tr.role_name as roleName
+            tg.group_name as groupName
         from t_user as tu
         left join t_user_group as tug on tu.user_id = tug.user_id
         left join t_group as tg on tug.group_id = tg.group_id
@@ -43,20 +60,20 @@
         left join t_role as tr on tur.role_id = tr.role_id
         where tu.account = #{account}
     </select>
-    <select id="getAllUserInfo" resultType="com.springboot.demo.entity.User">
-        select
-            tu.user_id as userId,
-            tu.account as account,
-            tu.zn_name as znName,
-            tu.email as email,
-            tu.telphone as telphone,
-            tr.role_name as roleName,
-            tg.group_name as groupName
-        from t_user as tu
-        left join t_user_group as tug on tu.user_id = tug.user_id
-        left join t_group as tg on tug.group_id = tg.group_id
-        left join t_user_role as tur on tu.user_id = tur.user_id
-        left join t_role as tr on tur.role_id = tr.role_id
-    </select>
-</mapper>
+    <!--获取用户、角色、组织关系列表-->
+    <select id="getURGInfoListByPage" resultType="com.springboot.demo.entity.User">
 
+
+    </select>
+    <!--注册-->
+    <insert id="createUser">
+        insert into t_user(user_id,account,group_desc,email,passcode)
+        values (#{userId},#{account},#{groupDesc},#{email},#{passcode})
+    </insert>
+    <insert id="addUserGroup">
+        insert into t_user_group(user_id) values (#{userID})
+    </insert>
+    <insert id="addUserRole">
+        insert into t_user_role(user_id) values (#{userID})
+    </insert>
+</mapper>

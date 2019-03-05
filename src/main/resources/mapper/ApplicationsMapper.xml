@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.demo.mapper.ApplicationMapper">
+    <resultMap id="authorMap" type="com.springboot.demo.entity.Application">
+        <result column="formID" jdbcType="VARCHAR"/>
+        <result column="userId" jdbcType="VARCHAR"/>
+        <result column="groupId" jdbcType="VARCHAR"/>
+        <result column="appTitle" jdbcType="VARCHAR"/>
+        <result column="appDesc" jdbcType="VARCHAR"/>
+        <result column="placeId" jdbcType="VARCHAR"/>
+        <result column="attendance" jdbcType="VARCHAR"/>
+        <result column="startTime" jdbcType="VARCHAR"/>
+        <result column="endTime" jdbcType="VARCHAR"/>
+        <result column="verifyStatus" jdbcType="VARCHAR"/>
+        <result column="createTime" jdbcType="VARCHAR"/>
+        <result column="updateTime" jdbcType="VARCHAR"/>
+        <result column="groupName" jdbcType="VARCHAR"/>
+        <result column="placeName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--新增申请表-->
+    <insert id="createAppForm">
+        insert into t_applications (
+          form_id as formId,
+          user_id as userId,
+          group_id as groupId,
+          app_title as appTitle,
+          app_desc as appDesc,
+          place_id as placeId,
+          attendance as attendance,
+          start_time as startTime,
+          end_time as endTime,
+          create_time as createTime
+        ) values(#{formId},#{userId},#{groupId},#{appTitle},
+        #{appDesc},#{placeId},#{attendance},#{startTime},
+        #{endTime},#{createTime},)
+    </insert>
+    <!--修改审核状态-->
+    <update id="modifyFormStatusByFormId">
+        update t_applications set
+            verify_status=#{verifyStatus},
+        where form_id=#{formId}
+    </update>
+    <!--修改表单信息-->
+    <update id="modifyFormInfoByFormId">
+        update t_applications set
+            app_title=#{appTitle},
+            app_desc=#{appDesc},
+            place_id=#{palceId},
+            attendance=#{attendance},
+            start_time=#{startTime},
+            end_time=#{endTime},
+            update_time=#{updateTime}
+        where form_id=#{formId}
+    </update>
+    <!--获取部门下所有申请表-->
+    <select id="getAllFormByDept" resultType="com.springboot.demo.entity.Application">
+        select
+          ta.form_id as formId,
+          ta.app_title as appTitle,
+          DATE_FORMAT(ta.start_time,'%Y-%m-%d')
+           as startTime,
+          DATE_FORMAT(ta.end_time,'%Y-%m-%d')
+           as endTime,
+          tp.place_name as placeName,
+          tu.zn_name as znName,
+          (case
+             when ta.verify_status='0' then '待审'
+             when ta.verify_status='1' then '通过'
+             else '未通过'
+            end )  as verifyStatus,
+          DATE_FORMAT(ta.create_time,'%Y-%m-%d')
+            as createTime
+from t_applications as ta
+       left join t_user as tu on ta.user_id = tu.user_id
+       left join t_place as tp on ta.place_id = tp.place_id
+       left join t_group as tg on ta.group_id = tg.group_id
+where ta.group_id = 14
+    </select>
+    <!--获取该用户的所有记录-->
+    <select id="getAllFormByUser" resultType="com.springboot.demo.entity.Application">
+        select
+           ta.form_id as formId,
+           ta.app_title as appTitle,
+           DATE_FORMAT(ta.start_time,'%Y-%m-%d')
+            as startTime,
+           DATE_FORMAT(ta.end_time,'%Y-%m-%d')
+            as endTime,
+           tp.place_name as placeName,
+           ta.attendance as attendance,
+           (case
+             when ta.verify_status='0' then '待审'
+             when ta.verify_status='1' then '通过'
+             else '未通过'
+            end )  as verifyStatus,
+            DATE_FORMAT(ta.create_time,'%Y-%m-%d')
+            as createTime,
+            ta.app_desc as appDesc
+        from t_applications as ta
+          left join t_user as tu on ta.user_id = tu.user_id
+          left join t_place as tp on ta.place_id = tp.place_id
+        where ta.user_id = 6
+    </select>
+    <!--根据ID获取表信息-->
+    <select id="getFormInfoByFormId" resultType="com.springboot.demo.entity.Application">
+        select
+          ta.form_id as formId,
+          ta.app_title as appTitle,
+          ta.start_time as startTime,
+          ta.end_time as endTime,
+          ta.attendance as attendance,
+          tp.place_name as placeName,
+          ta.app_desc as appDesc
+        from t_applications as ta
+          left join t_place as tp on ta.place_id = tp.place_id
+        where form_id = 1
+    </select>
+
+</mapper>
+

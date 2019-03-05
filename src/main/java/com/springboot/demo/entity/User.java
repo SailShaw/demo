@@ -2,8 +2,7 @@ package com.springboot.demo.entity;
 
 /**
  * Create By SINYA
- * Create Date 2019/2/27
- * Description: Pojo for User
+ * Description: Pojo for User Model
  */
 public class User {
 
@@ -15,24 +14,27 @@ public class User {
     private String telphone;//联系方式
     private String validFlag;//有效状态
     private String groupDesc;//组织描述
-
-
-
     private String createBy;//创建者
     private String createTime;//创建日期
     private String updateBy;//更新者
     private String updateTime;//更新日期
-
     private String roleId;//角色ID
     private String roleName;//角色名称
     private String roleStatus;//角色状态
-
-
     private String groupId;//组织ID
     private String groupName;//组织名称
-    private String isEff;//有效状态
+    private String groupStatus;//有效状态
+    private String ownStatus;
 
     /* Getter & Setter*/
+
+    public String getOwnStatus() {
+        return ownStatus;
+    }
+
+    public void setOwnStatus(String ownStatus) {
+        this.ownStatus = ownStatus;
+    }
 
     public String getUserId() {
         return userId;
@@ -170,11 +172,11 @@ public class User {
         this.groupName = groupName;
     }
 
-    public String getIsEff() {
-        return isEff;
+    public String getGroupStatus() {
+        return groupStatus;
     }
 
-    public void setIsEff(String isEff) {
-        this.isEff = isEff;
+    public void setGroupStatus(String groupStatus) {
+        this.groupStatus = groupStatus;
     }
 }

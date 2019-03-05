@@ -21,31 +21,79 @@ public class UserServiceImpl implements IUserService {
     private UserMapper userMapper;
 
 
+    /**
+     * 根据账号获取用户信息
+     * @param user
+     * @return
+     */
     @Override
     public List<User> getUserByAccount(User user) {
         List<User> resultList = userMapper.getUserByAccount(user);
         return resultList;
     }
 
+    /**
+     * 获取用户、角色、组织关系列表
+     * @param user
+     * @return
+     */
     @Override
-    public List<User> getAllUserInfo() {
-        List<User> result = userMapper.getAllUserInfo();
-        return result;
+    public List<User> getURGInfoListByPage(User user) {
+        List<User> result = userMapper.getURGInfoListByPage(user);
+        return  result;
     }
 
+
+    /**
+     * 注册
+     * @param user
+     */
     @Override
     public void createUser(User user) {
-        user.setUserId(UUIDTool.getUUID());
+        //生成userID
+        String id = UUIDTool.getUUID();
+        user.setUserId(id);
+        //t_user
         userMapper.createUser(user);
+        //t_user_role
+        userMapper.addUserRole(id);
+        //t_usergroup
+        userMapper.addUserGroup(id);
     }
 
+    /**
+     * 修改用户信息
+     * @param user
+     */
     @Override
-    public void updateUser(User user) {
-        userMapper.updateUser(user);
+    public void modifyUserInfoByAccount(User user) {
+        userMapper.modifyUserInfoByAccount(user);
     }
 
+    /**
+     * 删除用户
+     * @param user
+     */
     @Override
-    public void deleteUser(String id) {
-        userMapper.deleteUser(Integer.parseInt(id));
+    public void deleteUserByAccount(User user) {
+        userMapper.deleteUserByAccount(user);
+    }
+
+    /**
+     * 修改用户所属组织
+     * @param user
+     */
+    @Override
+    public void modifyGroupByUser(User user) {
+        userMapper.modifyGroupByUser(user);
+    }
+
+    /**
+     * 修改用户所属角色
+     * @param user
+     */
+    @Override
+    public void modifyRoleByUser(User user) {
+        userMapper.modifyRoleByUser(user);
     }
 }

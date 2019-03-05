@@ -32,21 +32,20 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/getUserByAccount",method = RequestMethod.GET)
-
     public List<User> getUserByAccount(User user){
         List<User> resultList = userService.getUserByAccount(user);
         return resultList;
     }
 
-    /**
-     * 获取所有用户信息
-     * @return
-     */
-    @RequestMapping(value = "/getAllUserInfo",method = RequestMethod.GET)
-    public List<User> getAllUserInfo(){
-        List<User> list = userService.getAllUserInfo();
-        return list;
-    }
+//    /**
+//     * 获取所有用户信息
+//     * @return
+//     */
+//    @RequestMapping(value = "/getAllUserInfo",method = RequestMethod.GET)
+//    public List<User> getAllUserInfo(){
+//        List<User> list = userService.getAllUserInfo();
+//        return list;
+//    }
 
     /**
      * 注册
@@ -59,23 +58,23 @@ public class UserController {
         return "test";
     }
 
-    /**
-     * 根据账号修改用户信息
-     * @param user
-     */
-    @RequestMapping(value = "/updateUser",method = RequestMethod.POST)
-     public void updateUser(User user){
-        userService.updateUser(user);
-    }
-
-    /**
-     * 删除用户
-     * @param id
-     */
-    @RequestMapping(value = "/deleteUser",method = RequestMethod.POST)
-    public void deleteUser(String id){
-        userService.deleteUser(id);
-    }
+//    /**
+//     * 根据账号修改用户信息
+//     * @param user
+//     */
+//    @RequestMapping(value = "/updateUser",method = RequestMethod.POST)
+//     public void updateUser(User user){
+//        userService.updateUser(user);
+//    }
+//
+//    /**
+//     * 删除用户
+//     * @param id
+//     */
+//    @RequestMapping(value = "/deleteUser",method = RequestMethod.POST)
+//    public void deleteUser(String id){
+//        userService.deleteUser(id);
+//    }
 
     /**
      * 获取邮箱发送重置密码链接以及验证码
@@ -86,5 +85,7 @@ public class UserController {
 
 //        userService.ModifyPassWordByEmail(user);
     }
+
+
 
 }

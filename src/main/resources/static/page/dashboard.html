@@ -8,11 +8,11 @@
   <meta name="author" content="">
   <title>首页</title>
   <!-- Custom fonts for this template-->
-  <link href="../../css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="../../https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="../css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="../https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <!-- Custom styles for this template-->
-  <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
   <!-- Page Wrapper -->
@@ -73,17 +73,17 @@
         Application Manage Center
       </div>
 
-      <!-- Nav Item - Application -->
+      <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item active">
-        <a class="nav-link" href="../application/activitymge.html">
+        <a class="nav-link" href="../usercenter/groupInfo.html">
           <i class="fas fa-fw fa-tasks"></i>
           <span>活动管理</span>
         </a>
       </li>
 
-      <!-- Nav Item - Verify -->
+      <!-- Nav Item - Charts -->
       <li class="nav-item active">
-        <a class="nav-link" href="../application/verifymge.html">
+        <a class="nav-link" href="../usercenter/groupInfo.html">
           <i class="fas fa-fw fa-balance-scale"></i>
           <span>审批管理</span>
         </a>
@@ -97,42 +97,53 @@
       <div class="sidebar-heading">
         System Manege Center
       </div>
-      <li class="nav-item active">
-        <a class="nav-link" href="../system/usermge.html">
-          <i class="fas fa-fw fa-archive"></i>
-          <span>用户管理</span>
+      <!-- Nav Item - Charts -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-sliders-h"></i>
+          <span>系统管理</span>
         </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Manage center:</h6>
+            <a class="collapse-item" href="#">用户管理</a>
+            <a class="collapse-item" href="#">邮箱测试</a>
+            <a class="collapse-item" href="#">场地管理</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">Other Tools:</h6>
+            <a class="collapse-item" href="#">邮箱测试</a>
+            <a class="collapse-item" href="#">系统日志</a>
+          </div>
+        </div>
       </li>
 
-      <!-- Nav Item - Charts -->
-      <li class="nav-item active">
-        <a class="nav-link" href="../system/placemge。">
-          <i class="fas fa-fw fa-map-marked-alt"></i>
-          <span>场地管理</span>
-        </a>
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="../orther/tables.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Tables</span></a>
       </li>
-      <!-- Nav Item - Charts -->
-      <li class="nav-item active">
-        <a class="nav-link" href="../system/emailtest.html">
-          <i class="fas fa-fw fa-envelope-open-text"></i>
-          <span>邮箱测试</span>
-        </a>
-      </li>
-      <!-- Nav Item - Charts -->
-      <li class="nav-item active">
-        <a class="nav-link" href="../system/systemlog.html">
-          <i class="fas fa-fw fa-clone"></i>
-          <span>系统日志</span>
-        </a>
+      <!-- Dividing Line -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Heading Title -->
+      <div class="sidebar-heading">
+        Instructions For Use
+      </div>
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="../orther/tables.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Pending...</span></a>
       </li>
 
       <!-- Dividing Line -->
       <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
+      <!--<div class="text-center d-none d-md-inline">-->
+        <!--<button class="rounded-circle border-0" id="sidebarToggle"></button>-->
+      <!--</div>-->
 
     </ul>
     <!-- End of Sidebar -->
@@ -190,7 +201,7 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">用户名称</span>
                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
               </a>
               <!-- Dropdown - User Information -->
@@ -201,13 +212,18 @@
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Settings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">
                   <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                   Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  退出
+                  Logout
                 </a>
               </div>
             </li>
@@ -235,8 +251,8 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">已注册用户数</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">400</div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -252,8 +268,8 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">当前总申请数</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">15,000</div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -269,10 +285,10 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">待审申请数</div>
                       <div class="row no-gutters align-items-center">
                         <div class="col-auto">
-                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">1694</div>
                         </div>
                         <div class="col">
                           <div class="progress progress-sm mr-2">
@@ -295,8 +311,8 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">通过率</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">86%</div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -540,19 +556,19 @@
     </div>
   </div>
   <!-- Bootstrap core JavaScript-->
-  <script src="../../js/private/bootstrap.bundle.min.js"></script>
-  <script src="../../js/private/bootstrap.min.js"></script>
-  <script src="../../js/private/Chart.min.js"></script>
-  <script src="../../js/private/chart-area-demo.js"></script>
-  <script src="../../js/private/chart-bar-demo.js"></script>
-  <script src="../../js/private/chart-pie-demo.js"></script>
-  <script src="../../js/private/dataTables.bootstrap4.min.js"></script>
-  <script src="../../js/private/datatables-demo.js"></script>
-  <script src="../../js/private/jquery.dataTables.min.js"></script>
-  <script src="../../js/private/jquery.easing.min.js"></script>
-  <script src="../../js/private/jquery.min.js"></script>
-  <script src="../../js/private/sb-admin-2.min.js"></script>
-  <script src="../../js/private/common.js"></script>
+  <script src="../js/private/bootstrap.bundle.min.js"></script>
+  <script src="../js/private/bootstrap.min.js"></script>
+  <script src="../js/private/Chart.min.js"></script>
+  <script src="../js/private/chart-area-demo.js"></script>
+  <script src="../js/private/chart-bar-demo.js"></script>
+  <script src="../js/private/chart-pie-demo.js"></script>
+  <script src="../js/private/dataTables.bootstrap4.min.js"></script>
+  <script src="../js/private/datatables-demo.js"></script>
+  <script src="../js/private/jquery.dataTables.min.js"></script>
+  <script src="../js/private/jquery.easing.min.js"></script>
+  <script src="../js/private/jquery.min.js"></script>
+  <script src="../js/private/sb-admin-2.min.js"></script>
+  <script src="../js/private/common.js"></script>
 </body>
 
 </html>

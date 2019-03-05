@@ -1,0 +1,151 @@
+<meta charset="UTF-8">
+<!--Header JS-->
+<script type="text/javascript" src="../../js/public/header.js" charset="utf-8"></script>
+<!--Content Begin-->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more
+        information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official
+            DataTables documentation</a>.</p>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <!--<div class="card-header py-3">-->
+        <!--<h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>-->
+        <!--</div>-->
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>活动标题</th>
+                        <th>开始日期</th>
+                        <th>结束日期</th>
+                        <th>占用场地</th>
+                        <th>审核状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--Verify Modal-->
+    <div class="modal fade" id="verifyModal" tabindex="-1" role="dialog" aria-labelledby="v_title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="v_title">选择审核状态</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-control">
+                        <option value="1">通过</option>
+                        <option value="2">不通过</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!--Modal End-->
+    <!--email Modal-->
+    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="e_title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="e_title">发送通知邮件</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <!--title-->
+                        <div class="form-group">
+                            <label for="email_title" class="col-sm-2 control-label">主题</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="email_title" placeholder="邮件主题">
+                            </div>
+                        </div>
+                        <!--content-->
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">邮箱</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="email" placeholder="example@live.cn">
+                            </div>
+                        </div>
+                        <!--content-->
+                        <div class="form-group">
+                            <label for="email_content" class="col-sm-2 control-label">内容</label>
+                            <div class="col-sm-10">
+                                <textarea type="text" class="form-control" id="email_content" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">发送</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!--Modal End-->
+</div>
+<!--Content End-->
+<!--Footer JS-->
+<script type="text/javascript" src="../../js/private/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/public/footer.js" charset="utf-8"></script>
+<!--Script Code Or FIle Begin-->
+
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: baseUrl + 'cams/app/getAllFormByDept',
+            type:'get',
+            dataType:'json',
+            success:function (data) {
+                //获取数据集
+                var trs = $("#dataTable").find("tr");
+                //取出第一行
+                var th = trs[0];
+                //判断数据集是否有值
+                if(trs.length>1){
+                    //先去除模板空行,再加入表头；
+                    $("#dataTable").empty().append(th);
+                }
+                //动态生成表格
+                for (i in data){
+                    var tr;
+                    tr=
+                        '<td>'+data[i].formId+'</td>'+
+                        '<td>'+data[i].appTitle+'</td>'+
+                        '<td>'+data[i].startTime+'</td>'+
+                        '<td>'+data[i].endTime+'</td>'+
+                        '<td>'+data[i].placeName+'</td>'+
+                        '<td>'+data[i].verifyStatus+'</td>'+
+                        '<td>'+'<button type="button" onclick="verifyForm()" class="btn btn-primary " data-toggle="modal" data-target="#verifyModal">审核</button>&nbsp;' +
+                        '<button type="button" class="btn btn-primary " data-toggle="modal" data-target="#emailModal">通知</button>'+'</td>'
+                    //编辑按钮
+                    $("#dataTable").append('<tr>'+tr+'</tr>')
+                }
+            }
+        })
+
+    })
+    function verifyForm() {
+        $("#verifyModal").modal('show');
+
+        var $td = $(obj).parents('tr').children('td');
+        var title = $td.eq(0).text();
+    }
+</script>
+<!--Script Code Or FIle End-->
+<script type="text/javascript" src="../../js/public/bottom.js.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../js/private/bootstrap.min.js"></script>
