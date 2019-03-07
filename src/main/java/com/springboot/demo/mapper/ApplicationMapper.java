@@ -56,4 +56,11 @@ public interface ApplicationMapper {
      */
     void createAppForm(Application application);
 
+    /**
+     * 获取所有列表
+     * @param application
+     * @return
+     */
+    List<Application> getPlaceList(Application application);
+
 }

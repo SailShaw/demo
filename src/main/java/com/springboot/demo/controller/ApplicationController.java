@@ -2,7 +2,6 @@ package com.springboot.demo.controller;
 
 import com.springboot.demo.entity.Application;
 import com.springboot.demo.service.IApplicationService;
-import com.springboot.demo.util.UUIDTool;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,5 +80,12 @@ public class ApplicationController {
     @RequestMapping(value = "/createAppForm",method = RequestMethod.POST)
     public void createAppForm(Application application){
         applicationService.createAppForm(application);
+    }
+
+
+    @RequestMapping(value = "/getPlaceList",method = RequestMethod.GET)
+    public List<Application> getPlaceList(Application application){
+        List<Application> result = applicationService.getPlaceList(application);
+        return result;
     }
 }

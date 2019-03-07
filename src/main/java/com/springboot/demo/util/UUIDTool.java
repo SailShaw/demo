@@ -10,9 +10,7 @@ import java.util.UUID;
 
 public class UUIDTool {
 
-
-
-    static UUID uuid;
+    public static UUID uuid;
 
     /**
      * 随机生成32位UUID

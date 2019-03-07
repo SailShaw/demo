@@ -56,6 +56,7 @@ public interface IApplicationService {
     void createAppForm(Application application);
 
 
+    List<Application> getPlaceList(Application application);
 
 
 }

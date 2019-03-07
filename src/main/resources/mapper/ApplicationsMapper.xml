@@ -44,11 +44,11 @@
     <update id="modifyFormInfoByFormId">
         update t_applications set
             app_title=#{appTitle},
-            app_desc=#{appDesc},
-            place_id=#{palceId},
-            attendance=#{attendance},
             start_time=#{startTime},
             end_time=#{endTime},
+            attendance=#{attendance},
+            place_id=#{placeId},
+            app_desc=#{appDesc},
             update_time=#{updateTime}
         where form_id=#{formId}
     </update>
@@ -80,11 +80,14 @@ where ta.group_id = 14
     <select id="getAllFormByUser" resultType="com.springboot.demo.entity.Application">
         select
            ta.form_id as formId,
+           ta.user_id as userId,
+           ta.group_id as groupId,
            ta.app_title as appTitle,
            DATE_FORMAT(ta.start_time,'%Y-%m-%d')
             as startTime,
            DATE_FORMAT(ta.end_time,'%Y-%m-%d')
             as endTime,
+           ta.place_id as placeId,
            tp.place_name as placeName,
            ta.attendance as attendance,
            (case
@@ -92,6 +95,7 @@ where ta.group_id = 14
              when ta.verify_status='1' then '通过'
              else '未通过'
             end )  as verifyStatus,
+            ta.app_desc as appDesc,
             DATE_FORMAT(ta.create_time,'%Y-%m-%d')
             as createTime
         from t_applications as ta
@@ -107,11 +111,16 @@ where ta.group_id = 14
           ta.start_time as startTime,
           ta.end_time as endTime,
           ta.attendance as attendance,
-          tp.place_name as placeName,
+          ta.place_id as placeId,
           ta.app_desc as appDesc
         from t_applications as ta
-          left join t_place as tp on ta.place_id = tp.place_id
         where form_id = #{formId}
+    </select>
+    <select id="getPlaceList" resultType="com.springboot.demo.entity.Application">
+        select
+          tp.place_id as placeId,
+          tp.place_name as placeName
+        from t_place as tp
     </select>
 
 </mapper>

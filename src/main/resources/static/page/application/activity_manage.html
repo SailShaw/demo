@@ -14,8 +14,9 @@
   <link href="../../https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <!-- Custom styles for this template-->
-  <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="../../css/bootstrap-datepicker.min.css" rel="stylesheet">
+  <!--<link href="../../css/sb-admin-2.min.css" rel="stylesheet">-->
+  <!--<link href="../../css/bootstrap-datepicker.min.css" rel="stylesheet">-->
+  <link href="../../css/bootstrap-datetimepicker.css" rel="stylesheet">
 
 </head>
 
@@ -348,7 +349,7 @@
             <!--</div>-->
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-striped table-bordered display" id="dataGrid" width="100%" cellspacing="0">
                   <thead>
                   <tr>
                     <th>编号</th>
@@ -424,14 +425,14 @@
             <!--id-->
             <div class="form-group">
               <label class="col-sm-10 control-label">表单ID</label>
-              <div class="col-sm-10">
+              <div class="col-sm-12">
                 <input type="text" class="form-control" name="formId"  placeholder="" readonly>
               </div>
             </div>
             <!--title-->
             <div class="form-group">
               <label class="col-sm-10 control-label">活动标题</label>
-              <div class="col-sm-10">
+              <div class="col-sm-12">
                 <input type="text" class="form-control" name="appTitle" placeholder="">
               </div>
             </div>
@@ -439,81 +440,104 @@
             <!--date-->
             <div class="form-group">
               <label class="col-sm-10 control-label">开始日期</label>
-              <div class="col-sm-10">
-                <input type='text' name="startTime" class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+              <div class="col-sm-12">
+                <input type='text' class="form-control date" name="startTime"/>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-10 control-label">结束日期</label>
-              <div class="col-sm-10">
-                <input type='text' name="endTime" class="form-control" />
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+              <div class="col-sm-12">
+                <input type='text' class="form-control date" name="endTime"/>
               </div>
             </div>
             <!--attendance-->
             <div class="form-group">
               <label class="col-sm-10 control-label">参与人数</label>
-              <div class="col-sm-10">
-                <input type="email" class="form-control" name="attendance" placeholder="输入人数">
+              <div class="col-sm-12">
+                <input type="text" class="form-control" name="attendance" placeholder="输入人数">
               </div>
             </div>
             <!--place-->
             <div class="form-group">
               <label class="col-sm-10 control-label">占用场地</label>
-              <div class="col-sm-10">
-                <select class="form-control">
-                  <option value="1">篮球场（东二院）</option>
-                  <option value="2">篮球场（新校区）</option>
-                  <option value="3">篮球场（老校区）</option>
+              <div class="col-sm-12">
+                <select name="placeId" id="placeId" class="form-control">
+
                 </select>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-10 control-label">活动描述</label>
-              <div class="col-sm-10">
-                <textarea type="text" class="form-control" id="appDesc" rows="3"></textarea>
+              <div class="col-sm-12">
+                <textarea type="text" class="form-control" name="appDesc" rows="3"></textarea>
               </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">发送</button>
+          <button type="button" class="btn btn-primary" onclick="updateForm()">提交</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal -->
   </div>
   <!--Java Script Files Link-->
-  <script src="../../js/private/jquery.min.js"></script>
-  <script src="../../js/private/bootstrap.bundle.min.js"></script>
-  <script src="../../js/private/bootstrap-datepicker.min.js"></script>
-  <script src="../../js/private/bootstrap-datepicker.zh-CN.min.js"></script>
-  <script src="../../js/private/jquery.easing.min.js"></script>
-  <script src="../../js/private/sb-admin-2.min.js"></script>
-  <script src="../../js/private/jquery.dataTables.min.js"></script>
-  <script src="../../js/private/dataTables.bootstrap4.min.js"></script>
-  <script src="../../js/private/datatables-demo.js"></script>
-  <script src="../../js/private/common.js"></script>
+  <script src="../../js/jquery-3.3.1.js"></script>
+  <script src="../../js/bootstrap.bundle.min.js"></script>
+  <script src="../../js/bootstrap-datetimepicker.js"></script>
+  <script src="../../js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+  <script src="../../js/jquery.easing.min.js"></script>
+  <script src="../../js/sb-admin-2.min.js"></script>
+  <script src="../../js/jquery.dataTables.min.js"></script>
+  <script src="../../js/dataTables.bootstrap4.min.js"></script>
+  <script src="../../js/datatables-demo.js"></script>
+  <script src="../../js/global-common.js"></script>
   <script type="text/javascript">
+
+    //页面加载事件
     $(function () {
+      // //Grid Init
+      // $('#dataGrid').DataTable({
+      //   "searching": false,
+      //   "ordering": true,
+      //   "autoWidth": false,
+      //   "pageLength": 10,
+      //   "serverSide": true,
+      // });
+
+
+      // 动态生成select
       $.ajax({
-        url: baseUrl + 'cams/app/getAllFormByUser',
+        url: BaseUrl + 'cams/app/getPlaceList',
         type: 'get',
         dataType: 'json',
         success: function (data) {
+          //动态生成下拉列表框
+          for (i in data) {
+            $("#placeId").append("<option value='"+data[i].placeId+"'>"+data[i].placeName+"</option>");
+          }
+          alert("执行完成");
+        },
+        error: function (data) {
+          alert("未执行");
+        }
+      });
+
+      // 动态生成table
+      $.ajax({
+        url: BaseUrl+ 'cams/app/getAllFormByUser',
+        type: 'get',
+        dataType: 'json',
+        success: function (data) {
+          alert("初始化表格数据")
           //获取数据集
-          var trs = $("#dataTable").find("tr");
+          var trs = $("#dataGrid").find("tr");
           //取出第一行
           var th = trs[0];
           //判断数据集是否有值
           if (trs.length > 1) {
             //先去除模板空行,再加入表头；
-            $("#dataTable").empty().append(th);
+            $("#dataGrid").empty().append(th);
           }
           //动态生成表格
           for (i in data) {
@@ -528,37 +552,100 @@
                     '<td data-tag="verifyStatus">' + data[i].verifyStatus + '</td>' +
                     '<td data-tag="createTime">' + data[i].createTime + '</td>' +
                     '<td>' + '<button type="button" onclick="editForm(this)" class="btn btn-primary " data-toggle="modal" data-target="#editModal">编辑</button>' + '</td>'
-            $("#dataTable").append('<tr>' + tr + '</tr>')
+            $("#dataGrid").append('<tr>' + tr + '</tr>')
           }
         }
-      })
+      });
+
+      initDatePicker();
+
     })
+
+    // 加载datepicker
+    function initDatePicker(){
+      $(".date").datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN"
+      });
+    }
+
+    //编辑表单方法
     function editForm(btn) {
+      //显示模态框
       $("#editModal").modal('show');
       //找父节点
-
       var currnet_row = $(btn).parents('tr');
       //定义数组
-
       var application = {};
-
+      //获取ID
       application.formId = currnet_row.find("td[data-tag='formId']").html();
-      alert(application.formId)
-
+      //ajax请求
       $.ajax({
-          url: baseUrl + 'cams/app/getFormInfoByFormId',
+          url: BaseUrl + 'cams/app/getFormInfoByFormId',
           type: 'get',
           data: application,
           dataType: 'json',
           success: function (data) {
-            debugger;
+            //因后端传回的为数组，与json格式不同
+            var placeId = data[0].placeId;
+            //取值时需要更改形式
             $.each(data[0],function (key,val) {
                 $("#modal_edit").find("input[name='" + key + "']").val(val);
+                $("#modal_edit").find("select[name='" + key + "']").val(val);
+                $("#modal_edit").find("textarea[name='" + key + "']").val(val);
             })
           }
-      })
+      });
+
+      $(".date").datetimepicker({
+        format: "dd MM yyyy - hh:ii:ss",
+        autoclose: true,
+        forceParse: true,
+        todayBtn: true,
+        startDate: "2013-02-14 10:00",
+        minuteStep: 10
+      });
+    }
+    //修改表单
+    function updateForm() {
+      //获取
+      /*
+       * 通过name选择元素
+       * $('input[name="nw"]').val()
+       */
+      var formId = $('input[name="formId"]').val();
+      var appTitle = $('input[name="appTitle"]').val();
+      var startTime = $('input[name="startTime"]').val();
+      var endTime = $('input[name="endTime"]').val();
+      var attendance = $('input[name="attendance"]').val();
+      var placeId = $('select[name="placeId"]').val();
+      var appDesc = $('textarea[name="appDesc"]').val();
+      //定义json
+      var ajaxdata = {
+        "formId": formId,
+        "appTitle": appTitle,
+        "startTime": startTime,
+        "endTime": endTime,
+        "attendance": attendance,
+        "placeId": placeId,
+        "appDesc": appDesc
+      };
+      debugger;
+      $.ajax({
+        url: BaseUrl + 'cams/app/modifyFormInfoByFormId',
+        type: "post",
+        data: ajaxdata,
+        dataType: "json",
+        success: function (data) {
+          console.log("执行完成");
+          //关闭模态框
+          $("#editModal").modal('hide');
+        }
+      });
     }
   </script>
 </body>
 </html>
+
+
 

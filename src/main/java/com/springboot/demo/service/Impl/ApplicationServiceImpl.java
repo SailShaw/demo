@@ -27,12 +27,14 @@ public class ApplicationServiceImpl implements IApplicationService {
      */
     @Override
     public List<Application> getAllFormByDept(Application application) {
+
         List<Application> result = applicationMapper.getAllFormByDept(application);
         return result;
     }
 
     @Override
     public List<Application> getFormInfoByFormId(Application application) {
+
         List<Application> result = applicationMapper.getFormInfoByFormId(application);
         return result;
     }
@@ -86,5 +88,16 @@ public class ApplicationServiceImpl implements IApplicationService {
         //执行新增操作
         applicationMapper.createAppForm(application);
 
+    }
+
+    /**
+     * 获取所有场地
+     * @param application
+     * @return
+     */
+    @Override
+    public List<Application> getPlaceList(Application application) {
+        List<Application> result = applicationMapper.getPlaceList(application);
+        return result;
     }
 }
