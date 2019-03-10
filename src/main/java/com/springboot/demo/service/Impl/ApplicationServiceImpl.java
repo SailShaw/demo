@@ -1,5 +1,6 @@
 package com.springboot.demo.service.Impl;
 
+import com.github.pagehelper.PageHelper;
 import com.springboot.demo.entity.Application;
 import com.springboot.demo.mapper.ApplicationMapper;
 import com.springboot.demo.service.IApplicationService;
@@ -21,20 +22,24 @@ public class ApplicationServiceImpl implements IApplicationService {
     private ApplicationMapper applicationMapper;
 
     /**
-     * 获取本部门所有申请记录
+     * 获取部门下所有记录
+     * @param pageSize
+     * @param pageNum
      * @param application
      * @return
      */
     @Override
-    public List<Application> getAllFormByDept(Application application) {
-
+    public List<Application> getAllFormByDept(Integer pageSize, Integer pageNum, Application application) {
+        //分页
+        PageHelper.startPage(pageSize,pageNum);
+        //
         List<Application> result = applicationMapper.getAllFormByDept(application);
         return result;
     }
 
     @Override
-    public List<Application> getFormInfoByFormId(Application application) {
-
+    public List<Application> getFormInfoByFormId(Integer pageSize, Integer pageNum,Application application) {
+        PageHelper.startPage(pageSize,pageNum);
         List<Application> result = applicationMapper.getFormInfoByFormId(application);
         return result;
     }

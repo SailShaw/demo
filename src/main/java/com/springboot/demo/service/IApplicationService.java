@@ -16,7 +16,7 @@ public interface IApplicationService {
      * @param application
      * @return
      */
-    List<Application> getAllFormByDept(Application application);
+    List<Application> getAllFormByDept(Integer pageSize, Integer pageNum,Application application);
 
 
     /**
@@ -25,7 +25,7 @@ public interface IApplicationService {
      * @return
      */
 
-    List<Application> getFormInfoByFormId(Application application);
+    List<Application> getFormInfoByFormId(Integer pageSize, Integer pageNum,Application application);
 
 
     /**
