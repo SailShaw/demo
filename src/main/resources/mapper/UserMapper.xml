@@ -27,7 +27,7 @@
             zn_name=#{znName},
             email=#{email},
             telphone=#{telphone},
-        where account=#{account}
+        where user_id = #{userId}
     </update>
     <!--修改用户所属部门-->
     <update id="modifyGroupByUser">
@@ -35,11 +35,13 @@
             group_id=#{groupId}
         where user_id=#{userId}
     </update>
+    <!--修改用户角色-->
     <update id="modifyRoleByUser">
         update t_user_role set
             role_id=#{roleId}
         where user_id=#{userId}
     </update>
+    <!--删除用户-->
     <delete id="deleteUserByID">
         delete from t_user where account=#{account}
     </delete>
@@ -67,8 +69,8 @@
     </select>
     <!--注册-->
     <insert id="createUser">
-        insert into t_user(user_id,account,group_desc,email,passcode)
-        values (#{userId},#{account},#{groupDesc},#{email},#{passcode})
+        insert into t_user(user_id,account,email,group_desc,passcode)
+        values (#{userId},#{account},#{email},#{groupDesc},#{passcode})
     </insert>
     <insert id="addUserGroup">
         insert into t_user_group(user_id) values (#{userID})

@@ -1,5 +1,6 @@
 package com.springboot.demo.controller;
 
+import com.springboot.demo.Common.PageBean;
 import com.springboot.demo.entity.Application;
 import com.springboot.demo.service.IApplicationService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/application")
 public class ApplicationController {
 
     @Resource
@@ -28,9 +29,27 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/getAllFormByDept",method = RequestMethod.GET)
-    public List<Application> getAllFormByDept(Application application){
-        List<Application> resultList = applicationService.getAllFormByDept(application);
-        return resultList;
+    public PageBean<Application> getAllFormByDept(Integer pageSize, Integer pageNum, Application application){
+        //logger
+
+        //定义数据集
+        List<Application> resultList = null;
+
+        //分页
+        try{
+
+            // 获取分页参数
+
+
+            resultList = applicationService.getAllFormByDept(pageSize,pageNum,application);
+        }catch(Exception e){
+            //logger
+        }
+
+        //Page对象
+
+        PageBean<Application> pageBean = new PageBean<>(resultList);
+        return pageBean;
     }
 
     /**
@@ -39,7 +58,7 @@ public class ApplicationController {
      * @return
      */
     @RequestMapping(value = "/getAllFormByUser",method = RequestMethod.GET)
-    public List<Application> getAllFormByUser(Application application){
+    public List<Application> getAllFormByUser(Integer pageSize, Integer pageNum,Application application){
         List<Application> resultList = applicationService.getAllFormByUser(application);
         return resultList;
     }
@@ -49,11 +68,11 @@ public class ApplicationController {
      * @param application
      * @return
      */
-    @RequestMapping(value = "/getFormInfoByFormId",method = RequestMethod.GET)
-    public List<Application> getFormInfoByFormId(Application application){
-        List<Application> resultList = applicationService.getFormInfoByFormId(application);
-        return resultList;
-    }
+//    @RequestMapping(value = "/getFormInfoByFormId",method = RequestMethod.GET)
+//    public List<Application> getFormInfoByFormId(Application application){
+//        List<Application> resultList = applicationService.getFormInfoByFormId(application);
+//        return resultList;
+//    }
 
     /**
      * 审核申请表

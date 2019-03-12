@@ -1,4 +1,6 @@
-package com.springboot.demo.config.PageHelper;
+package com.springboot.demo.Common;
+
+import com.github.pagehelper.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,8 +17,28 @@ public class PageBean<T> implements Serializable {
     private int pageNum;//第几页
     private int pageSize;//每页记录数
     private int pages;//总页数
-    private int size;//当前页数量
+    private int size;//当前页数量 <= PageSize
 
+
+    /**
+     * 包装Page对象
+     * 若直接返回Page对象，在json处理以及其他情况下会被当成list来处理
+     * 避免因此类原因出现的一些问题
+     * @param list
+     */
+    public PageBean(List<T> list){
+        if (list instanceof Page){
+            Page<T> page = (Page<T>) list;
+            this.pageNum = page.getPageNum();
+            this.pageSize = page.getPageSize();
+            this.count = page.getTotal();
+            this.pages = page.getPages();
+            this.result = page;
+            this.size = page.size();
+        }
+    }
+
+    //Getter & Setter
     public long getCount() {
         return count;
     }

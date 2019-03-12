@@ -89,11 +89,11 @@ public class UserServiceImpl implements IUserService {
         //生成userID
         String id = UUIDTool.getUUID();
         user.setUserId(id);
-        //t_user
+        //新增用户
         userMapper.createUser(user);
-        //t_user_role
+        //向用户角色表插入userId
         userMapper.addUserRole(id);
-        //t_usergroup
+        //向用户部门表插入userId
         userMapper.addUserGroup(id);
     }
 

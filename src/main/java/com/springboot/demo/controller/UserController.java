@@ -1,16 +1,12 @@
 package com.springboot.demo.controller;
 
 import com.springboot.demo.entity.User;
-import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -44,10 +40,10 @@ public class UserController {
      * @param user
      * @return
      */
-    @RequestMapping(value = "/createUser")
+    @RequestMapping(value = "/register")
     public String createUser(User user){
         userService.createUser(user);
-        return "test";
+        return "success";
     }
 
     /**
