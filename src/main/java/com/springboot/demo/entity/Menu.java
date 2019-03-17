@@ -5,14 +5,16 @@ package com.springboot.demo.entity;
  * Description: Pojo For Menu Model
  */
 public class Menu {
+
+    private String roleId;//角色ID
+    private String roleName;//角色名称
+
     private String permitId;//权限ID
     private String permitName;//权限名称
     private String permitUrl;//权限地址
     private String permitType;//权限类型
     private String createTime;//创建时间
     private String updateTime;//更新时间
-    private String roleId;//角色ID
-    private String roleName;//角色名称
 
     public String getPermitId() {
         return permitId;

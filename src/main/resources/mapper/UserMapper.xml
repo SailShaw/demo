@@ -64,8 +64,36 @@
     </select>
     <!--获取用户、角色、组织关系列表-->
     <select id="getURGInfoListByPage" resultType="com.springboot.demo.entity.User">
+        select
+               tur.user_id as userId,
+               tur.role_id as roleId,
+               tug.group_id as groupId,
+               tu.zn_name as znName,
+               tr.role_name as roleName,
+               tg.group_name as groupName,
+               date_format(tu.create_time,'%Y-%m-%d')
+                as createTime,
+               tu.group_desc as groupDesc
+        from  t_user_role as tur
+        left join t_user as tu on tur.user_id = tu.user_id
+        left join t_user_group as tug on tur.user_id = tug.user_id
+        left join t_role as tr on tur.role_id = tr.role_id
+        left join t_group as tg on tug.group_id = tg.group_id
 
-
+    </select>
+    <!--获取角色列表-->
+    <select id="getRoleList" resultType="com.springboot.demo.entity.User">
+        select
+                tr.role_id as roleId,
+                tr.role_name as roleName
+        from t_role as tr
+    </select>
+    <!--获取部门列表-->
+    <select id="getGroupList" resultType="com.springboot.demo.entity.User">
+        select
+                tg.group_id as groupId,
+                tg.group_name as groupName
+        from t_group as tg
     </select>
     <!--注册-->
     <insert id="createUser">

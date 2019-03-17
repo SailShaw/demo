@@ -11,18 +11,16 @@
         <result column="roleId" jdbcType="VARCHAR" />
         <result column="roleName" jdbcType="VARCHAR" />
     </resultMap>
+    <!--根据角色获取菜单列表-->
     <select id="getMenuListByRole" resultType="com.springboot.demo.entity.Menu">
-        select
-           trp.role_id as roleId,
-           trp.permit_id as permitId,
-           tr.role_name as roleName,
-           tp.permit_name as permitName,
-           tp.permit_url as permitUrl,
-           tp.permit_type as permitType
+        select distinct
+               tr.role_name as roleName,
+               tp.permit_name as permitName,
+               tp.permit_url as permitUrl
         from t_role_permit as trp
         left join t_permit as tp on trp.permit_id = tp.permit_id
         left join t_role as tr on trp.role_id = tr.role_id
-        where trp.role_id=#{roleId}
+        where trp.role_id = #{roleId};
     </select>
 
 

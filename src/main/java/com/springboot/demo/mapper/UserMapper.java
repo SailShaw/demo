@@ -4,7 +4,6 @@ import com.springboot.demo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Create By SINYA
@@ -46,13 +45,13 @@ public interface UserMapper {
      * 修改用户所属部门
      * @param user
      */
-    void modifyGroupByUser(User user);
+    boolean modifyGroupByUser(User user);
 
     /**
      * 修改用户所属角色
      * @param user
      */
-    void modifyRoleByUser(User user);
+    boolean modifyRoleByUser(User user);
 
     /**
      * 注册-用户表
@@ -72,4 +71,9 @@ public interface UserMapper {
      */
     void addUserRole(String id);
 
+
+    //获取角色列表
+    List<User> getRoleList();
+    //获取部门列表
+    List<User> getGroupList();
 }

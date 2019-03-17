@@ -16,16 +16,7 @@ public interface IApplicationService {
      * @param application
      * @return
      */
-    List<Application> getAllFormByDept(Integer pageSize, Integer pageNum,Application application);
-
-
-    /**
-     * 根据ID获取表单信息
-     * @param application
-     * @return
-     */
-
-    List<Application> getFormInfoByFormId(Integer pageSize, Integer pageNum,Application application);
+    List<Application> getAllFormByDept(Integer pageNum, Integer pageSize, Application application);
 
 
     /**
@@ -33,7 +24,7 @@ public interface IApplicationService {
      * @param application
      * @return
      */
-    List<Application> getAllFormByUser(Application application);
+    List<Application> getAllFormByUser(Integer pageNum, Integer pageSize, Application application);
 
 
     /**
@@ -56,7 +47,11 @@ public interface IApplicationService {
     void createAppForm(Application application);
 
 
-    List<Application> getPlaceList(Application application);
+    /**
+     * 获取场地列表
+     * @return
+     */
+    List<Application> getPlaceList();
 
 
 }

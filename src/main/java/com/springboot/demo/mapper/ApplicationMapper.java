@@ -1,7 +1,6 @@
 package com.springboot.demo.mapper;
 
 import com.springboot.demo.entity.Application;
-import com.springboot.demo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -57,10 +56,9 @@ public interface ApplicationMapper {
     void createAppForm(Application application);
 
     /**
-     * 获取所有列表
-     * @param application
+     * 获取场地列表
      * @return
      */
-    List<Application> getPlaceList(Application application);
+    List<Application> getPlaceList();
 
 }

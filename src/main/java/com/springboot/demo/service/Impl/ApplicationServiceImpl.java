@@ -29,18 +29,11 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @return
      */
     @Override
-    public List<Application> getAllFormByDept(Integer pageSize, Integer pageNum, Application application) {
+    public List<Application> getAllFormByDept(Integer pageNum, Integer pageSize, Application application) {
         //分页
-        PageHelper.startPage(pageSize,pageNum);
+        PageHelper.startPage(pageNum,pageSize);
         //
         List<Application> result = applicationMapper.getAllFormByDept(application);
-        return result;
-    }
-
-    @Override
-    public List<Application> getFormInfoByFormId(Integer pageSize, Integer pageNum,Application application) {
-        PageHelper.startPage(pageSize,pageNum);
-        List<Application> result = applicationMapper.getFormInfoByFormId(application);
         return result;
     }
 
@@ -50,7 +43,10 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @return
      */
     @Override
-    public List<Application> getAllFormByUser(Application application) {
+    public List<Application> getAllFormByUser(Integer pageNum, Integer pageSize, Application application) {
+        //分页(第几页,每页几个)
+        PageHelper.startPage(pageNum,pageSize);
+        //
         List<Application> result = applicationMapper.getAllFormByUser(application);
         return result;
     }
@@ -62,7 +58,16 @@ public class ApplicationServiceImpl implements IApplicationService {
     @Override
     public void modifyFormStatusByFormId(Application application) {
 
+        //获取该表单所属用户的邮箱
+
+        //获取邮件内容
+//        String mailText =
+
+        //修改审核状态
         applicationMapper.modifyFormStatusByFormId(application);
+
+        //发送邮件
+//        MailUtil.send();
 
     }
 
@@ -97,12 +102,11 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     /**
      * 获取所有场地
-     * @param application
      * @return
      */
     @Override
-    public List<Application> getPlaceList(Application application) {
-        List<Application> result = applicationMapper.getPlaceList(application);
+    public List<Application> getPlaceList() {
+        List<Application> result = applicationMapper.getPlaceList();
         return result;
     }
 }

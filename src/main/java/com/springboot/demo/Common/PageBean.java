@@ -39,6 +39,7 @@ public class PageBean<T> implements Serializable {
     }
 
     //Getter & Setter
+
     public long getCount() {
         return count;
     }

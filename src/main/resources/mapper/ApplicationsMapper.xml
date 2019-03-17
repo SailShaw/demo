@@ -55,26 +55,26 @@
     <!--获取部门下所有申请表-->
     <select id="getAllFormByDept" resultType="com.springboot.demo.entity.Application">
         select
-          ta.form_id as formId,
-          ta.app_title as appTitle,
-          DATE_FORMAT(ta.start_time,'%Y-%m-%d')
-           as startTime,
-          DATE_FORMAT(ta.end_time,'%Y-%m-%d')
-           as endTime,
-          tp.place_name as placeName,
-          tu.zn_name as znName,
-          (case
-             when ta.verify_status='0' then '待审'
-             when ta.verify_status='1' then '通过'
-             else '未通过'
-            end )  as verifyStatus,
-          DATE_FORMAT(ta.create_time,'%Y-%m-%d')
+           ta.form_id as formId,
+           ta.user_id as userId,
+           ta.group_id as groupId,
+           ta.app_title as appTitle,
+           DATE_FORMAT(ta.start_time,'%Y-%m-%d')
+            as startTime,
+           DATE_FORMAT(ta.end_time,'%Y-%m-%d')
+            as endTime,
+           ta.place_id as placeId,
+           tp.place_name as placeName,
+           tu.zn_name as znName,
+           ta.attendance as attendance,
+           ta.verify_status as verifyStatus,
+           ta.app_desc as appDesc,
+            DATE_FORMAT(ta.create_time,'%Y-%m-%d')
             as createTime
-from t_applications as ta
-       left join t_user as tu on ta.user_id = tu.user_id
-       left join t_place as tp on ta.place_id = tp.place_id
-       left join t_group as tg on ta.group_id = tg.group_id
-where ta.group_id = 14
+        from t_applications as ta
+          left join t_user as tu on ta.user_id = tu.user_id
+          left join t_place as tp on ta.place_id = tp.place_id
+        where ta.group_id = 14
     </select>
     <!--获取该用户的所有记录-->
     <select id="getAllFormByUser" resultType="com.springboot.demo.entity.Application">
@@ -90,12 +90,8 @@ where ta.group_id = 14
            ta.place_id as placeId,
            tp.place_name as placeName,
            ta.attendance as attendance,
-           (case
-             when ta.verify_status='0' then '待审'
-             when ta.verify_status='1' then '通过'
-             else '未通过'
-            end )  as verifyStatus,
-            ta.app_desc as appDesc,
+           ta.verify_status as verifyStatus,
+           ta.app_desc as appDesc,
             DATE_FORMAT(ta.create_time,'%Y-%m-%d')
             as createTime
         from t_applications as ta
@@ -116,6 +112,7 @@ where ta.group_id = 14
         from t_applications as ta
         where form_id = #{formId}
     </select>
+    <!--获取场地列表-->
     <select id="getPlaceList" resultType="com.springboot.demo.entity.Application">
         select
           tp.place_id as placeId,

@@ -8,11 +8,10 @@ package com.springboot.demo.entity;
 public class Place {
     private String placeId;//场地ID
     private String placeName;//场地名称
-    private String occupyStatus;//占用状态
+    private String placeType;//场地类型
     private String createBy;//创建者
     private String createTime;//创建时间
     private String isEff;//有效状态
-
 
     public String getPlaceId() {
         return placeId;
@@ -30,12 +29,12 @@ public class Place {
         this.placeName = placeName;
     }
 
-    public String getOccupyStatus() {
-        return occupyStatus;
+    public String getPlaceType() {
+        return placeType;
     }
 
-    public void setOccupyStatus(String occupyStatus) {
-        this.occupyStatus = occupyStatus;
+    public void setPlaceType(String placeType) {
+        this.placeType = placeType;
     }
 
     public String getCreateBy() {

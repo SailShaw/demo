@@ -1,5 +1,6 @@
 package com.springboot.demo.service.Impl;
 
+import com.github.pagehelper.PageHelper;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
@@ -47,7 +48,9 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     @Override
-    public List<User> getURGInfoListByPage(User user) {
+    public List<User> getURGInfoListByPage(Integer pageNum, Integer pageSize, User user) {
+        //分页
+        PageHelper.startPage(pageNum,pageSize);
         List<User> result = userMapper.getURGInfoListByPage(user);
         return result;
     }
@@ -61,24 +64,6 @@ public class UserServiceImpl implements IUserService {
         userMapper.deleteUserByID(user);
     }
 
-    /**
-     * 修改用户部门
-     * @param user
-     */
-    @Override
-    public void modifyGroupByUser(User user) {
-
-        userMapper.modifyGroupByUser(user);
-    }
-
-    /**
-     * 用该用户角色
-     * @param user
-     */
-    @Override
-    public void modifyRoleByUser(User user) {
-        userMapper.modifyRoleByUser(user);
-    }
 
     /**
      * 注册
@@ -97,5 +82,37 @@ public class UserServiceImpl implements IUserService {
         userMapper.addUserGroup(id);
     }
 
+    /**
+     * 获取角色列表
+     * @return
+     */
+    @Override
+    public List<User> getRoleList() {
+        List<User> result = userMapper.getRoleList();
+        return result;
 
+    }
+/**
+     * 获取部门列表
+     * @return
+     */
+    @Override
+    public List<User> getGroupList() {
+        List<User> result = userMapper.getGroupList();
+        return result;
+
+    }
+
+    /**
+     * 分配角色和部门
+     * @param user
+     */
+    @Override
+    public String modifyURGInfoById(User user) {
+        if (userMapper.modifyRoleByUser(user) && (userMapper.modifyGroupByUser(user))){
+            return "success";
+        }else {
+            return "error";
+        }
+    }
 }
