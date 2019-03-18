@@ -18,6 +18,6 @@ public class SysLogServiceImpl implements ISysLogService {
 
     @Override
     public void saveSysLog(SysLog sysLog) {
-        sysLogMapper.saveSysLog(sysLog);
+//        sysLogMapper.saveSysLog(sysLog);
     }
 }

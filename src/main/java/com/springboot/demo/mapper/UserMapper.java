@@ -57,23 +57,31 @@ public interface UserMapper {
      * 注册-用户表
      * @param user
      */
-    void createUser(User user);
+
 
     /**
      * 注册-用户组织关系表
      * @param id
      */
-    void addUserGroup(String id);
+
 
     /**
      * 注册-用户角色关系表
      * @param id
      */
-    void addUserRole(String id);
+
 
 
     //获取角色列表
     List<User> getRoleList();
     //获取部门列表
     List<User> getGroupList();
+
+    //注册步骤1-查重
+    User findUserByAccount(User user);
+    //注册步骤2-User表新增
+    void createUser(User user);
+    //注册步骤3-关系表新增
+    void addUserRole(String id);
+    void addUserGroup(String id);
 }

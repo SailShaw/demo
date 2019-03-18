@@ -95,6 +95,9 @@
                 tg.group_name as groupName
         from t_group as tg
     </select>
+    <select id="findUserByAccount" resultType="com.springboot.demo.entity.User">
+        select user_id, account, passcode, group_desc, salt, zn_name, email, telphone, status, create_time from t_user where account=#{account}
+    </select>
     <!--注册-->
     <insert id="createUser">
         insert into t_user(user_id,account,email,group_desc,passcode)

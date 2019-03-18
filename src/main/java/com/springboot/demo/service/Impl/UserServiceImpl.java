@@ -70,7 +70,7 @@ public class UserServiceImpl implements IUserService {
      * @param user
      */
     @Override
-    public void createUser(User user) {
+    public void register(User user) {
         //生成userID
         String id = UUIDTool.getUUID();
         user.setUserId(id);
@@ -115,4 +115,8 @@ public class UserServiceImpl implements IUserService {
             return "error";
         }
     }
+
+
+
+
 }

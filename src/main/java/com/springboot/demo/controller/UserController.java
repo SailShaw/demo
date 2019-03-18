@@ -37,18 +37,6 @@ public class UserController {
         return resultList;
     }
 
-
-    /**
-     * 注册
-     * @param user
-     * @return
-     */
-    @RequestMapping("/register")
-    public String createUser(User user){
-        userService.createUser(user);
-        return "success";
-    }
-
     /**
      * 获取用户管理列表
      * @param request

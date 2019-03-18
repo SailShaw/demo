@@ -39,13 +39,14 @@ public interface IUserService {
     void deleteUserByID(User user);
 
     //注册
-    void createUser(User user);
+    void register(User user);
 
     //角色列表
     List<User> getRoleList();
     //获取部门列表
     List<User> getGroupList();
 
-    //
+    //用户管理
     String modifyURGInfoById(User user);
+
 }
