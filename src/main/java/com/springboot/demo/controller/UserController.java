@@ -1,6 +1,6 @@
 package com.springboot.demo.controller;
 
-import com.springboot.demo.Common.PageBean;
+import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IUserService;
 import org.springframework.util.StringUtils;

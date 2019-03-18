@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.demo.mapper.SysLogMapper">
+    <resultMap id="authorMap" type="com.springboot.demo.entity.SysLog">
+        <result column="permitId" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--保存日志-->
+    <insert id="saveLog">
+        1
+    </insert>
+    <!--查询日志-->
+    <select id="getSysLogListByPage" resultType="com.springboot.demo.entity.SysLog">
+        1
+    </select>
+
+
+</mapper>

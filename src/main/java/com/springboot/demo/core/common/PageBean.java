@@ -1,4 +1,4 @@
-package com.springboot.demo.Common;
+package com.springboot.demo.core.common;
 
 import com.github.pagehelper.Page;
 

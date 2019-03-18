@@ -1,5 +1,6 @@
 package com.springboot.demo.controller;
 
+import com.springboot.demo.core.interceptor.aop.SystemControllerLog;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
@@ -18,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
  * Create By SINYA
  * Description:
  */
+
 @RestController
 public class LoginController {
 
@@ -29,6 +31,7 @@ public class LoginController {
     private UserMapper userMapper;
 
     @RequestMapping("/register")
+    @SystemControllerLog(description = "注册")
     public String register(User user,HttpServletResponse response){
 
         //小写转换
@@ -58,6 +61,7 @@ public class LoginController {
     }
 
     @RequestMapping("/login")
+    @SystemControllerLog(description = "登录")
     public String login(User user, HttpServletResponse response, HttpSession session) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
         //校验

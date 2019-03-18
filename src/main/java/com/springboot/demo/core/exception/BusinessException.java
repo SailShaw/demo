@@ -1,4 +1,4 @@
-package com.springboot.demo.exception;
+package com.springboot.demo.core.exception;
 
 /**
  * Create By SINYA

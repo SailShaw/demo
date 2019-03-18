@@ -10,64 +10,56 @@ public class SysLog implements Serializable {
 
     private static final long serialVersionUID = 2713975405735052081L;
 
-    private String longId;//
-    private String userId;//
-    private String operation;//
-    private String timeCost;//
-    private String method;//
-    private String parmas;//
-    private String createTime;//
+    private String logId;//日志ID
+    private String userName;//用户名字
+    private String userIp;//用户IP
+    private String requestMethod;//请求方法
+    private String requestDesc;//方法描述
+    private String createTime;//记录日期
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public String getLongId() {
-        return longId;
+    public String getLogId() {
+        return logId;
     }
 
-    public void setLongId(String longId) {
-        this.longId = longId;
+    public void setLogId(String logId) {
+        this.logId = logId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getOperation() {
-        return operation;
+    public String getUserIp() {
+        return userIp;
     }
 
-    public void setOperation(String operation) {
-        this.operation = operation;
+    public void setUserIp(String userIp) {
+        this.userIp = userIp;
     }
 
-    public String getTimeCost() {
-        return timeCost;
+    public String getRequestMethod() {
+        return requestMethod;
     }
 
-    public void setTimeCost(String timeCost) {
-        this.timeCost = timeCost;
+    public void setRequestMethod(String requestMethod) {
+        this.requestMethod = requestMethod;
     }
 
-    public String getMethod() {
-        return method;
+    public String getRequestDesc() {
+        return requestDesc;
     }
 
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public String getParmas() {
-        return parmas;
-    }
-
-    public void setParmas(String parmas) {
-        this.parmas = parmas;
+    public void setRequestDesc(String requestDesc) {
+        this.requestDesc = requestDesc;
     }
 
     public String getCreateTime() {
