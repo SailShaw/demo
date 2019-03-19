@@ -21,8 +21,8 @@ spring:
       max-wait: 60000
   #Aop
   aop:
-    proxy-target-class: true
     auto: true
+    proxy-target-class: true
 #mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -36,6 +36,6 @@ pagehelper:
   params: count=countSql
 
 
-logging:
-  config: classpath:log4j2.xml
+#logging:
+#  config: classpath:log4j2.xml
 

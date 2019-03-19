@@ -2,15 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.springboot.demo.mapper.SysLogMapper">
     <resultMap id="authorMap" type="com.springboot.demo.entity.SysLog">
-        <result column="permitId" jdbcType="VARCHAR" />
+        <result column="logId" jdbcType="VARCHAR" />
+        <result column="userName" jdbcType="VARCHAR" />
+        <result column="userIp" jdbcType="VARCHAR" />
+        <result column="requestMethod" jdbcType="VARCHAR" />
+        <result column="requestDesc" jdbcType="VARCHAR" />
+        <result column="createTime" jdbcType="VARCHAR" />
     </resultMap>
     <!--保存日志-->
     <insert id="saveLog">
-        1
+        insert into t_sys_log (log_id, user_name, user_ip, request_method, request_desc)
+        values (#{logId},#{userName},#{userIp},#{requestMethod},#{requestDesc})
     </insert>
     <!--查询日志-->
     <select id="getSysLogListByPage" resultType="com.springboot.demo.entity.SysLog">
-        1
+        select
+              log_id as logId,
+              user_name as userName,
+              user_ip as userIp,
+              request_method as requestMethod,
+              request_desc as requestDesc,
+              create_time as createTime
+        from t_sys_log
     </select>
 
 

@@ -5,6 +5,7 @@ import com.springboot.demo.entity.SysLog;
 import com.springboot.demo.mapper.SysLogMapper;
 import com.springboot.demo.service.ISysLogService;
 import com.springboot.demo.util.UUIDTool;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * Create By SINYA
  * Description:
  */
+@Service
 public class SysLogServiceImpl implements ISysLogService{
 
     @Resource

@@ -1,6 +1,7 @@
 package com.springboot.demo.controller;
 
 import com.springboot.demo.core.common.PageBean;
+import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IUserService;
 import org.springframework.util.StringUtils;
@@ -93,6 +94,7 @@ public class UserController {
     /**
      * 获取邮箱发送重置密码链接以及验证码
      */
+    @Operation(value = "获取邮箱发送重置密码链接以及验证码")
     @RequestMapping(value = "/modifyPasswordByEmail",method = RequestMethod.POST)
     public void modifyPasswordByEmail(User user){
 
@@ -103,6 +105,7 @@ public class UserController {
      * 获取角色列表
      * @return
      */
+    @Operation(value = "获取角色列表")
     @RequestMapping(value = "/getRoleList")
     public List<User> getRoleList(){
         List<User> result = userService.getRoleList();
@@ -113,12 +116,14 @@ public class UserController {
      * 获取部门列表
      * @return
      */
+    @Operation(value = "获取部门列表")
     @RequestMapping(value = "/getGroupList")
     public List<User> getGroupList(){
         List<User> result = userService.getGroupList();
         return result;
     }
 
+    @Operation(value = "修改用户角色与部门信息")
     @RequestMapping("/modifyURGInfo")
     public String  modifyURGInfoById(User user){
         String result = userService.modifyURGInfoById(user);

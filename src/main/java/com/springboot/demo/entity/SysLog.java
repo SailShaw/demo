@@ -62,6 +62,7 @@ public class SysLog implements Serializable {
         this.requestDesc = requestDesc;
     }
 
+
     public String getCreateTime() {
         return createTime;
     }
