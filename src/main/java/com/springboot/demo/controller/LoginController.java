@@ -1,5 +1,7 @@
 package com.springboot.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
@@ -20,7 +22,11 @@ import java.security.NoSuchAlgorithmException;
  */
 
 @RestController
+@RequestMapping("/")
 public class LoginController {
+
+    private final static Logger logger = LoggerFactory.getLogger(LoginController.class);
+
 
 
     @Resource
@@ -29,7 +35,7 @@ public class LoginController {
     @Resource
     private UserMapper userMapper;
 
-    @RequestMapping("/register")
+    @RequestMapping("register")
     public String register(User user,HttpServletResponse response){
 
         //小写转换
@@ -58,30 +64,34 @@ public class LoginController {
 
     }
 
-    @RequestMapping("/login")
-    public String login(User user, HttpServletResponse response, HttpSession session) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    @RequestMapping("login")
+    public String login(HttpServletResponse response,
+                        HttpSession session,
+                        User user) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
-        //校验
-        if (!RegexUtil.reviewAccount(user.getAccount())) {
-            return "账号格式不正确";
-        }
-        if (!RegexUtil.reviewAccount(user.getPasscode())) {
-            return "密码格式不正确";
-        }
         //账号是否存在
         User censor = userMapper.findUserByAccount(user);
         if (censor == null) {
-            return "用户名不存在";
+            logger.error("用户名不存在");
+            return "user is not exist";
         }else {
             boolean result= MD5.checkpassword(user.getPasscode(),censor.getPasscode());
             if (result) {
                 session.setAttribute("user",censor);
                 return "success";
             }else {
-                return "密码错误";
+                return "login";
             }
         }
     }
+
+
+
+
+//    @RequestMapping("/logout")
+//    public String logout(HttpSession session){
+//        session.removeAttribute();
+//    }
 
 
 }

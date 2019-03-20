@@ -4,6 +4,8 @@ import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +25,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    private final static Logger logger = LoggerFactory.getLogger(SysController.class);
+
     @Resource
     private IUserService userService;
 
@@ -32,6 +36,7 @@ public class UserController {
      * @param user
      * @return
      */
+    @Operation(value = "根据账号获取用户信息")
     @RequestMapping("/getUserByAccount")
     public List<User> getUserByAccount(User user){
         List<User> resultList = userService.getUserByAccount(user);
@@ -44,6 +49,7 @@ public class UserController {
      * @param user
      * @return
      */
+    @Operation(value = "获取用户管理列表")
     @RequestMapping("/getURGInfoListByPage")
     public PageBean<User> getURGInfoListByPage(HttpServletRequest request, User user){
         //logger
@@ -76,6 +82,7 @@ public class UserController {
      * 根据ID修改用户信息
      * @param user
      */
+    @Operation(value = "根据ID修改用户信息")
     @RequestMapping(value = "/modifyUserInfoById",method = RequestMethod.POST)
      public void modifyUserInfoById(User user){
         userService.modifyUserInfoById(user);
@@ -85,6 +92,7 @@ public class UserController {
      * 删除用户
      * @param user
      */
+    @Operation(value = "删除用户")
     @RequestMapping(value = "/deleteUserByID",method = RequestMethod.POST)
     public void deleteUserByID(User user){
         userService.deleteUserByID(user);
@@ -105,7 +113,6 @@ public class UserController {
      * 获取角色列表
      * @return
      */
-    @Operation(value = "获取角色列表")
     @RequestMapping(value = "/getRoleList")
     public List<User> getRoleList(){
         List<User> result = userService.getRoleList();
@@ -116,7 +123,6 @@ public class UserController {
      * 获取部门列表
      * @return
      */
-    @Operation(value = "获取部门列表")
     @RequestMapping(value = "/getGroupList")
     public List<User> getGroupList(){
         List<User> result = userService.getGroupList();

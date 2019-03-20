@@ -8,7 +8,6 @@ public class Menu {
 
     private String roleId;//角色ID
     private String roleName;//角色名称
-
     private String permitId;//权限ID
     private String permitName;//权限名称
     private String permitUrl;//权限地址

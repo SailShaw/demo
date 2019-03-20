@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 9012
 
 #spring
 spring:
@@ -23,6 +23,11 @@ spring:
   aop:
     auto: true
     proxy-target-class: true
+  #MVC
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
 #mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml

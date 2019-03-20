@@ -2,8 +2,8 @@ package com.springboot.demo.controller;
 
 import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
-import com.springboot.demo.entity.Place;
-import com.springboot.demo.service.IPlaceService;
+import com.springboot.demo.entity.SysLog;
+import com.springboot.demo.service.ISysLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -19,25 +19,26 @@ import java.util.List;
  * Description:
  */
 @RestController
-@RequestMapping("/place")
-public class PlaceController {
+@RequestMapping("/system")
+public class SysController {
 
     private final static Logger logger = LoggerFactory.getLogger(SysController.class);
 
     @Resource
-    private IPlaceService placeService;
+    private ISysLogService sysLogService;
 
 
+    @Operation(value = "查询系统日志")
     /**
-     * 获取场地列表
+     * 获取本部门下所有记录
+     * @param application
      * @return
      */
-    @Operation(value = "获取场地列表")
-    @RequestMapping("/getPlaceListByPage")
-    public PageBean<Place> getPlaceListByPage(HttpServletRequest request,Place place){
-        //定义数据集
-        List<Place> resultList = null;
+    @RequestMapping(value = "/getSysLogListByPage")
+    public PageBean<SysLog> getSysLogListByPage(HttpServletRequest request, SysLog sysLog){
 
+        //定义数据集
+        List<SysLog> resultList = null;
         //分页
         try{
             // 获取分页参数
@@ -47,31 +48,14 @@ public class PlaceController {
             Integer pageNum = StringUtils.isEmpty(_pageNum) ? 1 : Integer.parseInt(_pageNum);
             Integer pageSize = StringUtils.isEmpty(_pageSize) ? 7 : Integer.parseInt(_pageSize);
 
-            resultList = placeService.getPlaceListByPage(pageNum,pageSize,place);
+            resultList = sysLogService.getSysLogListByPage(pageNum,pageSize,sysLog);
         }catch(Exception e){
             //logger
+            logger.error("分页参数异常");
         }
-
         //Page对象
-
-        PageBean<Place> pageBean = new PageBean<>(resultList);
+        PageBean<SysLog> pageBean = new PageBean<>(resultList);
         return pageBean;
     }
 
-    /**
-     * 添加场地
-     * @param request
-     * @param place
-     * @return
-     */
-    @Operation(value = "添加场地")
-    @RequestMapping("/createPlace")
-    public String createPlace(HttpServletRequest request,Place place){
-        //从session里获取当前用户的名字
-//        place.setCreateBy(request.getSession().getAttribute("user").toString());
-        place.setCreateBy("Sinya");
-        //执行
-        placeService.createPlace(place);
-        return "success";
-    }
 }

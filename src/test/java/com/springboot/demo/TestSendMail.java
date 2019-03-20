@@ -15,5 +15,6 @@ public class TestSendMail {
                 "邮箱测试-2019年3月15日",
                 "rt \n- 来自Hutools",
                 false);
+
     }
 }
