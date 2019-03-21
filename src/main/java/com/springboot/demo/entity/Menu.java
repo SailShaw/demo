@@ -1,66 +1,29 @@
 package com.springboot.demo.entity;
 
+import java.io.Serializable;
+
 /**
  * Create By SINYA
  * Description: Pojo For Menu Model
  */
-public class Menu {
+public class Menu implements Serializable {
+
+    private static final long serialVersionUID = 4007682221096174434L;
 
     private String roleId;//角色ID
     private String roleName;//角色名称
+
     private String permitId;//权限ID
-    private String permitName;//权限名称
-    private String permitUrl;//权限地址
-    private String permitType;//权限类型
-    private String createTime;//创建时间
-    private String updateTime;//更新时间
+    private String permitType;//权限名称
+    private String permitDesc;//权限名称
+    private String permitIcon;//权限地址
+    private String permitUrl;//权限类型
+    private String orderNum;//权限类型
+    private String createBy;//创建时间
+    private String createTime;//更新时间
 
-    public String getPermitId() {
-        return permitId;
-    }
-
-    public void setPermitId(String permitId) {
-        this.permitId = permitId;
-    }
-
-    public String getPermitName() {
-        return permitName;
-    }
-
-    public void setPermitName(String permitName) {
-        this.permitName = permitName;
-    }
-
-    public String getPermitUrl() {
-        return permitUrl;
-    }
-
-    public void setPermitUrl(String permitUrl) {
-        this.permitUrl = permitUrl;
-    }
-
-    public String getPermitType() {
-        return permitType;
-    }
-
-    public void setPermitType(String permitType) {
-        this.permitType = permitType;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public String getRoleId() {
@@ -77,5 +40,69 @@ public class Menu {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getPermitId() {
+        return permitId;
+    }
+
+    public void setPermitId(String permitId) {
+        this.permitId = permitId;
+    }
+
+    public String getPermitType() {
+        return permitType;
+    }
+
+    public void setPermitType(String permitType) {
+        this.permitType = permitType;
+    }
+
+    public String getPermitDesc() {
+        return permitDesc;
+    }
+
+    public void setPermitDesc(String permitDesc) {
+        this.permitDesc = permitDesc;
+    }
+
+    public String getPermitIcon() {
+        return permitIcon;
+    }
+
+    public void setPermitIcon(String permitIcon) {
+        this.permitIcon = permitIcon;
+    }
+
+    public String getPermitUrl() {
+        return permitUrl;
+    }
+
+    public void setPermitUrl(String permitUrl) {
+        this.permitUrl = permitUrl;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

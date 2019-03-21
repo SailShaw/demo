@@ -2,25 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.springboot.demo.mapper.MenuMapper">
     <resultMap id="authorMap" type="com.springboot.demo.entity.Menu">
-        <result column="permitId" jdbcType="VARCHAR" />
-        <result column="permitName" jdbcType="VARCHAR" />
-        <result column="permitUrl" jdbcType="VARCHAR" />
-        <result column="permitType" jdbcType="VARCHAR" />
-        <result column="createTime" jdbcType="VARCHAR" />
-        <result column="updateTime" jdbcType="VARCHAR" />
         <result column="roleId" jdbcType="VARCHAR" />
         <result column="roleName" jdbcType="VARCHAR" />
+        <result column="permitId" jdbcType="VARCHAR" />
+        <result column="permitType" jdbcType="VARCHAR" />
+        <result column="permitDesc" jdbcType="VARCHAR" />
+        <result column="permitIcon" jdbcType="VARCHAR" />
+        <result column="permitUrl" jdbcType="VARCHAR" />
+        <result column="orderNum" jdbcType="VARCHAR" />
+        <result column="createBy" jdbcType="VARCHAR" />
+        <result column="createTime" jdbcType="VARCHAR" />
+
     </resultMap>
     <!--根据角色获取菜单列表-->
     <select id="getMenuListByRole" resultType="com.springboot.demo.entity.Menu">
-        select distinct
-               tr.role_name as roleName,
-               tp.permit_name as permitName,
-               tp.permit_url as permitUrl
+        select
+              trp.role_id as roleId,
+              trp.permit_id as permitId,
+              tp.permit_desc as permitDesc,
+              tp.permit_url as permitUrl,
+              tp.permit_icon as permitIcon,
+              tp.order_num as orderNum
         from t_role_permit as trp
-        left join t_permit as tp on trp.permit_id = tp.permit_id
-        left join t_role as tr on trp.role_id = tr.role_id
-        where trp.role_id = #{roleId};
+               left join t_permit as tp on trp.permit_id = tp.permit_id
+               left join t_role as tr on trp.role_id = tr.role_id
+        where trp.role_id = #{roleId}
+        order by tp.order_num
     </select>
 
 
