@@ -1,5 +1,6 @@
 package com.springboot.demo.service.Impl;
 
+import cn.hutool.extra.mail.MailUtil;
 import com.github.pagehelper.PageHelper;
 import com.springboot.demo.entity.SysLog;
 import com.springboot.demo.mapper.SysLogMapper;
@@ -43,5 +44,11 @@ public class SysLogServiceImpl implements ISysLogService{
 
         List<SysLog> result = sysLogMapper.getSysLogListByPage(sysLog);
         return result;
+    }
+
+    @Override
+    public boolean sendEmailOfTest(List<String> recipient, String mailTitle, String mailContent) {
+        MailUtil.send(recipient,mailTitle,mailContent,true);
+        return true;
     }
 }

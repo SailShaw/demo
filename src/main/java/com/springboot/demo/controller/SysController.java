@@ -1,6 +1,7 @@
 package com.springboot.demo.controller;
 
 import com.springboot.demo.core.common.PageBean;
+import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.SysLog;
 import com.springboot.demo.service.ISysLogService;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ public class SysController {
 
 
     /**
-     * 获取本部门下所有记录
+     * 获取系统日志记录
      * @param request
      * @param sysLog
      * @return
@@ -58,4 +60,29 @@ public class SysController {
         return pageBean;
     }
 
+    /**
+     * 获取本部门下所有记录
+     * @param request
+     * @return
+     */
+    @Operation(value = "发送测试邮件")
+    @RequestMapping(value = "/sendEmailOfTest")
+    public String sendEmailOfTest(HttpServletRequest request){
+        String recipients = request.getParameter("recipient");
+
+        // 收件人(单个或多个)
+        List<String> recipient = Arrays.asList(recipients.split(","));
+
+        //邮件标题
+        String mailTitle = request.getParameter("mailTitle");
+        //邮件内容
+        String mailContent = request.getParameter("mailContent");
+
+        if (sysLogService.sendEmailOfTest(recipient,mailTitle,mailContent)) {
+            return "SUCCESS";
+        }else{
+            logger.error("sendEmailOfTest() -> 发送失败");
+            return "ERROR";
+        }
+    }
 }
