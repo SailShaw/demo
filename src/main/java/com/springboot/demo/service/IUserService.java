@@ -36,7 +36,7 @@ public interface IUserService {
 
     //删除用户
 
-    void deleteUserByID(User user);
+    String deleteUserByID(User user);
 
     //注册
     void register(User user);

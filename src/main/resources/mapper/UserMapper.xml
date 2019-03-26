@@ -50,7 +50,13 @@
     </update>
     <!--删除用户-->
     <delete id="deleteUserByID">
-        delete from t_user where account=#{account}
+        delete from t_user where user_id=#{userId}
+    </delete>
+    <delete id="deleteUserRoleByID">
+        delete from t_user_role where user_id = #{userId}
+    </delete>
+    <delete id="deleteUserGroupByID">
+        delete from t_user_group where user_id = #{userId}
     </delete>
     <!--获取用户信息-->
     <select id="getUserByAccount" resultType="com.springboot.demo.entity.User">

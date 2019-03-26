@@ -113,8 +113,9 @@ public class UserController {
      */
     @Operation(value = "删除用户")
     @RequestMapping(value = "/deleteUserByID",method = RequestMethod.POST)
-    public void deleteUserByID(User user){
-        userService.deleteUserByID(user);
+    public String deleteUserByID(User user){
+        String result = userService.deleteUserByID(user);
+        return result;
     }
 
 

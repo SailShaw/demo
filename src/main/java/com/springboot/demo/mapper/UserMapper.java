@@ -36,10 +36,12 @@ public interface UserMapper {
     void modifyUserInfoById(User user);
 
     /**
-     * 删除用户
+     * 删除用户表记录
      * @param user
      */
-    void deleteUserByID(User user);
+    boolean deleteUserByID(User user);
+    boolean deleteUserRoleByID(User user);
+    boolean deleteUserGroupByID(User user);
 
     /**
      * 修改用户所属部门

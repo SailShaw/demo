@@ -68,8 +68,12 @@ public class UserServiceImpl implements IUserService {
      * @param user
      */
     @Override
-    public void deleteUserByID(User user) {
-        userMapper.deleteUserByID(user);
+    public String deleteUserByID(User user) {
+        if (userMapper.deleteUserByID(user) && userMapper.deleteUserRoleByID(user) && userMapper.deleteUserGroupByID(user)) {
+            return "success";
+        }else{
+            return "error";
+        }
     }
 
 
