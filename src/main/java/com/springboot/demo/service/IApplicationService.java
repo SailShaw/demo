@@ -31,20 +31,20 @@ public interface IApplicationService {
      * 修改表单审核状态
      * @param application
      */
-    void modifyFormStatusByFormId(Application application);
+    boolean modifyFormStatusByFormId(Application application);
 
     /**
      * 修改表单信息
      * @param application
      */
-    void modifyFormInfoByFormId(Application application);
+    boolean modifyFormInfoByFormId(Application application);
 
 
     /**
      * 新增申请表
      * @param application
      */
-    void createAppForm(Application application);
+    boolean createAppForm(Application application);
 
 
     /**

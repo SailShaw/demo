@@ -1,10 +1,14 @@
 package com.springboot.demo.entity;
 
+import java.io.Serializable;
+
 /**
  * Create By SINYA
  * Description: Pojo for User Model
  */
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = -9189035870008649769L;
 
     private String userId;//用户ID
     private String account;//账号
@@ -12,28 +16,29 @@ public class User {
     private String znName;//姓名
     private String email;//邮箱
     private String telphone;//联系方式
-    private String validFlag;//有效状态
     private String groupDesc;//组织描述
+    private String status;//用户有效状态
     private String createBy;//创建者
     private String createTime;//创建日期
     private String updateBy;//更新者
     private String updateTime;//更新日期
+
+
+
     private String roleId;//角色ID
     private String roleName;//角色名称
-    private String roleStatus;//角色状态
+    private String roleStatus;//角色有效状态
+
+
+
     private String groupId;//组织ID
     private String groupName;//组织名称
-    private String groupStatus;//有效状态
-    private String ownStatus;
+    private String groupStatus;//部门有效状态
 
     /* Getter & Setter*/
 
-    public String getOwnStatus() {
-        return ownStatus;
-    }
-
-    public void setOwnStatus(String ownStatus) {
-        this.ownStatus = ownStatus;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public String getUserId() {
@@ -84,20 +89,21 @@ public class User {
         this.telphone = telphone;
     }
 
-    public String getValidFlag() {
-        return validFlag;
-    }
-
-    public void setValidFlag(String validFlag) {
-        this.validFlag = validFlag;
-    }
-
     public String getGroupDesc() {
         return groupDesc;
     }
 
     public void setGroupDesc(String groupDesc) {
         this.groupDesc = groupDesc;
+    }
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCreateBy() {

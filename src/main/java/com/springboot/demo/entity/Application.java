@@ -1,10 +1,16 @@
 package com.springboot.demo.entity;
 
+import java.io.Serializable;
+
 /**
  * Create By SINYA
  * Description: Pojo for Applications
  */
-public class Application {
+public class Application implements Serializable {
+
+
+    private static final long serialVersionUID = 1117965240134220722L;
+
     private String formId;//表单ID
     private String userId;//用户ID
     private String groupId;//部门ID
@@ -15,11 +21,19 @@ public class Application {
     private String startTime;//开始日期
     private String endTime;//结束日期
     private String verifyStatus;//审核状态
+    private String reviewer;//审批人
     private String createTime;//创建日期
     private String updateTime;//修改日期
     private String groupName;//部门名称
     private String placeName;//场地名称
-    private String znName;//用户名称
+    private String znName;//申请人
+    private String mailMsg;//邮件内容
+
+    /* Getter & Setter */
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getFormId() {
         return formId;
@@ -101,6 +115,14 @@ public class Application {
         this.verifyStatus = verifyStatus;
     }
 
+    public String getReviewer() {
+        return reviewer;
+    }
+
+    public void setReviewer(String reviewer) {
+        this.reviewer = reviewer;
+    }
+
     public String getCreateTime() {
         return createTime;
     }
@@ -139,5 +161,13 @@ public class Application {
 
     public void setZnName(String znName) {
         this.znName = znName;
+    }
+
+    public String getMailMsg() {
+        return mailMsg;
+    }
+
+    public void setMailMsg(String mailMsg) {
+        this.mailMsg = mailMsg;
     }
 }

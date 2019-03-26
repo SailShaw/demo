@@ -49,4 +49,10 @@ public interface IUserService {
     //用户管理
     String modifyURGInfoById(User user);
 
+    //发送验证码
+
+    void sendVerificationCode(Integer VerifyComde,User user);
+
+    void resetPassword(User user);
+
 }

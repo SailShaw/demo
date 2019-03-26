@@ -3,6 +3,7 @@ package com.springboot.demo.controller;
 import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.Application;
+import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IApplicationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ import java.util.List;
 @RequestMapping("/application")
 public class ApplicationController {
 
-    private final static Logger logger = LoggerFactory.getLogger(SysController.class);
+    private final static Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
     @Resource
     private IApplicationService applicationService;
@@ -37,9 +38,15 @@ public class ApplicationController {
     @Operation(value = "获取本部门下所有记录")
     @RequestMapping(value = "/getAllFormByDept")
     public PageBean<Application> getAllFormByDept(HttpServletRequest request, Application application){
+
         //定义数据集
         List<Application> resultList = null;
-        //分页
+
+        //获取登陆用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //设置查询条件
+        application.setGroupId(user.getGroupId());
+
         try{
             // 获取分页参数
             String _pageNum = request.getParameter("pageNum");
@@ -51,6 +58,7 @@ public class ApplicationController {
         }catch(Exception e){
             logger.error("分页失败");
         }
+
         //Page对象
         PageBean<Application> pageBean = new PageBean<>(resultList);
         return pageBean;
@@ -68,6 +76,10 @@ public class ApplicationController {
 
         //定义数据集
         List<Application> resultList = null;
+        //获取登陆用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //设置查询条件
+        application.setUserId(user.getUserId());
         //分页
         try{
             // 获取分页参数
@@ -92,8 +104,22 @@ public class ApplicationController {
      */
     @Operation(value = "审核申请表")
     @RequestMapping(value = "/modifyFormStatusByFormId")
-    public void modifyFormStatusByFormId(Application application){
-        applicationService.modifyFormStatusByFormId(application);
+    public String modifyFormStatusByFormId(HttpServletRequest request,Application application){
+
+        //获取登陆用户信息
+        User user = (User) request.getSession().getAttribute("user");
+        //设置审核人
+        application.setReviewer(user.getZnName());
+
+        //返回结果
+        String result = "";
+
+        if (applicationService.modifyFormStatusByFormId(application)){
+            result = "success";
+        }else {
+            result = "error";
+        }
+        return result;
     }
 
     /**
@@ -102,8 +128,18 @@ public class ApplicationController {
      */
     @Operation(value = "修改申请表")
     @RequestMapping(value = "/modifyFormInfoByFormId")
-    public void modifyFormInfoByFormId(Application application){
-        applicationService.modifyFormInfoByFormId(application);
+    public String modifyFormInfoByFormId(Application application){
+
+        //返回结果
+        String result = "";
+
+        if (applicationService.modifyFormInfoByFormId(application)){
+            result = "success";
+        }else {
+            result = "error";
+        }
+
+        return result;
     }
 
     /**
@@ -112,8 +148,22 @@ public class ApplicationController {
      */
     @Operation(value = "添加申请表")
     @RequestMapping(value = "/createAppForm")
-    public void createAppForm(Application application){
-        applicationService.createAppForm(application);
+    public String createAppForm(HttpServletRequest request,Application application){
+        //用户ID、部门ID直接获取当前用户的数据
+        User user = (User) request.getSession().getAttribute("user");
+        application.setUserId(user.getUserId());
+        application.setGroupId(user.getGroupId());
+
+        //返回结果
+        String result = "";
+
+        if (applicationService.createAppForm(application)) {
+            result = "success";
+        }else {
+            result = "error";
+        }
+        return result;
+
     }
 
 

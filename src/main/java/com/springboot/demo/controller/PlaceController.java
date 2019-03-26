@@ -3,6 +3,7 @@ package com.springboot.demo.controller;
 import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.Place;
+import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IPlaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequestMapping("/place")
 public class PlaceController {
 
-    private final static Logger logger = LoggerFactory.getLogger(SysController.class);
+    private final static Logger logger = LoggerFactory.getLogger(PlaceController.class);
 
     @Resource
     private IPlaceService placeService;
@@ -68,10 +69,17 @@ public class PlaceController {
     @RequestMapping("/createPlace")
     public String createPlace(HttpServletRequest request,Place place){
         //从session里获取当前用户的名字
-//        place.setCreateBy(request.getSession().getAttribute("user").toString());
-        place.setCreateBy("Sinya");
+        User userInfo = (User) request.getSession().getAttribute("user");
+        //设置创建者
+        place.setCreateBy(userInfo.getZnName());
         //执行
-        placeService.createPlace(place);
-        return "success";
+        String result = "";
+
+        if (placeService.createPlace(place)) {
+            result = "success";
+        }else {
+            result = "error";
+        }
+        return result;
     }
 }

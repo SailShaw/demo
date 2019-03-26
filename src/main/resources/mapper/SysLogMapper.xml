@@ -17,13 +17,14 @@
     <!--查询日志-->
     <select id="getSysLogListByPage" resultType="com.springboot.demo.entity.SysLog">
         select
-              log_id as logId,
-              user_name as userName,
-              user_ip as userIp,
-              request_method as requestMethod,
-              request_desc as requestDesc,
-              create_time as createTime
+          log_id as logId,
+          user_name as userName,
+          user_ip as userIp,
+          request_method as requestMethod,
+          request_desc as requestDesc,
+          create_time as createTime
         from t_sys_log
+        order by createTime desc
     </select>
 
 

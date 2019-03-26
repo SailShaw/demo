@@ -1,7 +1,6 @@
 package com.springboot.demo.controller;
 
 import com.springboot.demo.core.common.PageBean;
-import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.SysLog;
 import com.springboot.demo.service.ISysLogService;
 import org.slf4j.Logger;
@@ -28,10 +27,11 @@ public class SysController {
     private ISysLogService sysLogService;
 
 
-    @Operation(value = "查询系统日志")
+
     /**
      * 获取本部门下所有记录
-     * @param application
+     * @param request
+     * @param sysLog
      * @return
      */
     @RequestMapping(value = "/getSysLogListByPage")

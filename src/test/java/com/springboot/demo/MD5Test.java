@@ -17,6 +17,10 @@ public class MD5Test {
         String val = "s0706";
 
         System.out.println(MD5.EncoderByMd5(val));
+
+
+        System.out.println(MD5.checkpassword("y0706","FYIYP9U4L8W5KMWCV1saVA=="));
+
     }
 
 }

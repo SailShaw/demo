@@ -1,8 +1,11 @@
 package com.springboot.demo.service.Impl;
 
+import cn.hutool.extra.mail.MailUtil;
 import com.github.pagehelper.PageHelper;
 import com.springboot.demo.entity.Application;
+import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.ApplicationMapper;
+import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IApplicationService;
 import com.springboot.demo.util.UUIDTool;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,9 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     @Resource
     private ApplicationMapper applicationMapper;
+
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 获取部门下所有记录
@@ -52,33 +58,49 @@ public class ApplicationServiceImpl implements IApplicationService {
     }
 
     /**
-     * 修改表单审核状态
+     * 审核申请表
      * @param application
      */
     @Override
-    public void modifyFormStatusByFormId(Application application) {
+    public boolean modifyFormStatusByFormId(Application application) {
 
         //获取该表单所属用户的邮箱
+        User user = new User();
 
+        user.setUserId(application.getUserId());
+
+        User userinfo = userMapper.getEmailById(user);
+
+        String recipient = userinfo.getEmail();
+        //设置邮件标题
+        String mailTitle = "审核结果通知";
         //获取邮件内容
-//        String mailText =
+        String mailText = application.getMailMsg();
 
         //修改审核状态
-        applicationMapper.modifyFormStatusByFormId(application);
 
-        //发送邮件
-//        MailUtil.send();
+        //发送邮件(邮箱地址,标题,正文,是否是html)
+        MailUtil.send(recipient,mailTitle,mailText,false);
 
+        if (applicationMapper.modifyFormStatusByFormId(application)) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
-     * 修改表单信息
+     * 修改申请表
      * @param application
      */
     @Override
-    public void modifyFormInfoByFormId(Application application) {
+    public boolean modifyFormInfoByFormId(Application application) {
 
-        applicationMapper.modifyFormInfoByFormId(application);
+        if (applicationMapper.modifyFormInfoByFormId(application)) {
+            return true;
+        }else{
+            return false;
+        }
 
     }
 
@@ -87,16 +109,16 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @param application
      */
     @Override
-    public void createAppForm(Application application) {
+    public boolean createAppForm(Application application) {
         //表单ID自动生成
         application.setFormId(UUIDTool.getUUID());
-        //用户、部门ID直接获取当前用户的数据
-//        session.getuserId();
-//        session.getgroupId();
-        //内容校验框架
 
         //执行新增操作
-        applicationMapper.createAppForm(application);
+        if (applicationMapper.createAppForm(application)) {
+            return true;
+        }else{
+            return false;
+        }
 
     }
 

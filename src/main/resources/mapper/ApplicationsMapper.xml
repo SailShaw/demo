@@ -38,6 +38,7 @@
     <update id="modifyFormStatusByFormId">
         update t_applications set
             verify_status=#{verifyStatus},
+            mail_msg = #{mailMsg}
         where form_id=#{formId}
     </update>
     <!--修改表单信息-->
@@ -74,7 +75,7 @@
         from t_applications as ta
           left join t_user as tu on ta.user_id = tu.user_id
           left join t_place as tp on ta.place_id = tp.place_id
-        where ta.group_id = 14
+        where ta.group_id = #{groupId}
     </select>
     <!--获取该用户的所有记录-->
     <select id="getAllFormByUser" resultType="com.springboot.demo.entity.Application">
@@ -97,7 +98,7 @@
         from t_applications as ta
           left join t_user as tu on ta.user_id = tu.user_id
           left join t_place as tp on ta.place_id = tp.place_id
-        where ta.user_id = 6
+        where ta.user_id = #{userId}
     </select>
     <!--根据ID获取表信息-->
     <select id="getFormInfoByFormId" resultType="com.springboot.demo.entity.Application">

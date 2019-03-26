@@ -13,5 +13,5 @@ public interface IPlaceService {
     //获取场地列表
     List<Place> getPlaceListByPage(Integer pageNum,Integer pageSize,Place place);
 
-    void createPlace(Place place);
+    boolean createPlace(Place place);
 }

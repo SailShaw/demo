@@ -32,12 +32,15 @@ public class PlaceServiceImpl implements IPlaceService {
     }
 
     @Override
-    public void createPlace(Place place) {
+    public boolean createPlace(Place place) {
         //生成ID
         place.setPlaceId(UUIDTool.getUUID());
-//        long time = System.currentTimeMillis();
-//        place.setCreateTime(String.valueOf(time));
-        placeMapper.createPlace(place);
 
+        //执行
+        if (placeMapper.createPlace(place)){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

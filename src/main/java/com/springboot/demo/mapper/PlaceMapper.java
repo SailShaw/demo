@@ -14,5 +14,5 @@ public interface PlaceMapper {
     //
     List<Place> getPlaceListByPage(Place place);
 
-    void createPlace(Place place);
+    boolean createPlace(Place place);
 }

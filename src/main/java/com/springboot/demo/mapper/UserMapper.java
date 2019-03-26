@@ -53,25 +53,6 @@ public interface UserMapper {
      */
     boolean modifyRoleByUser(User user);
 
-    /**
-     * 注册-用户表
-     * @param user
-     */
-
-
-    /**
-     * 注册-用户组织关系表
-     * @param id
-     */
-
-
-    /**
-     * 注册-用户角色关系表
-     * @param id
-     */
-
-
-
     //获取角色列表
     List<User> getRoleList();
     //获取部门列表
@@ -84,4 +65,13 @@ public interface UserMapper {
     //注册步骤3-关系表新增
     void addUserRole(String id);
     void addUserGroup(String id);
+
+    //根据id获取邮箱
+    User getEmailById(User user);
+
+    //根据email查找账户信息
+    User findUserByEmail(User user);
+
+    //重置密码
+    void resetPassword(User user);
 }

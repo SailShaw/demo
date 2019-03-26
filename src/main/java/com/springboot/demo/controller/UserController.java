@@ -1,8 +1,10 @@
 package com.springboot.demo.controller;
 
+import cn.hutool.core.util.RandomUtil;
 import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.User;
+import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create By SINYA
@@ -25,10 +29,12 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    private final static Logger logger = LoggerFactory.getLogger(SysController.class);
+    private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Resource
     private IUserService userService;
+    @Resource
+    private UserMapper userMapper;
 
 
     /**
@@ -44,6 +50,20 @@ public class UserController {
     }
 
     /**
+     *
+     * @param request
+     * @param user
+     * @return
+     */
+    @RequestMapping("/getUserInfoById")
+    public User getUserInfoById(HttpServletRequest request,User user){
+        //从session里获取用户信息
+        User userInfo = (User) request.getSession().getAttribute("user");
+//        List<User> result = (List<User>) userInfo;
+        return userInfo;
+    }
+
+    /**
      * 获取用户管理列表
      * @param request
      * @param user
@@ -52,8 +72,7 @@ public class UserController {
     @Operation(value = "获取用户管理列表")
     @RequestMapping("/getURGInfoListByPage")
     public PageBean<User> getURGInfoListByPage(HttpServletRequest request, User user){
-        //logger
-
+        logger.info("getURGInfoListByPage()" + "Begin:");
         //定义数据集
         List<User> resultList = null;
         //分页
@@ -68,8 +87,8 @@ public class UserController {
             resultList = userService.getURGInfoListByPage(pageNum,pageSize,user);
         }catch(Exception e){
             //logger
+            logger.error("getURGInfoListByPage" + e);
         }
-
         //Page对象
         PageBean<User> pageBean = new PageBean<>(resultList);
         return pageBean;
@@ -100,13 +119,49 @@ public class UserController {
 
 
     /**
-     * 获取邮箱发送重置密码链接以及验证码
+     * 获取邮箱发送验证码
+     * @Descript:使用session存储user对象和验证码
      */
-    @Operation(value = "获取邮箱发送重置密码链接以及验证码")
-    @RequestMapping(value = "/modifyPasswordByEmail",method = RequestMethod.POST)
-    public void modifyPasswordByEmail(User user){
+    @Operation(value = "获取邮箱发送验证码")
+    @RequestMapping("/sendResetPasswordLink")
+    public void sendResetPasswordLink(HttpServletRequest request,User user){
+        //验证码
+        int VerifyComde =RandomUtil.randomInt(999999);
+        //获取邮箱地址
+        String mailAddress = request.getParameter("email");
+        //查询账号信息
+        User userInfo = userMapper.findUserByEmail(user);
+        Map<String,Object> map = new HashMap<>();
 
-//        userService.ModifyPassWordByEmail(user);
+        map.put("VerifyComde",VerifyComde);
+        map.put("userInfo",userInfo);
+        //存入session
+        request.getSession().setAttribute("content",map);
+        //发送
+        userService.sendVerificationCode(VerifyComde,user);
+
+    }
+
+    @Operation(value = "重置密码")
+    @RequestMapping("/resetPasswordByCode")
+    public String resetPasswordByCode(HttpServletRequest request,User user){
+        //获取session中的数据
+        Map<String,Object> map = new HashMap<>();
+        map = (Map<String, Object>) request.getSession().getAttribute("content");
+        String code = request.getParameter("VerifyCode");
+        String password = request.getParameter("password");
+        User userInfo = (User) map.get("userInfo");
+        //注入对象
+
+        if (code.equals(map.get("VerifyComde"))) {
+            userInfo.setPasscode(password);
+            userService.resetPassword(userInfo);
+            return "success";
+        }else{
+            logger.error("resetPasswordByCode():error->"+code);
+            return "error";
+        }
+
     }
 
     /**
@@ -135,5 +190,7 @@ public class UserController {
         String result = userService.modifyURGInfoById(user);
         return result;
     }
+
+
 
 }
