@@ -150,7 +150,7 @@ public class UserServiceImpl implements IUserService {
     public void sendVerificationCode(Integer VerifyComde,User user) {
         String title = "验证您的电子邮件地址";
         String content =
-                "<p>尊敬的<strong>XX</strong>，您好：</p>" +
+                "<p>尊敬的<strong>"+user.getZnName()+"</strong>，您好：</p>" +
                 "<p>您正在对您的 CAMS 账号 ("+user.getAccount()+") 进行重置密码操作。</p>" +
                 "<p>您的验证码是</p>" +
                 "<p><h1>" + VerifyComde + "</h1></p>" +
@@ -166,6 +166,14 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public void resetPassword(User user) {
+
+        try {
+            user.setPasscode(MD5.EncoderByMd5(user.getPasscode()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         userMapper.resetPassword(user);
     }
 

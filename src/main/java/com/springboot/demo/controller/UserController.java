@@ -125,41 +125,58 @@ public class UserController {
      */
     @Operation(value = "获取邮箱发送验证码")
     @RequestMapping("/sendResetPasswordLink")
-    public void sendResetPasswordLink(HttpServletRequest request,User user){
+    public String sendResetPasswordLink(HttpServletRequest request,User user){
         //验证码
-        int VerifyComde =RandomUtil.randomInt(999999);
+        int verifyCode =RandomUtil.randomInt(100000,999999);
         //获取邮箱地址
-        String mailAddress = request.getParameter("email");
+        String account = request.getParameter("account").toLowerCase();
+        String email = request.getParameter("email").toLowerCase();
         //查询账号信息
         User userInfo = userMapper.findUserByEmail(user);
-        Map<String,Object> map = new HashMap<>();
-
-        map.put("VerifyComde",VerifyComde);
-        map.put("userInfo",userInfo);
-        //存入session
-        request.getSession().setAttribute("content",map);
-        //发送
-        userService.sendVerificationCode(VerifyComde,user);
-
+        String userAccount = userInfo.getAccount().toLowerCase();
+        String userEmail = userInfo.getEmail().toLowerCase();
+        //账号邮箱匹配校验
+        if (account.equals(userAccount)) {
+            if (email.equals(userEmail)) {
+                Map<String,Object> map = new HashMap<>();
+                map.put("verifyCode",verifyCode);
+                map.put("userInfo",userInfo);
+                //存入session
+                request.getSession().setAttribute("content",map);
+                //发送
+                userService.sendVerificationCode(verifyCode,userInfo);
+                logger.info("sendResetPasswordLink -> 成功");
+                return "success";
+            }else{
+                return "ACCOUNT_NOT_MATCH_EMAIL";
+            }
+        }else{
+            return "error";
+        }
     }
 
     @Operation(value = "重置密码")
     @RequestMapping("/resetPasswordByCode")
-    public String resetPasswordByCode(HttpServletRequest request,User user){
+    public String resetPasswordByCode(HttpServletRequest request){
         //获取session中的数据
         Map<String,Object> map = new HashMap<>();
         map = (Map<String, Object>) request.getSession().getAttribute("content");
-        String code = request.getParameter("VerifyCode");
-        String password = request.getParameter("password");
+
+        String verifyCode = request.getParameter("verifyCode");
+        String password = request.getParameter("passcode").toLowerCase();
         User userInfo = (User) map.get("userInfo");
         //注入对象
 
-        if (code.equals(map.get("VerifyComde"))) {
+
+        if ((!StringUtils.isEmpty(verifyCode)) && verifyCode.equals(map.get("verifyCode") + "")) {
             userInfo.setPasscode(password);
             userService.resetPassword(userInfo);
+            //移除session
+            request.getSession().removeAttribute("content");
             return "success";
+
         }else{
-            logger.error("resetPasswordByCode():error->"+code);
+            logger.error("resetPasswordByCode():error->"+verifyCode);
             return "error";
         }
 

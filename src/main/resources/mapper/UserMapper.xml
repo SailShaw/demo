@@ -135,16 +135,16 @@
         select tu.email as email from t_user as tu
         where  tu.user_id= #{userId}
     </select>
+    <!--通过邮件查找账号信息-->
     <select id="findUserByEmail" resultType="com.springboot.demo.entity.User">
         select
-               tu.user_id as userId,
-               tu.account as account,
-               tu.passcode as passcode,
-               tu.zn_name as znName,
-               tu.email as email,
-               tu.telphone as telphone,
-        from t_user as tu
-        where tu.email = #{email};
+                user_id as userId,
+                account as account,
+                passcode as passcode,
+                zn_name as znName,
+                email as email
+        from t_user
+        where email = #{email} and account=#{account}
     </select>
 
     <!--注册-->
