@@ -15,5 +15,5 @@ public interface ISysLogService {
     //查询日志列表
     List<SysLog> getSysLogListByPage(Integer pageNum,Integer pageSize,SysLog sysLog);
 
-    boolean sendEmailOfTest(List<String> recipient,String mailTitle,String mailContent);
+
 }
