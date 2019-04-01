@@ -86,7 +86,7 @@ public class PlaceController {
      * @return
      */
     @Operation("修改资源信息")
-    @RequestMapping("modifyPlace")
+    @RequestMapping("/modifyPlace")
     public String modifyPlace(Place place) {
         //执行
         String result = "";
@@ -104,7 +104,7 @@ public class PlaceController {
      * @return
      */
     @Operation("逻辑删除资源")
-    @RequestMapping("deletePlace")
+    @RequestMapping("/deletePlace")
     public String deletePlace(Place place) {
         //执行
         String result = "";
