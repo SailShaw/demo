@@ -7,24 +7,26 @@
         <result column="placeType" jdbcType="VARCHAR" />
         <result column="createBy" jdbcType="VARCHAR" />
         <result column="createTime" jdbcType="VARCHAR" />
+        <result column="updateBy" jdbcType="VARCHAR" />
+        <result column="updateTime" jdbcType="VARCHAR" />
         <result column="isEff" jdbcType="VARCHAR" />
-        <result column="isDelete" jdbcType="VARCHAR" />
     </resultMap>
     <!--添加-->
     <insert id="createPlace">
-        insert into t_place(place_id, place_name, place_type, create_by)
-        values (#{placeId},#{placeName},#{placeType},#{createBy})
+        insert into t_place(place_id, place_name, place_type, create_by,create_time)
+        values (#{placeId},#{placeName},#{placeType},#{createBy},#{createTime})
     </insert>
+    <!--修改资源信息-->
     <update id="modifyPlace">
         update t_place as tp set
             tp.place_name=#{placeName},
             tp.place_type=#{placeType}
         where tp.place_id=#{placeId}
     </update>
+    <!--删除资源-->
     <update id="deletePlace">
         update t_place as tp set
             tp.is_eff=#{isEff},
-            tp.is_delete=#{isDelete}
         where tp.place_id=#{placeId}
     </update>
     <!--获取资源清单-->
@@ -35,15 +37,19 @@
                    tp.place_type as placeType,
                    tp.create_by as createBy,
                    tp.create_time as createTime,
-                   tp.is_eff as isEff
+                   tp.update_by as updateBy,
+                   tp.update_time as updateTime
             from t_place as tp
+            where tp.is_eff !=1
     </select>
     <!--获取资源列表-->
     <select id="getPlaceList" resultType="com.springboot.demo.entity.Place">
-        select
-          tp.place_id as placeId,
-          tp.place_name as placeName
-        from t_place as tp
+            select
+                tp.place_id as placeId,
+                tp.place_name as placeName,
+                tp.is_eff as isEff
+            from t_place as tp
+            where tp.is_eff != 1
     </select>
 
 

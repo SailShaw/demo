@@ -23,21 +23,21 @@ public interface PlaceMapper {
      * @param place
      * @return
      */
-    boolean createPlace(Place place);
+    void createPlace(Place place);
 
     /**
      * 修改资源信息
      * @param place
      * @return
      */
-    boolean modifyPlace(Place place);
+    void modifyPlace(Place place);
 
     /**
      * 逻辑删除资源
      * @param place
      * @return
      */
-    boolean deletePlace(Place place);
+    void deletePlace(Place place);
 
     /**
      * 获取资源下拉列表

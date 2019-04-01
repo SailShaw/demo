@@ -16,19 +16,27 @@ public class Place implements Serializable {
     private String placeType;//场地类型
     private String createBy;//创建者
     private String createTime;//创建时间
+    private String updateBy;//更新者
+    private String updateTime;//更新时间
     private String isEff;//有效状态
-    private String isDelete;//逻辑删除
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public String getIsDelete() {
-        return isDelete;
+    public String getUpdateBy() {
+        return updateBy;
     }
 
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete;
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getPlaceId() {

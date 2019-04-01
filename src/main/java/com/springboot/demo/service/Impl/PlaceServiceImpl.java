@@ -6,6 +6,7 @@ import com.springboot.demo.mapper.PlaceMapper;
 import com.springboot.demo.service.IPlaceService;
 
 import com.springboot.demo.util.SnowFlake;
+import com.springboot.demo.util.TimeHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,15 +48,16 @@ public class PlaceServiceImpl implements IPlaceService {
      * @return
      */
     @Override
-    public boolean createPlace(Place place) {
+    public String createPlace(Place place) {
         //生成ID
         place.setPlaceId(String.valueOf(snowFlake.nextId()));
+
+        //设置更新时间
+        place.setCreateTime(TimeHelper.getNowTime());
         //执行
-        if (placeMapper.createPlace(place)){
-            return true;
-        }else{
-            return false;
-        }
+        placeMapper.createPlace(place);
+        //返回
+        return "SUCCESS";
     }
 
     /**
@@ -64,13 +66,13 @@ public class PlaceServiceImpl implements IPlaceService {
      * @return
      */
     @Override
-    public boolean modifyPlace(Place place) {
+    public String modifyPlace(Place place) {
+        //设置更新时间
+        place.setUpdateTime(TimeHelper.getNowTime());
         //执行
-        if (placeMapper.modifyPlace(place)){
-            return true;
-        }else{
-            return false;
-        }
+        placeMapper.modifyPlace(place);
+        //返回
+        return "SUCCESS";
     }
 
     /**
@@ -79,13 +81,13 @@ public class PlaceServiceImpl implements IPlaceService {
      * @return
      */
     @Override
-    public boolean deletePlace(Place place) {
+    public String deletePlace(Place place) {
+        //设置更新时间
+        place.setUpdateTime(TimeHelper.getNowTime());
         //执行
-        if (placeMapper.deletePlace(place)){
-            return true;
-        }else{
-            return false;
-        }
+        placeMapper.deletePlace(place);
+        //返回
+        return "SUCCESS";
     }
 
 }

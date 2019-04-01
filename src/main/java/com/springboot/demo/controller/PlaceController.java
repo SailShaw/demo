@@ -34,7 +34,7 @@ public class PlaceController {
      *
      * @return
      */
-    @Operation(value = "获取场地列表")
+    @Operation("获取场地列表")
     @RequestMapping("/getPlaceListByPage")
     public PageBean<Place> getPlaceListByPage(HttpServletRequest request, Place place) {
         //定义数据集
@@ -44,7 +44,6 @@ public class PlaceController {
             // 获取分页参数
             Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
             Integer pageSize = 9;
-
             resultList = placeService.getPlaceListByPage(pageNum, pageSize, place);
         } catch (Exception e) {
             //logger
@@ -62,19 +61,19 @@ public class PlaceController {
      * @param place
      * @return
      */
-    @Operation(value = "添加场地")
+    @Operation("添加场地")
     @RequestMapping("/createPlace")
     public String createPlace(HttpServletRequest request, Place place) {
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
-        //设置创建者
-        place.setCreateBy(userInfo.getZnName());
-        //执行
         String result = "";
-        if (placeService.createPlace(place)) {
-            result = "success";
+        //判空
+        if (place != null) {
+            //设置创建者
+            place.setCreateBy(userInfo.getZnName());
+            result = placeService.createPlace(place);
         } else {
-            result = "error";
+            result = "JSON_IS_NULL";
         }
         return result;
     }
@@ -82,36 +81,48 @@ public class PlaceController {
 
     /**
      * 修改资源信息
+     *
      * @param place
      * @return
      */
     @Operation("修改资源信息")
     @RequestMapping("/modifyPlace")
-    public String modifyPlace(Place place) {
+    public String modifyPlace(HttpServletRequest request, Place place) {
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("user");
         //执行
         String result = "";
-        if (placeService.modifyPlace(place)) {
-            result = "success";
+        //判空
+        if (place != null) {
+            //设置更新者
+            place.setUpdateBy(userInfo.getZnName());
+
+            result = placeService.createPlace(place);
         } else {
-            result = "error";
+            result = "JSON_IS_NULL";
         }
         return result;
     }
 
     /**
      * 逻辑删除资源
+     *
      * @param place
      * @return
      */
     @Operation("逻辑删除资源")
     @RequestMapping("/deletePlace")
-    public String deletePlace(Place place) {
+    public String deletePlace(HttpServletRequest request,Place place) {
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("user");
         //执行
         String result = "";
-        if (placeService.deletePlace(place)) {
-            result = "success";
+        if (place != null) {
+            //设置更新者
+            place.setUpdateBy(userInfo.getZnName());
+            result = placeService.createPlace(place);
         } else {
-            result = "error";
+            result = "JSON_IS_NULL";
         }
         return result;
     }

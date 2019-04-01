@@ -24,20 +24,20 @@ public interface IPlaceService {
      * @param place
      * @return
      */
-    boolean createPlace(Place place);
+    String createPlace(Place place);
 
     /**
      * 修改资源信息
      * @param place
      * @return
      */
-    boolean modifyPlace(Place place);
+    String modifyPlace(Place place);
 
     /**
      * 逻辑删除资源
      * @param place
      * @return
      */
-    boolean deletePlace(Place place);
+    String deletePlace(Place place);
 
 }
