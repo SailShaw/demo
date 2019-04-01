@@ -35,31 +35,29 @@ public class SysAspect {
 
     @AfterReturning("logPointCut()")
     public void saveSysLog(JoinPoint joinPoint) {
-        //保存日志
         SysLog sysLog = new SysLog();
-
         //从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         //获取切入点所在的方法
         Method method = signature.getMethod();
-
-
         //获取操作
         Operation operation = method.getAnnotation(Operation.class);
         if (operation != null) {
             String value = operation.value();
             sysLog.setRequestDesc(value);//保存获取的操作
         }
-
         //获取请求的类名
         String className = joinPoint.getTarget().getClass().getName();
         //获取请求的方法名
         String methodName = method.getName();
-
-
-        // 1judge param1 instance of req
-        // httpreq = (req) param1;
-
+        /*
+         * 1.取得请求中的参数
+         * 2.遍历
+         * 3.判断 obj instance of HttpServletRequest
+         * 4.赋值,结束循环
+         * 5.转型HttpServletRequest req = (HttpServletRequest) obj;
+         * 6.判空String params = JSONUtil.toJsonStr(args);
+         */
         Object[] args = joinPoint.getArgs();
         Object obj = null;
         //遍历方法参数数组
@@ -74,16 +72,8 @@ public class SysAspect {
         if(!StringUtils.isEmpty(obj)){
             request = (HttpServletRequest) obj;
         }
-
-
-        // bl args
-        // obj = args[i] --> instance of HttpServletRequest
-        // true break
-        // HttpServletRequest req = (HttpServletRequest) obj;
-        // String params = JSONUtil.toJsonStr(args);
-
         User userInfo = null;
-
+        //判空
         if (!StringUtils.isEmpty(request)) {
             userInfo = (User) request.getSession().getAttribute("user");
         }
@@ -92,7 +82,6 @@ public class SysAspect {
         sysLog.setUserName(userInfo.getZnName());
         sysLog.setUserIp(SystemUtil.getHostInfo().getAddress());
         sysLog.setRequestMethod(className + "." + methodName);
-
         //调用service保存SysLog实体类到数据库
         sysLogService.saveLog(sysLog);
     }
