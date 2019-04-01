@@ -2,101 +2,122 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.springboot.demo.mapper.UserMapper">
     <resultMap id="authorMap" type="com.springboot.demo.entity.User">
-        <result column="user_id" jdbcType="VARCHAR" />
-        <result column="account" jdbcType="VARCHAR" />
-        <result column="passcode" jdbcType="VARCHAR" />
-        <result column="zn_name" jdbcType="VARCHAR" />
-        <result column="email" jdbcType="VARCHAR" />
-        <result column="telphone" jdbcType="VARCHAR" />
-        <result column="valid_flag" jdbcType="VARCHAR" />
-        <result column="group_desc" jdbcType="VARCHAR" />
-        <result column="create_by" jdbcType="VARCHAR" />
-        <result column="create_time" jdbcType="VARCHAR" />
-        <result column="update_by" jdbcType="VARCHAR" />
-        <result column="update_time" jdbcType="VARCHAR" />
-        <result column="role_id" jdbcType="VARCHAR" />
-        <result column="role_name" jdbcType="VARCHAR" />
-        <result column="role_status" jdbcType="VARCHAR" />
-        <result column="group_id" jdbcType="VARCHAR" />
-        <result column="group_name" jdbcType="VARCHAR" />
-        <result column="group_status" jdbcType="VARCHAR" />
+        <result column="user_id" jdbcType="VARCHAR"/>
+        <result column="account" jdbcType="VARCHAR"/>
+        <result column="password" jdbcType="VARCHAR"/>
+        <result column="zn_name" jdbcType="VARCHAR"/>
+        <result column="email" jdbcType="VARCHAR"/>
+        <result column="telphone" jdbcType="VARCHAR"/>
+        <result column="groupDesc" jdbcType="VARCHAR"/>
+        <result column="createTime" jdbcType="VARCHAR"/>
+        <result column="isEff" jdbcType="VARCHAR"/>
+        <result column="lastLogin" jdbcType="VARCHAR"/>
+        <result column="roleId" jdbcType="VARCHAR"/>
+        <result column="roleName" jdbcType="VARCHAR"/>
+        <result column="groupId" jdbcType="VARCHAR"/>
+        <result column="groupName" jdbcType="VARCHAR"/>
+        <result column="updateBy" jdbcType="VARCHAR"/>
+        <result column="updateTime" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <!-- 根据条件查找用户资料 -->
+    <select id="findUserByUser" resultType="com.springboot.demo.entity.User">
+        select
+        tu.user_id as userId,
+        tu.account as account,
+        tu.password as password,
+        tu.zn_name as znName,
+        tu.email as email,
+        tu.telphone as telphone,
+        tu.create_time as createTime,
+        tr.role_id   as roleId,
+        tr.role_name as roleName,
+        tg.group_id as groupId,
+        tg.group_name as groupName,
+        tu.last_login as lastLogin,
+        tu.is_eff as isEff,
+        tu.is_delete as isDelete
+        from t_user as tu
+        left join t_user_group as tug on tu.user_id = tug.user_id
+        left join t_user_role as tur on tu.user_id = tur.user_id
+        left join t_group as tg on tug.group_id = tg.group_id
+        left join t_role as tr on tur.role_id = tr.role_id
+        where 1=1
+        <if test="user.userId != null and user.userId !='' ">
+            and tu.user_id = #{user.userId}
+        </if>
+        <if test="user.account != null and user.account !='' ">
+            and tu.account = #{user.account}
+        </if>
+        <if test="user.email != null and user.email !='' ">
+            and tu.email = #{user.email}
+        </if>
+    </select>
+
+    <!--获取用户管理清单-->
+    <select id="getURGInfoListByPage" resultType="com.springboot.demo.entity.User">
+        select
+                  tur.user_id as userId,
+                  tur.role_id as roleId,
+                  tug.group_id as groupId,
+                  tu.zn_name as znName,
+                  tr.role_name as roleName,
+                  tg.group_name as groupName,
+                  date_format(tu.create_time,'%Y-%m-%d')
+                    as createTime,
+                  tu.group_desc as groupDesc,
+                  tur.is_eff as isEff
+        from  t_user_role as tur
+                left join t_user as tu on tur.user_id = tu.user_id
+                left join t_user_group as tug on tur.user_id = tug.user_id
+                left join t_role as tr on tur.role_id = tr.role_id
+                left join t_group as tg on tug.group_id = tg.group_id
+        where tur.role_id!=1 or tur.role_id is null and tur.is_eff!=1
+        order by tur.create_time
+    </select>
+
+    <!--删除用户 USER表-->
+    <delete id="deleteUserByID">
+        update t_user set
+                is_eff = #{isEff},
+        where user_id=?
+    </delete>
+    <!-- 删除用户 USER_ROLE 表 -->
+    <delete id="deleteUserRoleByID">
+        update t_user_role set
+                is_eff = #{isEff},
+        where user_id=?
+    </delete>
+    <!-- 删除用户 USER_GROUP 表 -->
+    <delete id="deleteUserGroupByID">
+        update t_user_group set
+                is_eff = #{isEff},
+        where user_id=?
+    </delete>
+
     <!--修改用户信息-->
     <update id="modifyUserInfoById">
         update t_user set
             zn_name=#{znName},
             email=#{email},
-            telphone=#{telphone},
+            telphone=#{telphone}
         where user_id = #{userId}
     </update>
-    <!--修改用户所属部门-->
+
+    <!--1.修改用户所属部门-->
     <update id="modifyGroupByUser">
         update t_user_group set
             group_id=#{groupId}
         where user_id=#{userId}
     </update>
-    <!--修改用户角色-->
+
+    <!--2.修改用户所属角色-->
     <update id="modifyRoleByUser">
         update t_user_role set
             role_id=#{roleId}
         where user_id=#{userId}
     </update>
-    <!-- 重置密码 -->
-    <update id="resetPassword">
-        update t_user set
-                passcode = #{passcode}
-        where account=#{account}
-        and email = #{email}
-    </update>
-    <!--删除用户-->
-    <delete id="deleteUserByID">
-        delete from t_user where user_id=#{userId}
-    </delete>
-    <delete id="deleteUserRoleByID">
-        delete from t_user_role where user_id = #{userId}
-    </delete>
-    <delete id="deleteUserGroupByID">
-        delete from t_user_group where user_id = #{userId}
-    </delete>
-    <!--获取用户信息-->
-    <select id="getUserByAccount" resultType="com.springboot.demo.entity.User">
-        select
-               tu.user_id as userId,
-               tu.account as account,
-               tu.zn_name as znName,
-               tu.email as email,
-               tu.telphone as telphone,
-               tu.create_time as createTime,
-               tr.role_id   as roleId,
-               tr.role_name as roleName,
-               tg.group_id as groupId,
-               tg.group_name as groupName
-        from t_user as tu
-               left join t_user_role as tur on tu.user_id = tur.user_id
-               left join t_role as tr on tur.role_id = tr.role_id
-               left join t_user_group as tug on tu.user_id = tug.user_id
-               left join t_group as tg on tug.group_id = tg.group_id
-        where tu.account = #{account}
-    </select>
-    <!--获取用户、角色、组织关系列表-->
-    <select id="getURGInfoListByPage" resultType="com.springboot.demo.entity.User">
-        select
-               tur.user_id as userId,
-               tur.role_id as roleId,
-               tug.group_id as groupId,
-               tu.zn_name as znName,
-               tr.role_name as roleName,
-               tg.group_name as groupName,
-               date_format(tu.create_time,'%Y-%m-%d')
-                as createTime,
-               tu.group_desc as groupDesc
-        from  t_user_role as tur
-        left join t_user as tu on tur.user_id = tu.user_id
-        left join t_user_group as tug on tur.user_id = tug.user_id
-        left join t_role as tr on tur.role_id = tr.role_id
-        left join t_group as tg on tug.group_id = tg.group_id
 
-    </select>
     <!--获取角色列表-->
     <select id="getRoleList" resultType="com.springboot.demo.entity.User">
         select
@@ -104,6 +125,7 @@
                 tr.role_name as roleName
         from t_role as tr
     </select>
+
     <!--获取部门列表-->
     <select id="getGroupList" resultType="com.springboot.demo.entity.User">
         select
@@ -111,51 +133,40 @@
                 tg.group_name as groupName
         from t_group as tg
     </select>
-    <select id="findUserByAccount" resultType="com.springboot.demo.entity.User">
-        select
-               tu.user_id as userId,
-               tu.account as account,
-               tu.passcode as passcode,
-               tu.zn_name as znName,
-               tu.email as email,
-               tu.telphone as telphone,
-               tu.create_time as createTime,
-               tr.role_id   as roleId,
-               tr.role_name as roleName,
-               tg.group_id as groupId,
-               tg.group_name as groupName
-        from t_user as tu
-        left join t_user_group as tug on tu.user_id = tug.user_id
-        left join t_user_role as tur on tu.user_id = tur.user_id
-        left join t_group as tg on tug.group_id = tg.group_id
-        left join t_role as tr on tur.role_id = tr.role_id
-        where tu.account = #{account};
-    </select>
-    <select id="getEmailById" resultType="com.springboot.demo.entity.User">
-        select tu.email as email from t_user as tu
-        where  tu.user_id= #{userId}
-    </select>
-    <!--通过邮件查找账号信息-->
-    <select id="findUserByEmail" resultType="com.springboot.demo.entity.User">
-        select
-                user_id as userId,
-                account as account,
-                passcode as passcode,
-                zn_name as znName,
-                email as email
-        from t_user
-        where email = #{email} and account=#{account}
-    </select>
 
-    <!--注册-->
+    <!--注册1.用户表-->
     <insert id="createUser">
-        insert into t_user(user_id,account,email,group_desc,passcode)
-        values (#{userId},#{account},#{email},#{groupDesc},#{passcode})
+        insert into t_user(user_id,account,email,group_desc,password)
+        values (#{userId},#{account},#{email},#{groupDesc},#{password})
     </insert>
+    <!--注册2.用户部门表-->
     <insert id="addUserGroup">
         insert into t_user_group(user_id) values (#{userID})
     </insert>
+    <!--注册3.用户角色表-->
     <insert id="addUserRole">
         insert into t_user_role(user_id) values (#{userID})
     </insert>
+
+    <!-- 重置密码 -->
+    <update id="resetPassword">
+        update t_user set
+                password = #{password}
+        where account=#{account}
+        and email = #{email}
+    </update>
+
+    <!--记录登录日期-->
+    <update id="recordLoginTime">
+        update t_user set
+            last_login=#{lastLogin}
+        where user_id=#{userId};
+    </update>
+
+    <!--修改密码-->
+    <update id="updatePassword">
+        update t_user set
+            password=#{password}
+        where user_id=#{userId}
+    </update>
 </mapper>

@@ -1,23 +1,22 @@
 package com.springboot.demo.controller;
 
-import cn.hutool.core.util.RandomUtil;
 import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
+import com.springboot.demo.util.MD5;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Create By SINYA
@@ -38,32 +37,6 @@ public class UserController {
 
 
     /**
-     * 根据账号获取用户信息
-     * @param user
-     * @return
-     */
-    @Operation(value = "根据账号获取用户信息")
-    @RequestMapping("/getUserByAccount")
-    public List<User> getUserByAccount(User user){
-        List<User> resultList = userService.getUserByAccount(user);
-        return resultList;
-    }
-
-    /**
-     *
-     * @param request
-     * @param user
-     * @return
-     */
-    @RequestMapping("/getUserInfoById")
-    public User getUserInfoById(HttpServletRequest request,User user){
-        //从session里获取用户信息
-        User userInfo = (User) request.getSession().getAttribute("user");
-//        List<User> result = (List<User>) userInfo;
-        return userInfo;
-    }
-
-    /**
      * 获取用户管理列表
      * @param request
      * @param user
@@ -78,11 +51,8 @@ public class UserController {
         //分页
         try{
             // 获取分页参数
-            String _pageNum = request.getParameter("pageNum");
-            String _pageSize = request.getParameter("pageSize");
-            //转型+判空(设置默认分页大小为7)
-            Integer pageNum = StringUtils.isEmpty(_pageNum) ? 1 : Integer.parseInt(_pageNum);
-            Integer pageSize = StringUtils.isEmpty(_pageSize) ? 7 : Integer.parseInt(_pageSize);
+            Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
+            Integer pageSize = 9;
 
             resultList = userService.getURGInfoListByPage(pageNum,pageSize,user);
         }catch(Exception e){
@@ -92,8 +62,6 @@ public class UserController {
         //Page对象
         PageBean<User> pageBean = new PageBean<>(resultList);
         return pageBean;
-
-
     }
 
 
@@ -102,9 +70,85 @@ public class UserController {
      * @param user
      */
     @Operation(value = "根据ID修改用户信息")
-    @RequestMapping(value = "/modifyUserInfoById",method = RequestMethod.POST)
-     public void modifyUserInfoById(User user){
-        userService.modifyUserInfoById(user);
+    @RequestMapping(value = "/modifyUserInfoById")
+     public String modifyUserInfoById(User user){
+
+        String result = null;
+
+        if (user != null) {
+            result = userService.modifyUserInfoById(user);
+        } else {
+            result = "JSON_IS_NULL";
+        }
+        return result;
+    }
+
+
+
+    /**
+     * 修改密码
+     * @param request
+     * @return
+     */
+    @Operation(value = "修改密码")
+    @RequestMapping("updatePassword")
+    public String updatePasswordByUser(HttpServletRequest request) {
+        String result = null;
+
+        //获取session
+        User censor = (User) request.getSession().getAttribute("user");
+        //获取完整信息
+        User user = userMapper.findUserByUser(censor);
+
+        //获取输入的旧密码
+        String oldPassword = request.getParameter("oldPassword");
+        //获取输入的新密码
+        String newPassword = request.getParameter("newPassword");
+
+        //验证旧密码是否与数据库中相同
+        boolean flag= false;
+        try {
+            flag = MD5.checkpassword(oldPassword, user.getPassword());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        if (flag == true) {
+            //执行密码修改
+            user.setPassword(newPassword);
+            userService.updatePassword(user);
+            result =  "SUCCESS";
+        }else {
+            result =  "PASSWORD_NOT_MATCH";
+        }
+
+        return result;
+    }
+
+    /**
+     * 修改用户角色与部门信息
+     * @param request
+     * @param user
+     * @return
+     */
+    @Operation(value = "修改用户角色与部门信息")
+    @RequestMapping("/modifyURGInfo")
+    public String  modifyURGInfoById(HttpServletRequest request,User user){
+
+        String result = null;
+
+        //获取当前用户
+        User censor = (User) request.getSession().getAttribute("user");
+        //判空
+        if (user != null) {
+            //设置更新者
+            user.setUpdateBy(censor.getZnName());
+            result = userService.modifyURGInfoById(user);
+        } else {
+            result = "JSON_IS_NULL";
+        }
+        return result;
     }
 
     /**
@@ -112,103 +156,17 @@ public class UserController {
      * @param user
      */
     @Operation(value = "删除用户")
-    @RequestMapping(value = "/deleteUserByID",method = RequestMethod.POST)
+    @RequestMapping("/deleteUserByID")
     public String deleteUserByID(User user){
-        String result = userService.deleteUserByID(user);
-        return result;
-    }
 
+        String result = null;
 
-    /**
-     * 获取邮箱发送验证码
-     * @Descript:使用session存储user对象和验证码
-     */
-    @Operation(value = "获取邮箱发送验证码")
-    @RequestMapping("/sendResetPasswordLink")
-    public String sendResetPasswordLink(HttpServletRequest request,User user){
-        //验证码
-        int verifyCode =RandomUtil.randomInt(100000,999999);
-        //获取邮箱地址
-        String account = request.getParameter("account").toLowerCase();
-        String email = request.getParameter("email").toLowerCase();
-        //查询账号信息
-        User userInfo = userMapper.findUserByEmail(user);
-        String userAccount = userInfo.getAccount().toLowerCase();
-        String userEmail = userInfo.getEmail().toLowerCase();
-        //账号邮箱匹配校验
-        if (account.equals(userAccount)) {
-            if (email.equals(userEmail)) {
-                Map<String,Object> map = new HashMap<>();
-                map.put("verifyCode",verifyCode);
-                map.put("userInfo",userInfo);
-                //存入session
-                request.getSession().setAttribute("content",map);
-                //发送
-                userService.sendVerificationCode(verifyCode,userInfo);
-                logger.info("sendResetPasswordLink -> 成功");
-                return "success";
-            }else{
-                return "ACCOUNT_NOT_MATCH_EMAIL";
-            }
-        }else{
-            return "error";
+        if (user != null) {
+            //设置更新者
+            result = userService.deleteUserByID(user);
+        } else {
+            result = "JSON_IS_NULL";
         }
-    }
-
-    @Operation(value = "重置密码")
-    @RequestMapping("/resetPasswordByCode")
-    public String resetPasswordByCode(HttpServletRequest request){
-        //获取session中的数据
-        Map<String,Object> map = new HashMap<>();
-        map = (Map<String, Object>) request.getSession().getAttribute("content");
-
-        String verifyCode = request.getParameter("verifyCode");
-        String password = request.getParameter("passcode").toLowerCase();
-        User userInfo = (User) map.get("userInfo");
-        //注入对象
-
-
-        if ((!StringUtils.isEmpty(verifyCode)) && verifyCode.equals(map.get("verifyCode") + "")) {
-            userInfo.setPasscode(password);
-            userService.resetPassword(userInfo);
-            //移除session
-            request.getSession().removeAttribute("content");
-            return "success";
-
-        }else{
-            logger.error("resetPasswordByCode():error->"+verifyCode);
-            return "error";
-        }
-
-    }
-
-    /**
-     * 获取角色列表
-     * @return
-     */
-    @RequestMapping(value = "/getRoleList")
-    public List<User> getRoleList(){
-        List<User> result = userService.getRoleList();
         return result;
     }
-
-    /**
-     * 获取部门列表
-     * @return
-     */
-    @RequestMapping(value = "/getGroupList")
-    public List<User> getGroupList(){
-        List<User> result = userService.getGroupList();
-        return result;
-    }
-
-    @Operation(value = "修改用户角色与部门信息")
-    @RequestMapping("/modifyURGInfo")
-    public String  modifyURGInfoById(User user){
-        String result = userService.modifyURGInfoById(user);
-        return result;
-    }
-
-
-
 }

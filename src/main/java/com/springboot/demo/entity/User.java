@@ -12,28 +12,25 @@ public class User implements Serializable {
 
     private String userId;//用户ID
     private String account;//账号
-    private String passcode;//密码
+    private String password;//密码
     private String znName;//姓名
     private String email;//邮箱
     private String telphone;//联系方式
     private String groupDesc;//组织描述
-    private String status;//用户有效状态
-    private String createBy;//创建者
     private String createTime;//创建日期
-    private String updateBy;//更新者
-    private String updateTime;//更新日期
-
-
+    private String isEff;//有效状态
+    private String lastLogin;//上次登录日期
 
     private String roleId;//角色ID
     private String roleName;//角色名称
-    private String roleStatus;//角色有效状态
 
 
 
     private String groupId;//组织ID
     private String groupName;//组织名称
-    private String groupStatus;//部门有效状态
+
+    private String updateBy;//更新者
+    private String updateTime;//更新时间
 
     /* Getter & Setter*/
 
@@ -57,12 +54,12 @@ public class User implements Serializable {
         this.account = account;
     }
 
-    public String getPasscode() {
-        return passcode;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasscode(String passcode) {
-        this.passcode = passcode;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getZnName() {
@@ -97,23 +94,6 @@ public class User implements Serializable {
         this.groupDesc = groupDesc;
     }
 
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
     public String getCreateTime() {
         return createTime;
     }
@@ -122,20 +102,12 @@ public class User implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getUpdateBy() {
-        return updateBy;
+    public String getIsEff() {
+        return isEff;
     }
 
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setIsEff(String isEff) {
+        this.isEff = isEff;
     }
 
     public String getRoleId() {
@@ -154,14 +126,6 @@ public class User implements Serializable {
         this.roleName = roleName;
     }
 
-    public String getRoleStatus() {
-        return roleStatus;
-    }
-
-    public void setRoleStatus(String roleStatus) {
-        this.roleStatus = roleStatus;
-    }
-
     public String getGroupId() {
         return groupId;
     }
@@ -178,11 +142,27 @@ public class User implements Serializable {
         this.groupName = groupName;
     }
 
-    public String getGroupStatus() {
-        return groupStatus;
+    public String getLastLogin() {
+        return lastLogin;
     }
 
-    public void setGroupStatus(String groupStatus) {
-        this.groupStatus = groupStatus;
+    public void setLastLogin(String lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

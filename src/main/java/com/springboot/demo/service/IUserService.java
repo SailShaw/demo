@@ -12,22 +12,9 @@ import java.util.List;
 
 public interface IUserService {
 
-    /*个人中心接口*/
+    //根据ID修改资料
 
-    /**
-     * 个人中心资料查询
-     * 根据账号获取用户信息
-     * @param user
-     * @return
-     */
-    List<User> getUserByAccount(User user);
-
-    /**
-     * 个人中心资料修改
-     * 根据ID修改
-     * @param user
-     */
-    void modifyUserInfoById(User user);
+    String modifyUserInfoById(User user);
 
 
     //获取用户、角色、部门信息
@@ -39,12 +26,7 @@ public interface IUserService {
     String deleteUserByID(User user);
 
     //注册
-    void register(User user);
-
-    //角色列表
-    List<User> getRoleList();
-    //获取部门列表
-    List<User> getGroupList();
+    String register(User user);
 
     //用户管理
     String modifyURGInfoById(User user);
@@ -53,6 +35,11 @@ public interface IUserService {
 
     void sendVerificationCode(Integer VerifyComde,User user);
 
+    //重置密码
     void resetPassword(User user);
 
+    //记录登录日期
+    void recordLoginTime(User user);
+
+    String updatePassword(User censor);
 }
