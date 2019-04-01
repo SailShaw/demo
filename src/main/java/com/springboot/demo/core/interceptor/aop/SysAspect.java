@@ -2,6 +2,7 @@ package com.springboot.demo.core.interceptor.aop;
 
 import cn.hutool.system.SystemUtil;
 import com.springboot.demo.entity.SysLog;
+import com.springboot.demo.entity.User;
 import com.springboot.demo.service.ISysLogService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -9,8 +10,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 /**
@@ -53,9 +56,40 @@ public class SysAspect {
         //获取请求的方法名
         String methodName = method.getName();
 
+
+        // 1judge param1 instance of req
+        // httpreq = (req) param1;
+
+        Object[] args = joinPoint.getArgs();
+        Object obj = null;
+        //遍历方法参数数组
+        for (Object val : args) {
+            if (val instanceof HttpServletRequest) {
+                obj = val;
+                break;
+            }
+        }
+        //获取request
+        HttpServletRequest request = null;
+        if(!StringUtils.isEmpty(obj)){
+            request = (HttpServletRequest) obj;
+        }
+
+
+        // bl args
+        // obj = args[i] --> instance of HttpServletRequest
+        // true break
+        // HttpServletRequest req = (HttpServletRequest) obj;
+        // String params = JSONUtil.toJsonStr(args);
+
+        User userInfo = null;
+
+        if (!StringUtils.isEmpty(request)) {
+            userInfo = (User) request.getSession().getAttribute("user");
+        }
         //注入Syslog对象
         //username应从session里取出
-        sysLog.setUserName("Sinya");
+        sysLog.setUserName(userInfo.getZnName());
         sysLog.setUserIp(SystemUtil.getHostInfo().getAddress());
         sysLog.setRequestMethod(className + "." + methodName);
 

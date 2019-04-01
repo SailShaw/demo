@@ -14,7 +14,7 @@ public class MD5Test {
 
     public static void main(String[] args) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
-        String val = "s0706";
+        String val = "1009";
 
         System.out.println(MD5.EncoderByMd5(val));
 

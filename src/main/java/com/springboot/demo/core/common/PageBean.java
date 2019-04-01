@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
+
 /**
  * Create By SINYA
  * Description: PageBean
@@ -17,7 +18,6 @@ public class PageBean<T> implements Serializable {
     private int pageNum;//第几页
     private int pageSize;//每页记录数
     private int pages;//总页数
-    private int size;//当前页数量 <= PageSize
 
 
     /**
@@ -34,7 +34,6 @@ public class PageBean<T> implements Serializable {
             this.count = page.getTotal();
             this.pages = page.getPages();
             this.result = page;
-            this.size = page.size();
         }
     }
 
@@ -80,11 +79,4 @@ public class PageBean<T> implements Serializable {
         this.pages = pages;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
 }

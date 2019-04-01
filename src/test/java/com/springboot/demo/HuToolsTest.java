@@ -23,5 +23,7 @@ public class HuToolsTest {
                         "<p>此致</p>" +
                         "<p>CAMS 支持</p>";
         MailUtil.send("ShawSail@live.cn",title,content,true);
+
+
     }
 }

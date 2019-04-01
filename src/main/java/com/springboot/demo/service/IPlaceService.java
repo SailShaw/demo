@@ -10,8 +10,34 @@ import java.util.List;
  */
 public interface IPlaceService {
 
-    //获取场地列表
+    /**
+     * 获取资源清单
+     * @param pageNum
+     * @param pageSize
+     * @param place
+     * @return
+     */
     List<Place> getPlaceListByPage(Integer pageNum,Integer pageSize,Place place);
 
+    /**
+     * 新增资源
+     * @param place
+     * @return
+     */
     boolean createPlace(Place place);
+
+    /**
+     * 修改资源信息
+     * @param place
+     * @return
+     */
+    boolean modifyPlace(Place place);
+
+    /**
+     * 逻辑删除资源
+     * @param place
+     * @return
+     */
+    boolean deletePlace(Place place);
+
 }
