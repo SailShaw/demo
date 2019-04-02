@@ -26,8 +26,7 @@ public class UserServiceImpl implements IUserService {
     @Resource
     private UserMapper userMapper;
 
-    private SnowFlake snowFlake = new SnowFlake(3,9);
-
+    private SnowFlake snowFlake = new SnowFlake(3, 9);
 
 
     /**
@@ -42,7 +41,7 @@ public class UserServiceImpl implements IUserService {
         //执行判断
         if (userMapper.modifyUserInfoById(user)) {
             result = "SUCCESS";
-        }else {
+        } else {
             result = "ERROR";
         }
 
@@ -74,9 +73,9 @@ public class UserServiceImpl implements IUserService {
         String result = null;
         //判断执行
         if (userMapper.deleteUserByID(user) && userMapper.deleteUserRoleByID(user) && userMapper.deleteUserGroupByID(user)) {
-            result =  "SUCCESS";
-        }else{
-            result =  "ERROR";
+            result = "SUCCESS";
+        } else {
+            result = "ERROR";
         }
         return result;
     }
@@ -108,7 +107,7 @@ public class UserServiceImpl implements IUserService {
             userMapper.addUserRole(id);
             userMapper.addUserGroup(id);
             result = "SUCCESS";
-        }else {
+        } else {
             result = "JSON_IS_NULL";
         }
         return result;
@@ -125,33 +124,35 @@ public class UserServiceImpl implements IUserService {
         String result = null;
 
         if (userMapper.modifyRoleByUser(user) && (userMapper.modifyGroupByUser(user))) {
-            result =  "SUCCESS";
+            result = "SUCCESS";
         } else {
-            result =  "ERROR";
+            result = "ERROR";
         }
         return result;
     }
 
     /**
      * 发送验证码
+     *
      * @param user
      */
     @Override
-    public void sendVerificationCode(Integer VerifyComde,User user) {
+    public void sendVerificationCode(Integer VerifyComde, User user) {
         String title = "验证您的电子邮件地址";
         String content =
-                "<p>尊敬的<strong>"+user.getZnName()+"</strong>，您好：</p>" +
-                "<p>您正在对您的 CAMS 账号 ("+user.getAccount()+") 进行重置密码操作。</p>" +
-                "<p>您的验证码是</p>" +
-                "<p><h1>" + VerifyComde + "</h1></p>" +
-                "<p>如果您未做过这些更改或认为有未经授权的人员访问了您的帐户，您应尽快登录 C A M S 系统进行更改密码,以防账户丢失。</p>" +
-                "<p>此致</p>" +
-                "<p>CAMS 支持</p>";
+                "<p>尊敬的<strong>" + user.getZnName() + "</strong>，您好：</p>" +
+                        "<p>您正在对您的 CAMS 账号 (" + user.getAccount() + ") 进行重置密码操作。</p>" +
+                        "<p>您的验证码是</p>" +
+                        "<p><h1>" + VerifyComde + "</h1></p>" +
+                        "<p>如果您未做过这些更改或认为有未经授权的人员访问了您的帐户，您应尽快登录 C A M S 系统进行更改密码,以防账户丢失。</p>" +
+                        "<p>此致</p>" +
+                        "<p>CAMS 支持</p>";
         MailUtil.send(user.getEmail(), title, content, true);
     }
 
     /**
      * 重置密码
+     *
      * @param user
      */
     @Override
@@ -170,6 +171,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 记录登录日期
+     *
      * @param user
      */
     @Override
@@ -181,6 +183,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 修改密码
+     *
      * @param user
      * @return
      */
@@ -189,9 +192,9 @@ public class UserServiceImpl implements IUserService {
         String result = null;
 
         if (userMapper.updatePassword(user)) {
-            result =  "SUCCESS";
-        }else {
-            result =  "ERROR";
+            result = "SUCCESS";
+        } else {
+            result = "ERROR";
         }
         return result;
     }

@@ -1,7 +1,6 @@
 package com.springboot.demo.controller;
 
 import cn.hutool.core.util.RandomUtil;
-import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
@@ -36,7 +35,7 @@ public class LoginController {
     @Resource
     private UserMapper userMapper;
 
-    @Operation(value = "注册账号")
+
     @RequestMapping("register")
     public String register(User user){
         String result = null;
@@ -58,7 +57,7 @@ public class LoginController {
         return result;
     }
 
-    @Operation(value = "登录系统")
+
     @RequestMapping("login")
     public String login(HttpServletRequest request, User user)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {

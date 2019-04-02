@@ -35,8 +35,7 @@
         tg.group_id as groupId,
         tg.group_name as groupName,
         tu.last_login as lastLogin,
-        tu.is_eff as isEff,
-        tu.is_delete as isDelete
+        tu.is_eff as isEff
         from t_user as tu
         left join t_user_group as tug on tu.user_id = tug.user_id
         left join t_user_role as tur on tu.user_id = tur.user_id
