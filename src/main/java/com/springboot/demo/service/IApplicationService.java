@@ -48,10 +48,24 @@ public interface IApplicationService {
 
 
     /**
-     * 获取场地列表
+     * 获取表单详情
+     * @param application
      * @return
      */
-    List<Application> getPlaceList();
+    Application getFormInfoByFormId(Application application);
 
+    /**
+     * 关闭表单
+     * @param application
+     * @return
+     */
+    String closeFormById(Application application);
+
+    /**
+     * 删除表单
+     * @param application
+     * @return
+     */
+    String deleteFormById(Application application);
 
 }

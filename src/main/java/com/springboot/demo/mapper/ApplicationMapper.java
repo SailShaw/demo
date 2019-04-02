@@ -34,7 +34,7 @@ public interface ApplicationMapper {
      * @param application
      * @return
      */
-    List<Application> getFormInfoByFormId(Application application);
+    Application getFormInfoByFormId(Application application);
 
     /**
      * 修改表单审核状态
@@ -55,10 +55,21 @@ public interface ApplicationMapper {
      */
     boolean createAppForm(Application application);
 
+
     /**
-     * 获取场地列表
+     * 关闭表单
+     * 不可编辑,只可查看,由管理员操作该状态
+     * @param application
      * @return
      */
-    List<Application> getPlaceList();
+    boolean closeFormById(Application application);
+
+    /**
+     * 删除表单
+     * 逻辑删除该表单,但数据仍在表中,
+     * @param application
+     * @return
+     */
+    boolean deleteFormById(Application application);
 
 }

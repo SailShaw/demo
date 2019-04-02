@@ -14,20 +14,28 @@ public class Application implements Serializable {
     private String formId;//表单ID
     private String userId;//用户ID
     private String groupId;//部门ID
-    private String appTitle;//活动标题
-    private String appDesc;//活动描述
-    private String placeId;//场地ID
+    private String palceId;//资源ID
+
+    private String activityTitle;//活动描述
+    private String activityContent;//场地ID
     private String attendance;//参与人数
-    private String startTime;//开始日期
-    private String endTime;//结束日期
-    private String verifyStatus;//审核状态
-    private String reviewer;//审批人
-    private String createTime;//创建日期
-    private String updateTime;//修改日期
-    private String groupName;//部门名称
-    private String placeName;//场地名称
-    private String znName;//申请人
+    private String startDate;//开始日期
+    private String endDate;//结束日期
+
     private String mailMsg;//邮件内容
+    private String verifyStatus;//审核状态
+    private String isEff;//是否有效
+    private String isOff;//是否关闭
+
+    private String createTime;//创建日期
+    private String updateTime;//更新日期
+    private String verifyTime;//更新日期
+
+    private String znName;//申请人
+    private String reviewer;//审批人
+    private String placeName;//场地名称
+
+
 
     /* Getter & Setter */
 
@@ -59,28 +67,28 @@ public class Application implements Serializable {
         this.groupId = groupId;
     }
 
-    public String getAppTitle() {
-        return appTitle;
+    public String getPalceId() {
+        return palceId;
     }
 
-    public void setAppTitle(String appTitle) {
-        this.appTitle = appTitle;
+    public void setPalceId(String palceId) {
+        this.palceId = palceId;
     }
 
-    public String getAppDesc() {
-        return appDesc;
+    public String getActivityTitle() {
+        return activityTitle;
     }
 
-    public void setAppDesc(String appDesc) {
-        this.appDesc = appDesc;
+    public void setActivityTitle(String activityTitle) {
+        this.activityTitle = activityTitle;
     }
 
-    public String getPlaceId() {
-        return placeId;
+    public String getActivityContent() {
+        return activityContent;
     }
 
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
+    public void setActivityContent(String activityContent) {
+        this.activityContent = activityContent;
     }
 
     public String getAttendance() {
@@ -91,20 +99,28 @@ public class Application implements Serializable {
         this.attendance = attendance;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getMailMsg() {
+        return mailMsg;
+    }
+
+    public void setMailMsg(String mailMsg) {
+        this.mailMsg = mailMsg;
     }
 
     public String getVerifyStatus() {
@@ -115,12 +131,20 @@ public class Application implements Serializable {
         this.verifyStatus = verifyStatus;
     }
 
-    public String getReviewer() {
-        return reviewer;
+    public String getIsEff() {
+        return isEff;
     }
 
-    public void setReviewer(String reviewer) {
-        this.reviewer = reviewer;
+    public void setIsEff(String isEff) {
+        this.isEff = isEff;
+    }
+
+    public String getIsOff() {
+        return isOff;
+    }
+
+    public void setIsOff(String isOff) {
+        this.isOff = isOff;
     }
 
     public String getCreateTime() {
@@ -139,20 +163,12 @@ public class Application implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getVerifyTime() {
+        return verifyTime;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public String getPlaceName() {
-        return placeName;
-    }
-
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
+    public void setVerifyTime(String verifyTime) {
+        this.verifyTime = verifyTime;
     }
 
     public String getZnName() {
@@ -163,11 +179,19 @@ public class Application implements Serializable {
         this.znName = znName;
     }
 
-    public String getMailMsg() {
-        return mailMsg;
+    public String getPlaceName() {
+        return placeName;
     }
 
-    public void setMailMsg(String mailMsg) {
-        this.mailMsg = mailMsg;
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    public String getReviewer() {
+        return reviewer;
+    }
+
+    public void setReviewer(String reviewer) {
+        this.reviewer = reviewer;
     }
 }

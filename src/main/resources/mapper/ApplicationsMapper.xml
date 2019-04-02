@@ -2,80 +2,92 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.springboot.demo.mapper.ApplicationMapper">
     <resultMap id="authorMap" type="com.springboot.demo.entity.Application">
-        <result column="formID" jdbcType="VARCHAR"/>
+        <result column="formId" jdbcType="VARCHAR"/>
         <result column="userId" jdbcType="VARCHAR"/>
         <result column="groupId" jdbcType="VARCHAR"/>
-        <result column="appTitle" jdbcType="VARCHAR"/>
-        <result column="appDesc" jdbcType="VARCHAR"/>
-        <result column="placeId" jdbcType="VARCHAR"/>
+        <result column="palceId" jdbcType="VARCHAR"/>
+        <result column="activityTitle" jdbcType="VARCHAR"/>
+        <result column="activityContent" jdbcType="VARCHAR"/>
         <result column="attendance" jdbcType="VARCHAR"/>
-        <result column="startTime" jdbcType="VARCHAR"/>
-        <result column="endTime" jdbcType="VARCHAR"/>
+        <result column="startDate" jdbcType="VARCHAR"/>
+        <result column="endDate" jdbcType="VARCHAR"/>
+        <result column="mailMsg" jdbcType="VARCHAR"/>
         <result column="verifyStatus" jdbcType="VARCHAR"/>
+        <result column="isEff" jdbcType="VARCHAR"/>
+        <result column="isOff" jdbcType="VARCHAR"/>
         <result column="createTime" jdbcType="VARCHAR"/>
         <result column="updateTime" jdbcType="VARCHAR"/>
-        <result column="groupName" jdbcType="VARCHAR"/>
-        <result column="placeName" jdbcType="VARCHAR"/>
+        <result column="verifyTime" jdbcType="VARCHAR"/>
+        <result column="znName" jdbcType="VARCHAR"/>
+        <result column="palceName" jdbcType="VARCHAR"/>
+
     </resultMap>
+
+
     <!--新增申请表-->
     <insert id="createAppForm">
         insert into t_applications (
-          form_id as formId,
-          user_id as userId,
-          group_id as groupId,
-          app_title as appTitle,
-          app_desc as appDesc,
-          place_id as placeId,
-          attendance as attendance,
-          start_time as startTime,
-          end_time as endTime,
-          create_time as createTime
-        ) values(#{formId},#{userId},#{groupId},#{appTitle},
-        #{appDesc},#{placeId},#{attendance},#{startTime},
-        #{endTime},#{createTime},)
+          form_id, user_id, group_id, place_id,
+          activity_title, activity_content, attendance,
+          start_date, end_date,create_time
+        ) values(#{formId},#{userId},#{groupId},#{palceId},
+        #{activityTitle},#{activityContent},#{attendance},
+        #{startDate},#{endDate},#{createTime})
     </insert>
+
     <!--修改审核状态-->
     <update id="modifyFormStatusByFormId">
         update t_applications set
             verify_status=#{verifyStatus},
-            mail_msg = #{mailMsg}
+            verify_time=#{verifyTime}
         where form_id=#{formId}
     </update>
+
     <!--修改表单信息-->
     <update id="modifyFormInfoByFormId">
         update t_applications set
-            app_title=#{appTitle},
-            start_time=#{startTime},
-            end_time=#{endTime},
-            attendance=#{attendance},
-            place_id=#{placeId},
-            app_desc=#{appDesc},
-            update_time=#{updateTime}
+            activity_title = #{activityTitle},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            attendance = #{attendance},
+            place_id = #{placeId},
+            activity_content = #{activityContent},
+            update_time = #{updateTime}
+        where form_id = #{formId}
+    </update>
+
+    <!-- 关闭表单 -->
+    <update id="closeFormById">
+        update t_applications set
+           is_off = #{isOff}
         where form_id=#{formId}
     </update>
+    <update id="deleteFormById">
+        update t_applications set
+           is_eff = #{isEff}
+        where form_id=#{formId}
+    </update>
+
     <!--获取部门下所有申请表-->
     <select id="getAllFormByDept" resultType="com.springboot.demo.entity.Application">
-        select
-           ta.form_id as formId,
-           ta.user_id as userId,
-           ta.group_id as groupId,
-           ta.app_title as appTitle,
-           DATE_FORMAT(ta.start_time,'%Y-%m-%d')
-            as startTime,
-           DATE_FORMAT(ta.end_time,'%Y-%m-%d')
-            as endTime,
-           ta.place_id as placeId,
-           tp.place_name as placeName,
-           tu.zn_name as znName,
-           ta.attendance as attendance,
-           ta.verify_status as verifyStatus,
-           ta.app_desc as appDesc,
-            DATE_FORMAT(ta.create_time,'%Y-%m-%d')
-            as createTime
+        select ta.form_id as formId,
+               ta.user_id as userId,
+               ta.group_id as groupId,
+               ta.place_id as placeId,
+               tu.zn_name as znName,
+               ta.activity_title as activityTitle,
+               DATE_FORMAT(ta.start_date,'%Y-%m-%d') as startDate,
+               DATE_FORMAT(ta.end_date,'%Y-%m-%d') as endDate,
+               ta.verify_status as verifyStatus,
+               ta.is_eff as isEff,
+               ta.is_off as isOff,
+               ta.reviewer as reviewer,
+               DATE_FORMAT(ta.create_time,'%Y-%m-%d') as createTime,
+               DATE_FORMAT(ta.verify_time,'%Y-%m-%d') as verifyTime
         from t_applications as ta
-          left join t_user as tu on ta.user_id = tu.user_id
-          left join t_place as tp on ta.place_id = tp.place_id
-        where ta.group_id = #{groupId}
+        left join t_user as tu on ta.user_id = tu.user_id
+        left join t_place as tp on ta.place_id = tp.place_id
+        where ta.group_id = #{groupId} and ta.is_eff!=1
     </select>
     <!--获取该用户的所有记录-->
     <select id="getAllFormByUser" resultType="com.springboot.demo.entity.Application">
@@ -98,28 +110,34 @@
         from t_applications as ta
           left join t_user as tu on ta.user_id = tu.user_id
           left join t_place as tp on ta.place_id = tp.place_id
-        where ta.user_id = #{userId}
+        where ta.user_id = #{userId} and ta.is_eff!=1
     </select>
-    <!--根据ID获取表信息-->
+    <!--表单详情-->
     <select id="getFormInfoByFormId" resultType="com.springboot.demo.entity.Application">
         select
-          ta.form_id as formId,
-          ta.app_title as appTitle,
-          ta.start_time as startTime,
-          ta.end_time as endTime,
-          ta.attendance as attendance,
-          ta.place_id as placeId,
-          ta.app_desc as appDesc
+               ta.form_id as formId,
+               ta.user_id as userId,
+               ta.group_id as groupId,
+               ta.place_id as placeId,
+               tu.zn_name as znName,
+               ta.reviewer as reviewer,
+               ta.activity_title as activityTitle,
+               ta.activity_content as activityContent,
+               ta.attendance as attendance,
+               ta.start_date as startDate,
+               ta.end_date as endDate,
+               ta.mail_msg as mailMsg,
+               ta.verify_status as verifyStatus,
+               ta.is_eff as isEff,
+               ta.is_off as isOff,
+               ta.create_time as createTime,
+               ta.update_time as updateTime,
+               ta.verify_time as verifyTime
         from t_applications as ta
-        where form_id = #{formId}
+        left join t_user as tu on ta.user_id = tu.user_id
+        where form_id = #{formId};
     </select>
-    <!--获取场地列表-->
-    <select id="getPlaceList" resultType="com.springboot.demo.entity.Application">
-        select
-          tp.place_id as placeId,
-          tp.place_name as placeName
-        from t_place as tp
-    </select>
+
 
 </mapper>
 

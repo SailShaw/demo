@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/application")
+@RequestMapping("/app")
 public class ApplicationController {
 
     private final static Logger logger = LoggerFactory.getLogger(ApplicationController.class);
@@ -49,16 +49,12 @@ public class ApplicationController {
 
         try{
             // 获取分页参数
-            String _pageNum = request.getParameter("pageNum");
-            String _pageSize = request.getParameter("pageSize");
-            //转型+判空(设置默认分页大小为7)
-            Integer pageNum = StringUtils.isEmpty(_pageNum) ? 1 : Integer.parseInt(_pageNum);
-            Integer pageSize = StringUtils.isEmpty(_pageSize) ? 7 : Integer.parseInt(_pageSize);
+            Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
+            Integer pageSize = 9;
             resultList = applicationService.getAllFormByDept(pageNum,pageSize,application);
         }catch(Exception e){
-            logger.error("分页失败");
+            logger.error("getAllFormByDept()"+e);
         }
-
         //Page对象
         PageBean<Application> pageBean = new PageBean<>(resultList);
         return pageBean;
@@ -83,16 +79,12 @@ public class ApplicationController {
         //分页
         try{
             // 获取分页参数
-            String _pageNum = request.getParameter("pageNum");
-            String _pageSize = request.getParameter("pageSize");
-            //转型+判空
-            Integer pageNum = StringUtils.isEmpty(_pageNum) ? 1 : Integer.parseInt(_pageNum);
-            Integer pageSize = StringUtils.isEmpty(_pageSize) ? 7 : Integer.parseInt(_pageSize);
+            Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
+            Integer pageSize = 9;
             resultList = applicationService.getAllFormByUser(pageNum,pageSize,application);
         }catch(Exception e){
-
+            logger.error("getAllFormByUser"+e);
         }
-
         //Page对象
         PageBean<Application> pageBean = new PageBean<>(resultList);
         return pageBean;
@@ -122,6 +114,7 @@ public class ApplicationController {
         return result;
     }
 
+
     /**
      * 修改申请表
      * @param application
@@ -129,7 +122,6 @@ public class ApplicationController {
     @Operation(value = "修改申请表")
     @RequestMapping(value = "/modifyFormInfoByFormId")
     public String modifyFormInfoByFormId(Application application){
-
         //返回结果
         String result = "";
 
@@ -138,7 +130,6 @@ public class ApplicationController {
         }else {
             result = "error";
         }
-
         return result;
     }
 
@@ -166,14 +157,51 @@ public class ApplicationController {
 
     }
 
+    @Operation("关闭表单")
+    @RequestMapping("/closeFormById")
+    public String closeFormById(Application application){
+        String result = null;
 
-    /**
-     * 获取场地列表
-     * @return
-     */
-    @RequestMapping(value = "/getPlaceList")
-    public List<Application> getPlaceList(){
-        List<Application> result = applicationService.getPlaceList();
+        if (application != null) {
+            result = applicationService.closeFormById(application);
+        }else {
+            logger.error("closeFormById() -> Object is Null");
+            result = "JSON_IS_NULL";
+        }
         return result;
     }
+
+    @Operation("删除表单")
+    @RequestMapping("/closeFormById")
+    public String deleteFormById(Application application){
+        String result = null;
+
+        if (application != null) {
+            result = applicationService.deleteFormById(application);
+        }else {
+            logger.error("closeFormById() -> Object is Null");
+            result = "JSON_IS_NULL";
+        }
+        return result;
+    }
+
+
+    /**
+     * 获取表单详情
+     * @param application
+     * @return
+     */
+    @RequestMapping("/getFormInfoByFormId")
+    public Application getFormInfoByFormId(Application application){
+        Application details = null;
+        if (application != null) {
+            details = applicationService.getFormInfoByFormId(application);
+        }else{
+            logger.error("getFormInfoByFormId() -> Object is Null");
+            return null;
+        }
+        return details;
+
+    }
+
 }
