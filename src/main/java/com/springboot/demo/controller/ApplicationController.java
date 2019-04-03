@@ -65,7 +65,7 @@ public class ApplicationController {
      * @param application
      * @return
      */
-    @Operation(value = "获取本人所有申请记录")
+//    @Operation(value = "获取本人所有申请记录")
     @RequestMapping(value = "/getAllFormByUser")
     public PageBean<Application> getAllFormByUser(HttpServletRequest request, Application application){
         //logger
@@ -75,7 +75,8 @@ public class ApplicationController {
         //获取登陆用户信息
         User user = (User) request.getSession().getAttribute("user");
         //设置查询条件
-        application.setUserId(user.getUserId());
+//        application.setUserId(user.getUserId());
+        application.setUserId("560779324594204679");
         //分页
         try{
             // 获取分页参数

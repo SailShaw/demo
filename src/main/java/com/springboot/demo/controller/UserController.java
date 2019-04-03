@@ -1,5 +1,6 @@
 package com.springboot.demo.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.springboot.demo.core.common.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.User;
@@ -42,7 +43,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @Operation(value = "获取用户管理列表")
+//    @Operation(value = "获取用户管理列表")
     @RequestMapping("/getURGInfoListByPage")
     public PageBean<User> getURGInfoListByPage(HttpServletRequest request, User user){
         logger.info("getURGInfoListByPage()" + "Begin:");
@@ -81,6 +82,39 @@ public class UserController {
             result = "JSON_IS_NULL";
         }
         return result;
+    }
+
+
+//    @Operation("查询用户信息")
+    @RequestMapping("/getUserToFind")
+    public String getUserToFind(HttpServletRequest request,User user){
+        String result = null;
+        //判空
+        if(ObjectUtil.isNull(user)){
+            result =  "JSON_IS_NULL";
+        }else{
+            //查询
+            User cache = userMapper.findUserByUser(user);
+            //存入session
+            request.getSession().setAttribute("cache",cache);
+            result = "SUCCESS";
+        }
+        return result;
+    }
+//    @Operation("获取用户信息")
+    @RequestMapping("/getUserOnCache")
+    public User getUserOnCache(HttpServletRequest request){
+        User result = null;
+        //空指针异常处理
+        try {
+            result = (User) request.getSession().getAttribute("cache");
+        }catch (NullPointerException e){
+            logger.error("getUserOnCache()"+e);
+            result = null;
+        }finally {
+//            request.getSession().removeAttribute("cache");
+            return result;
+        }
     }
 
 
@@ -155,14 +189,17 @@ public class UserController {
      * 删除用户
      * @param user
      */
-    @Operation(value = "删除用户")
+//    @Operation(value = "删除用户")
     @RequestMapping("/deleteUserByID")
-    public String deleteUserByID(User user){
+    public String deleteUserByID(HttpServletRequest request,User user){
 
         String result = null;
 
+        User operator = (User) request.getSession().getAttribute("user");
+
         if (user != null) {
             //设置更新者
+            user.setUpdateBy(operator.getZnName());
             result = userService.deleteUserByID(user);
         } else {
             result = "JSON_IS_NULL";
