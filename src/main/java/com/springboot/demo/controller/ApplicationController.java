@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/application")
 public class ApplicationController {
 
     private final static Logger logger = LoggerFactory.getLogger(ApplicationController.class);
@@ -172,7 +172,7 @@ public class ApplicationController {
     }
 
     @Operation("删除表单")
-    @RequestMapping("/closeFormById")
+    @RequestMapping("/deleteFormById")
     public String deleteFormById(Application application){
         String result = null;
 
@@ -191,6 +191,7 @@ public class ApplicationController {
      * @param application
      * @return
      */
+    @Operation("获取表单详情")
     @RequestMapping("/getFormInfoByFormId")
     public Application getFormInfoByFormId(Application application){
         Application details = null;

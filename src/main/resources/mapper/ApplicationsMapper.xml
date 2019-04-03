@@ -91,26 +91,30 @@
     </select>
     <!--获取该用户的所有记录-->
     <select id="getAllFormByUser" resultType="com.springboot.demo.entity.Application">
-        select
-           ta.form_id as formId,
-           ta.user_id as userId,
-           ta.group_id as groupId,
-           ta.app_title as appTitle,
-           DATE_FORMAT(ta.start_time,'%Y-%m-%d')
-            as startTime,
-           DATE_FORMAT(ta.end_time,'%Y-%m-%d')
-            as endTime,
-           ta.place_id as placeId,
-           tp.place_name as placeName,
-           ta.attendance as attendance,
-           ta.verify_status as verifyStatus,
-           ta.app_desc as appDesc,
-            DATE_FORMAT(ta.create_time,'%Y-%m-%d')
-            as createTime
-        from t_applications as ta
-          left join t_user as tu on ta.user_id = tu.user_id
-          left join t_place as tp on ta.place_id = tp.place_id
-        where ta.user_id = #{userId} and ta.is_eff!=1
+            select
+                ta.form_id as formId,
+                ta.user_id as userId,
+                ta.group_id as groupId,
+                ta.place_id as placeId,
+                tu.zn_name as znName,
+                ta.reviewer as reviewer,
+                ta.activity_title as activityTitle,
+                ta.activity_content as activityContent,
+                ta.attendance as attendance,
+                tp.place_name as placeName,
+                DATE_FORMAT(ta.start_date, '%Y-%m-%d') as startDate,
+                DATE_FORMAT(ta.end_date, '%Y-%m-%d') as endDate,
+                ta.mail_msg as mailMsg,
+                ta.verify_status as verifyStatus,
+                ta.is_eff as isEff,
+                ta.is_off as isOff,
+                DATE_FORMAT(ta.create_time, '%Y-%m-%d') as createTime,
+                DATE_FORMAT(ta.update_time, '%Y-%m-%d') as updateTime,
+                DATE_FORMAT(ta.verify_time, '%Y-%m-%d') as verifyTime
+            from t_applications as ta
+            left join t_user as tu on ta.user_id = tu.user_id
+            left join t_place as tp on ta.place_id = tp.place_id
+            where ta.user_id = '560779324594204679' and ta.is_eff!=1
     </select>
     <!--表单详情-->
     <select id="getFormInfoByFormId" resultType="com.springboot.demo.entity.Application">
