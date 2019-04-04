@@ -3,9 +3,13 @@ package com.springboot.demo.entity;
 import java.io.Serializable;
 
 /**
- * Create By SINYA
- * Description:
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Domain for Syslog
  */
+
 public class SysLog implements Serializable {
 
     private static final long serialVersionUID = 2713975405735052081L;

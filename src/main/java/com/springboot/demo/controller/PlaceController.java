@@ -1,6 +1,6 @@
 package com.springboot.demo.controller;
 
-import com.springboot.demo.core.common.PageBean;
+import com.springboot.demo.core.model.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
@@ -16,9 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Description:
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Controller for Resources
  */
+
 @RestController
 @RequestMapping("/place")
 public class PlaceController {

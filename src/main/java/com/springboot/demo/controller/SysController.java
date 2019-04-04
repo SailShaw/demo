@@ -1,6 +1,6 @@
 package com.springboot.demo.controller;
 
-import com.springboot.demo.core.common.PageBean;
+import com.springboot.demo.core.model.PageBean;
 import com.springboot.demo.entity.SysLog;
 import com.springboot.demo.service.ISysLogService;
 import org.slf4j.Logger;
@@ -14,9 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Description:
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Controller for System
  */
+
 @RestController
 @RequestMapping("/system")
 public class SysController {

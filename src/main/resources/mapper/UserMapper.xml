@@ -75,23 +75,14 @@
         order by tur.create_time
     </select>
 
-    <!--删除用户 USER表-->
+    <!--删除用户-->
     <delete id="deleteUserByID">
-        update t_user set
-                is_eff = #{isEff},
-        where user_id=?
-    </delete>
-    <!-- 删除用户 USER_ROLE 表 -->
-    <delete id="deleteUserRoleByID">
-        update t_user_role set
-                is_eff = #{isEff},
-        where user_id=?
-    </delete>
-    <!-- 删除用户 USER_GROUP 表 -->
-    <delete id="deleteUserGroupByID">
-        update t_user_group set
-                is_eff = #{isEff},
-        where user_id=?
+        update t_user tu
+        left join t_user_role tur on tu.user_id = tur.user_id
+        left join t_user_group tug on tu.user_id = tug.user_id
+        set
+          tu.is_eff = '1',tur.is_eff = '1', tug.is_eff = '1'
+        where tu.user_id = #{userId}
     </delete>
 
     <!--修改用户信息-->

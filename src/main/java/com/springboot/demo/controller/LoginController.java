@@ -19,8 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Create By SINYA
- * Description:
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Controller for Login
  */
 
 @RestController
@@ -158,7 +161,7 @@ public class LoginController {
      * @param request
      * @return
      */
-    @RequestMapping("/logout")
+    @RequestMapping("/loginOut")
     public String logout(HttpServletRequest request){
         String result = null;
         //移除session

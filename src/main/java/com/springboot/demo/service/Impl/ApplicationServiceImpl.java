@@ -8,16 +8,20 @@ import com.springboot.demo.mapper.ApplicationMapper;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IApplicationService;
 import com.springboot.demo.util.SnowFlake;
+import com.springboot.demo.util.TimeHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Create Date 2019/3/1
- * Description:
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Implements for Application
  */
+
 @Service
 public class ApplicationServiceImpl implements IApplicationService {
 
@@ -38,11 +42,10 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @return
      */
     @Override
-    public List<Application> getAllFormByDept(Integer pageNum, Integer pageSize, Application application) {
+    public List<Application> getFormListByDept(Integer pageNum, Integer pageSize, Application application) {
         //分页
         PageHelper.startPage(pageNum, pageSize);
-        //
-        List<Application> result = applicationMapper.getAllFormByDept(application);
+        List<Application> result = applicationMapper.getFormListByDept(application);
         return result;
     }
 
@@ -53,11 +56,10 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @return
      */
     @Override
-    public List<Application> getAllFormByUser(Integer pageNum, Integer pageSize, Application application) {
-        //分页(第几页,每页几个)
+    public List<Application> getFormListByUser(Integer pageNum, Integer pageSize, Application application) {
+        //分页+
         PageHelper.startPage(pageNum, pageSize);
-        //
-        List<Application> result = applicationMapper.getAllFormByUser(application);
+        List<Application> result = applicationMapper.getFormListByUser(application);
         return result;
     }
 
@@ -67,31 +69,28 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @param application
      */
     @Override
-    public boolean modifyFormStatusByFormId(Application application) {
-
+    public boolean verifyFormById(Application application) {
         //获取该表单所属用户的邮箱
         User user = new User();
-
+        boolean flag;
         user.setUserId(application.getUserId());
-
         User userinfo = userMapper.findUserByUser(user);
-
         String recipient = userinfo.getEmail();
         //设置邮件标题
         String mailTitle = "审核结果通知";
         //获取邮件内容
         String mailText = application.getMailMsg();
-
+        //设置审核时间
+        application.setVerifyTime(TimeHelper.getNowTime());
         //修改审核状态
-
-        //发送邮件(邮箱地址,标题,正文,是否是html)
-        MailUtil.send(recipient, mailTitle, mailText, false);
-
-        if (applicationMapper.modifyFormStatusByFormId(application)) {
-            return true;
+        if (applicationMapper.verifyFormById(application)) {
+            flag = true;
         } else {
-            return false;
+            flag = false;
         }
+        //发送邮件(邮箱地址,标题,正文,是否是html)
+        MailUtil.send(recipient, mailTitle, mailText, true);
+        return flag;
     }
 
     /**
@@ -100,14 +99,12 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @param application
      */
     @Override
-    public boolean modifyFormInfoByFormId(Application application) {
-
-        if (applicationMapper.modifyFormInfoByFormId(application)) {
+    public boolean modifyFormById(Application application) {
+        if (applicationMapper.modifyFormById(application)) {
             return true;
         } else {
             return false;
         }
-
     }
 
     /**
@@ -131,6 +128,7 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     /**
      * 获取表单详情
+     *
      * @return
      */
     @Override
@@ -141,14 +139,13 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     /**
      * 关闭表单
+     *
      * @param application
      * @return
      */
     @Override
     public String closeFormById(Application application) {
-
         String result = null;
-
         if (applicationMapper.closeFormById(application)) {
             result = "SUCCESS";
         } else {
@@ -159,6 +156,7 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     /**
      * 删除表单
+     *
      * @param application
      * @return
      */

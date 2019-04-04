@@ -20,56 +20,9 @@
         <result column="verifyTime" jdbcType="VARCHAR"/>
         <result column="znName" jdbcType="VARCHAR"/>
         <result column="palceName" jdbcType="VARCHAR"/>
-
     </resultMap>
-
-
-    <!--新增申请表-->
-    <insert id="createAppForm">
-        insert into t_applications (
-          form_id, user_id, group_id, place_id,
-          activity_title, activity_content, attendance,
-          start_date, end_date,create_time
-        ) values(#{formId},#{userId},#{groupId},#{palceId},
-        #{activityTitle},#{activityContent},#{attendance},
-        #{startDate},#{endDate},#{createTime})
-    </insert>
-
-    <!--修改审核状态-->
-    <update id="modifyFormStatusByFormId">
-        update t_applications set
-            verify_status=#{verifyStatus},
-            verify_time=#{verifyTime}
-        where form_id=#{formId}
-    </update>
-
-    <!--修改表单信息-->
-    <update id="modifyFormInfoByFormId">
-        update t_applications set
-            activity_title = #{activityTitle},
-            start_date = #{startDate},
-            end_date = #{endDate},
-            attendance = #{attendance},
-            place_id = #{placeId},
-            activity_content = #{activityContent},
-            update_time = #{updateTime}
-        where form_id = #{formId}
-    </update>
-
-    <!-- 关闭表单 -->
-    <update id="closeFormById">
-        update t_applications set
-           is_off = #{isOff}
-        where form_id=#{formId}
-    </update>
-    <update id="deleteFormById">
-        update t_applications set
-           is_eff = #{isEff}
-        where form_id=#{formId}
-    </update>
-
     <!--获取部门下所有申请表-->
-    <select id="getAllFormByDept" resultType="com.springboot.demo.entity.Application">
+    <select id="getFormListByDept" resultType="com.springboot.demo.entity.Application">
         select ta.form_id as formId,
                ta.user_id as userId,
                ta.group_id as groupId,
@@ -89,8 +42,9 @@
         left join t_place as tp on ta.place_id = tp.place_id
         where ta.group_id = #{groupId} and ta.is_eff!=1
     </select>
+
     <!--获取该用户的所有记录-->
-    <select id="getAllFormByUser" resultType="com.springboot.demo.entity.Application">
+    <select id="getFormListByUser" resultType="com.springboot.demo.entity.Application">
             select
                 ta.form_id as formId,
                 ta.user_id as userId,
@@ -116,6 +70,39 @@
             left join t_place as tp on ta.place_id = tp.place_id
             where ta.user_id = '560779324594204679' and ta.is_eff!=1
     </select>
+
+    <!--修改审核状态-->
+    <update id="verifyFormById">
+        update t_applications set
+            verify_status=#{verifyStatus},
+            verify_time=#{verifyTime}
+        where form_id=#{formId}
+    </update>
+
+    <!--修改表单信息-->
+    <update id="modifyFormById">
+        update t_applications set
+            activity_title = #{activityTitle},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            attendance = #{attendance},
+            place_id = #{placeId},
+            activity_content = #{activityContent},
+            update_time = #{updateTime}
+        where form_id = #{formId}
+    </update>
+
+    <!--新增申请表-->
+    <insert id="createAppForm">
+        insert into t_applications (
+          form_id, user_id, group_id, place_id,
+          activity_title, activity_content, attendance,
+          start_date, end_date,create_time
+        ) values(#{formId},#{userId},#{groupId},#{palceId},
+        #{activityTitle},#{activityContent},#{attendance},
+        #{startDate},#{endDate},#{createTime})
+    </insert>
+
     <!--表单详情-->
     <select id="getFormInfoByFormId" resultType="com.springboot.demo.entity.Application">
         select
@@ -142,6 +129,19 @@
         where form_id = #{formId};
     </select>
 
+    <!--关闭表单 -->
+    <update id="closeFormById">
+        update t_applications set
+           is_off = #{isOff}
+        where form_id=#{formId}
+    </update>
+
+    <!--删除表单-->
+    <update id="deleteFormById">
+        update t_applications set
+           is_eff = #{isEff}
+        where form_id=#{formId}
+    </update>
 
 </mapper>
 

@@ -7,6 +7,7 @@ import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IApplicationService;
 import com.springboot.demo.service.IGlobalService;
 import com.springboot.demo.service.IMenuService;
+import com.springboot.demo.util.ObjectHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Description:
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Controller for Global
  */
+
 @RestController
 @RequestMapping("/global")
 public class GlobalController {
@@ -92,10 +97,15 @@ public class GlobalController {
      * @return
      */
     @RequestMapping("/getLoginUserInfo")
-    public User getInfo(HttpServletRequest request){
+    public User getInfo(HttpServletRequest request) throws IllegalAccessException {
         //获取session
         User user = (User) request.getSession().getAttribute("user");
-        return user;
+        //判空
+        if(ObjectHandle.reflectFieldIsNotALLNull(user,new String[]{"serialVersionUID"})){
+            return user;
+        }else {
+            return null;
+        }
     }
 
     /**

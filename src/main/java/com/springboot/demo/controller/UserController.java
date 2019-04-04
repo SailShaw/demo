@@ -1,12 +1,12 @@
 package com.springboot.demo.controller;
 
-import cn.hutool.core.util.ObjectUtil;
-import com.springboot.demo.core.common.PageBean;
+import com.springboot.demo.core.model.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
 import com.springboot.demo.util.MD5;
+import com.springboot.demo.util.ObjectHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -20,9 +20,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Create Date 2019/2/27
- * Description: Controller For User
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Controller for User
  */
 
 @RestController
@@ -87,10 +89,10 @@ public class UserController {
 
 //    @Operation("查询用户信息")
     @RequestMapping("/getUserToFind")
-    public String getUserToFind(HttpServletRequest request,User user){
+    public String getUserToFind(HttpServletRequest request,User user) throws IllegalAccessException {
         String result = null;
         //判空
-        if(ObjectUtil.isNull(user)){
+        if(!ObjectHandle.reflectFieldIsNotALLNull(user,new String[]{"serialVersionUID"})){
             result =  "JSON_IS_NULL";
         }else{
             //查询

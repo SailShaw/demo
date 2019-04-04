@@ -5,9 +5,11 @@ import com.springboot.demo.entity.User;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Create Date 2019/2/27
- * Description:Service For User
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Service for User
  */
 
 public interface IUserService {

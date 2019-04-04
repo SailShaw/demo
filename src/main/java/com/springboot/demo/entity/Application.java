@@ -3,8 +3,11 @@ package com.springboot.demo.entity;
 import java.io.Serializable;
 
 /**
- * Create By SINYA
- * Description: Pojo for Applications
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Domain for Application
  */
 public class Application implements Serializable {
 

@@ -1,16 +1,18 @@
-package com.springboot.demo.core.common;
+package com.springboot.demo.core.model;
 
 import com.github.pagehelper.Page;
 
 import java.io.Serializable;
 import java.util.List;
 
-
-
 /**
- * Create By SINYA
- * Description: PageBean
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Core for PageBean
  */
+
 public class PageBean<T> implements Serializable {
 
     private long count;//总记录数

@@ -16,10 +16,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Create Date 2019/2/27
- * Description:Service Implements For User
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Implements for User
  */
+
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -72,7 +75,7 @@ public class UserServiceImpl implements IUserService {
 
         String result = null;
         //判断执行
-        if (userMapper.deleteUserByID(user) && userMapper.deleteUserRoleByID(user) && userMapper.deleteUserGroupByID(user)) {
+        if (userMapper.deleteUserByID(user)) {
             result = "SUCCESS";
         } else {
             result = "ERROR";

@@ -7,9 +7,11 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Create By SINYA
- * Create Date 2019/2/27
- * Description: Mapper For User
+ * Create By: SINYA
+ * Create Time: 2019/2/4 12:22
+ * Update Time: 2019/4/4 23:22
+ * Project Name: CAMS
+ * Description:Mapper for User
  */
 
 @Mapper
@@ -36,23 +38,13 @@ public interface UserMapper {
     boolean modifyUserInfoById(User user);
 
     /**
-     * 1.逻辑删除用户表信息
+     * 逻辑删除用户
+     * 1.通过leftJoin关联ID,实现多表同时更新,
      * @param user
      * @return
      */
     boolean deleteUserByID(User user);
-    /**
-     * 2.逻辑删除用户角色表信息
-     * @param user
-     * @return
-     */
-    boolean deleteUserRoleByID(User user);
-    /**
-     * 3.逻辑删除用户部门表信息
-     * @param user
-     * @return
-     */
-    boolean deleteUserGroupByID(User user);
+
 
 
     /**
