@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
  * Create By SINYA
  * Description:
  */
-public class MD5Test {
+public class TestMD5 {
 
 
     public static void main(String[] args) throws UnsupportedEncodingException, NoSuchAlgorithmException {

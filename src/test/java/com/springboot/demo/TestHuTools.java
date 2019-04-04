@@ -8,7 +8,7 @@ import com.springboot.demo.util.ObjectHandle;
  * Create Date 2019/3/1
  * Description:
  */
-public class HuToolsTest {
+public class TestHuTools {
 
 
     public static void main(String[] args) throws IllegalAccessException {

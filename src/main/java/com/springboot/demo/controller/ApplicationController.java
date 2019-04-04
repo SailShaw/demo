@@ -35,6 +35,7 @@ public class ApplicationController {
 
     /**
      * 获取本部门下所有记录
+     *
      * @param application
      * @return
      */
@@ -62,6 +63,7 @@ public class ApplicationController {
 
     /**
      * 获取本人所有申请记录
+     *
      * @param application
      * @return
      */
@@ -100,14 +102,14 @@ public class ApplicationController {
         //获取登陆用户信息
         User user = (User) request.getSession().getAttribute("user");
         //判空
-        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})){
+        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             application.setReviewer(user.getZnName());
             if (applicationService.verifyFormById(application)) {
                 result = "SUCCESS";
             } else {
                 result = "ERROR";
             }
-        }else {
+        } else {
             logger.error("verifyFormById() -> Json is Null");
             result = "JSON_IS_NULL";
         }
@@ -127,13 +129,13 @@ public class ApplicationController {
     public String modifyFormById(Application application) throws IllegalAccessException {
         String result = "";
         //判空
-        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})){
+        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             if (applicationService.modifyFormById(application)) {
                 result = "SUCCESS";
             } else {
                 result = "ERROR";
             }
-        }else {
+        } else {
             logger.error("modifyFormById() -> Json is Null");
             result = "JSON_IS_NULL";
         }
@@ -142,16 +144,17 @@ public class ApplicationController {
 
     /**
      * 新增申请表
+     *
      * @param application
      */
-//    @Operation(value = "添加申请表")
+    @Operation(value = "添加申请表")
     @RequestMapping(value = "/createAppForm")
     public String createAppForm(HttpServletRequest request, Application application) throws IllegalAccessException {
         String result = "";
         //获取session中的用户信息
         User user = (User) request.getSession().getAttribute("user");
         //判空
-        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})){
+        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             //注入对象
             application.setUserId(user.getUserId());
             application.setGroupId(user.getGroupId());
@@ -160,7 +163,7 @@ public class ApplicationController {
             } else {
                 result = "error";
             }
-        }else {
+        } else {
             logger.error("createAppForm() -> Json is Null");
             result = "JSON_IS_NULL";
         }
@@ -168,7 +171,7 @@ public class ApplicationController {
         return result;
     }
 
-//    @Operation("关闭表单")
+    @Operation("关闭表单")
     @RequestMapping("/closeFormById")
     public String closeFormById(Application application) {
         String result = null;
@@ -182,7 +185,7 @@ public class ApplicationController {
         return result;
     }
 
-//    @Operation("删除表单")
+    @Operation("删除表单")
     @RequestMapping("/deleteFormById")
     public String deleteFormById(Application application) throws IllegalAccessException {
         String result = null;
@@ -196,8 +199,6 @@ public class ApplicationController {
         return result;
     }
 
-
-    //    @Operation("存入表单数据")
     @RequestMapping("/getDetailToCache")
     public String getDetailToCache(HttpServletRequest request, Application application) throws IllegalAccessException {
         String result = null;
@@ -215,7 +216,7 @@ public class ApplicationController {
         return result;
     }
 
-    //    @Operation("获取表单详情")
+    @Operation("获取表单详情")
     @RequestMapping("/getDetailOnCache")
     public Application getDetailOnCache(HttpServletRequest request) throws IllegalAccessException {
         Application result = null;
@@ -223,7 +224,7 @@ public class ApplicationController {
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(result, new String[]{"serialVersionUID"})) {
             return result;
-        }else {
+        } else {
             logger.error("getDetailOnCache() -> Session is null");
             return null;
         }

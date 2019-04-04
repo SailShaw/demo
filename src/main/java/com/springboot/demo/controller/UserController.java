@@ -41,24 +41,25 @@ public class UserController {
 
     /**
      * 获取用户管理列表
+     *
      * @param request
      * @param user
      * @return
      */
 //    @Operation(value = "获取用户管理列表")
     @RequestMapping("/getURGInfoListByPage")
-    public PageBean<User> getURGInfoListByPage(HttpServletRequest request, User user){
+    public PageBean<User> getURGInfoListByPage(HttpServletRequest request, User user) {
         logger.info("getURGInfoListByPage()" + "Begin:");
         //定义数据集
         List<User> resultList = null;
         //分页
-        try{
+        try {
             // 获取分页参数
             Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
             Integer pageSize = 9;
 
-            resultList = userService.getURGInfoListByPage(pageNum,pageSize,user);
-        }catch(Exception e){
+            resultList = userService.getURGInfoListByPage(pageNum, pageSize, user);
+        } catch (Exception e) {
             //logger
             logger.error("getURGInfoListByPage" + e);
         }
@@ -70,11 +71,12 @@ public class UserController {
 
     /**
      * 根据ID修改用户信息
+     *
      * @param user
      */
     @Operation(value = "根据ID修改用户信息")
     @RequestMapping(value = "/modifyUserInfoById")
-     public String modifyUserInfoById(User user){
+    public String modifyUserInfoById(User user) {
 
         String result = null;
 
@@ -87,42 +89,43 @@ public class UserController {
     }
 
 
-//    @Operation("查询用户信息")
+    @Operation("查询用户信息")
     @RequestMapping("/getUserToFind")
-    public String getUserToFind(HttpServletRequest request,User user) throws IllegalAccessException {
+    public String getUserToFind(HttpServletRequest request, User user) throws IllegalAccessException {
         String result = null;
         //判空
-        if(!ObjectHandle.reflectFieldIsNotALLNull(user,new String[]{"serialVersionUID"})){
-            result =  "JSON_IS_NULL";
-        }else{
+        if (!ObjectHandle.reflectFieldIsNotALLNull(user, new String[]{"serialVersionUID"})) {
+            result = "JSON_IS_NULL";
+        } else {
             //查询
             User cache = userMapper.findUserByUser(user);
             //存入session
-            request.getSession().setAttribute("cache",cache);
+            request.getSession().setAttribute("cache", cache);
             result = "SUCCESS";
         }
         return result;
     }
-//    @Operation("获取用户信息")
+
+    @Operation("获取用户信息")
     @RequestMapping("/getUserOnCache")
-    public User getUserOnCache(HttpServletRequest request){
+    public User getUserOnCache(HttpServletRequest request) {
         User result = null;
         //空指针异常处理
         try {
             result = (User) request.getSession().getAttribute("cache");
-        }catch (NullPointerException e){
-            logger.error("getUserOnCache()"+e);
+        } catch (NullPointerException e) {
+            logger.error("getUserOnCache()" + e);
             result = null;
-        }finally {
+        } finally {
 //            request.getSession().removeAttribute("cache");
             return result;
         }
     }
 
 
-
     /**
      * 修改密码
+     *
      * @param request
      * @return
      */
@@ -142,7 +145,7 @@ public class UserController {
         String newPassword = request.getParameter("newPassword");
 
         //验证旧密码是否与数据库中相同
-        boolean flag= false;
+        boolean flag = false;
         try {
             flag = MD5.checkpassword(oldPassword, user.getPassword());
         } catch (NoSuchAlgorithmException e) {
@@ -154,9 +157,9 @@ public class UserController {
             //执行密码修改
             user.setPassword(newPassword);
             userService.updatePassword(user);
-            result =  "SUCCESS";
-        }else {
-            result =  "PASSWORD_NOT_MATCH";
+            result = "SUCCESS";
+        } else {
+            result = "PASSWORD_NOT_MATCH";
         }
 
         return result;
@@ -164,13 +167,14 @@ public class UserController {
 
     /**
      * 修改用户角色与部门信息
+     *
      * @param request
      * @param user
      * @return
      */
     @Operation(value = "修改用户角色与部门信息")
     @RequestMapping("/modifyURGInfo")
-    public String  modifyURGInfoById(HttpServletRequest request,User user){
+    public String modifyURGInfoById(HttpServletRequest request, User user) {
 
         String result = null;
 
@@ -189,11 +193,12 @@ public class UserController {
 
     /**
      * 删除用户
+     *
      * @param user
      */
-//    @Operation(value = "删除用户")
+    @Operation(value = "删除用户")
     @RequestMapping("/deleteUserByID")
-    public String deleteUserByID(HttpServletRequest request,User user){
+    public String deleteUserByID(HttpServletRequest request, User user) {
 
         String result = null;
 
