@@ -1,6 +1,5 @@
 package com.springboot.demo;
 
-import cn.hutool.core.util.RandomUtil;
 import com.springboot.demo.util.SnowFlake;
 
 import java.io.UnsupportedEncodingException;
@@ -17,12 +16,20 @@ public class TestSnowFlake {
     public static void main(String[] args) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
 
-        for (int i = 1; i <= 180 ; i++) {
-//            System.out.println(String.valueOf(snowFlake.nextId()));
-            System.out.println(String.valueOf(RandomUtil.randomInt(10,3000)));
-//            System.out.println(MD5.EncoderByMd5("test"+i));
-        }
+//        for (int i = 1; i <= 180 ; i++) {
+////            System.out.println(String.valueOf(snowFlake.nextId()));
+//            System.out.println(String.valueOf(RandomUtil.randomInt(10,3000)));
+////            System.out.println(MD5.EncoderByMd5("test"+i));
+//        }
 
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("num",1);
+//
+//        Map<String,Object> result = new HashMap<>();
+//
+//        result.put("han",map);
+//
+//        System.out.println(result.get("han"));
 
     }
 }

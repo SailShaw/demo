@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create By: SINYA
@@ -135,6 +136,24 @@ public class GlobalController {
             result =  "ERROR";
         }
         return result;
+    }
+
+    @RequestMapping("/dataStatistics")
+    public Map<String,Object> dataStatistics(){
+
+        //1.申请表总数统计,待审核统计,已通过统计,未通过统计
+
+        //2.已注册用户数统计
+
+        //3.资源数统计
+
+        //4.两周内提交的申请表数据查询
+
+        //5.图表数据:横坐标为一周7天,纵坐标为当天提交申请表总数
+
+        return globalService.dataStatistics();
+
+
     }
 
 }

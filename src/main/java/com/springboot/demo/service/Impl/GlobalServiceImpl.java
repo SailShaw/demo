@@ -3,13 +3,16 @@ package com.springboot.demo.service.Impl;
 import cn.hutool.extra.mail.MailUtil;
 import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
+import com.springboot.demo.mapper.GlobalMapper;
 import com.springboot.demo.mapper.PlaceMapper;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IGlobalService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create By: SINYA
@@ -28,6 +31,8 @@ public class GlobalServiceImpl implements IGlobalService {
     private PlaceMapper placeMapper;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private GlobalMapper globalMapper;
 
     /**
      * 获取所有场地
@@ -66,6 +71,25 @@ public class GlobalServiceImpl implements IGlobalService {
         //发送
         MailUtil.send(recipient, mailTitle, mailContent, true);
         return true;
+    }
+
+    @Override
+    public Map<String, Object> dataStatistics() {
+
+        Map<String, Object> map = new HashMap<>();
+        //活动申请总数
+        map.put("total",globalMapper.applicationTotal());
+        //审核类型统计
+        map.put("typeCount",globalMapper.typeCount());
+        //用户数统计
+        map.put("userCount",globalMapper.userCount());
+        //资源数统计
+        map.put("placeCount",globalMapper.placeCount());
+        //上一周每日申请数统计
+        map.put("lastWeekNumCount",globalMapper.lastWeekNumCount());
+        //两周内申请数据
+        map.put("twoWeekDataCount",globalMapper.twoWeekDataCount());
+        return map;
     }
 
 }

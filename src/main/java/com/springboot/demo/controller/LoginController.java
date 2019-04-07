@@ -39,7 +39,7 @@ public class LoginController {
     private UserMapper userMapper;
 
 
-    @RequestMapping("register")
+    @RequestMapping("/register")
     public String register(User user){
         String result = null;
 
@@ -61,7 +61,7 @@ public class LoginController {
     }
 
 
-    @RequestMapping("login")
+    @RequestMapping("/login")
     public String login(HttpServletRequest request, User user)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
@@ -93,7 +93,7 @@ public class LoginController {
      * 获取邮箱发送验证码
      * @Descript:使用session存储user对象和验证码
      */
-    @RequestMapping("sendResetPasswordLink")
+    @RequestMapping("/sendResetPasswordLink")
     public String sendResetPasswordLink(HttpServletRequest request,User user){
         String result = null;
         //验证码
@@ -131,7 +131,7 @@ public class LoginController {
      * @param request
      * @return
      */
-    @RequestMapping("resetPasswordByCode")
+    @RequestMapping("/resetPasswordByCode")
     public String resetPasswordByCode(HttpServletRequest request){
         String result = null;
         //获取session中的数据

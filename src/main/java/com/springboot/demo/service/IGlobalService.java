@@ -4,6 +4,7 @@ import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create By: SINYA
@@ -23,4 +24,6 @@ public interface IGlobalService {
     List<User> getGroupList();
 
     boolean sendEmailOfTest(List<String> recipient,String mailTitle,String mailContent);
+
+    Map<String,Object> dataStatistics();
 }
