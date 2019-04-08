@@ -55,8 +55,7 @@ public class PlaceServiceImpl implements IPlaceService {
     public String createPlace(Place place) {
         //生成ID
         place.setPlaceId(String.valueOf(snowFlake.nextId()));
-
-        //设置更新时间
+        //设置创建时间
         place.setCreateTime(TimeHelper.getNowTime());
         //执行
         placeMapper.createPlace(place);
@@ -92,6 +91,11 @@ public class PlaceServiceImpl implements IPlaceService {
         placeMapper.deletePlace(place);
         //返回
         return "SUCCESS";
+    }
+
+    @Override
+    public Place findPlaceById(Place place) {
+        return placeMapper.findPlaceById(place);
     }
 
 }

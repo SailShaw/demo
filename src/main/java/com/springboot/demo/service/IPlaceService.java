@@ -43,4 +43,5 @@ public interface IPlaceService {
      */
     String deletePlace(Place place);
 
+    Place findPlaceById(Place place);
 }

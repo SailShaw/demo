@@ -48,4 +48,6 @@ public interface PlaceMapper {
      * @return
      */
     List<Place> getPlaceList();
+
+    Place findPlaceById(Place place);
 }

@@ -5,6 +5,7 @@ import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IPlaceService;
+import com.springboot.demo.util.ObjectHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -38,7 +39,7 @@ public class PlaceController {
      *
      * @return
      */
-    @Operation("获取场地列表")
+    @Operation("获取资源清单")
     @RequestMapping("/getPlaceListByPage")
     public PageBean<Place> getPlaceListByPage(HttpServletRequest request, Place place) {
         //定义数据集
@@ -65,18 +66,19 @@ public class PlaceController {
      * @param place
      * @return
      */
-    @Operation("添加场地")
+    @Operation("添加资源")
     @RequestMapping("/createPlace")
-    public String createPlace(HttpServletRequest request, Place place) {
+    public String createPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
         String result = "";
         //判空
-        if (place != null) {
+        if(ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})){
             //设置创建者
             place.setCreateBy(userInfo.getZnName());
             result = placeService.createPlace(place);
-        } else {
+        }else {
+            logger.error("createPlace() -> Json is null");
             result = "JSON_IS_NULL";
         }
         return result;
@@ -91,18 +93,17 @@ public class PlaceController {
      */
     @Operation("修改资源信息")
     @RequestMapping("/modifyPlace")
-    public String modifyPlace(HttpServletRequest request, Place place) {
+    public String modifyPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
         //执行
         String result = "";
         //判空
-        if (place != null) {
+        if (ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})){
             //设置更新者
             place.setUpdateBy(userInfo.getZnName());
-
-            result = placeService.createPlace(place);
-        } else {
+            result = placeService.modifyPlace(place);
+        }else{
             result = "JSON_IS_NULL";
         }
         return result;
@@ -116,19 +117,27 @@ public class PlaceController {
      */
     @Operation("逻辑删除资源")
     @RequestMapping("/deletePlace")
-    public String deletePlace(HttpServletRequest request,Place place) {
+    public String deletePlace(HttpServletRequest request,Place place) throws IllegalAccessException {
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
         //执行
         String result = "";
-        if (place != null) {
+        if (ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})) {
             //设置更新者
             place.setUpdateBy(userInfo.getZnName());
-            result = placeService.createPlace(place);
-        } else {
+            result = placeService.deletePlace(place);
+        }else {
             result = "JSON_IS_NULL";
         }
         return result;
     }
 
+    @RequestMapping("/findPlaceById")
+    public Place findPlaceById(HttpServletRequest request,Place place) throws IllegalAccessException {
+        if (ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})) {
+            return placeService.findPlaceById(place);
+        }else {
+            return  null;
+        }
+    }
 }

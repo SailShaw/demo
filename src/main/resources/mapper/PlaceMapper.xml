@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.springboot.demo.mapper.PlaceMapper">
     <resultMap id="authorMap" type="com.springboot.demo.entity.Place">
-        <result column="placeId" jdbcType="VARCHAR" />
-        <result column="placeName" jdbcType="VARCHAR" />
-        <result column="placeType" jdbcType="VARCHAR" />
-        <result column="createBy" jdbcType="VARCHAR" />
-        <result column="createTime" jdbcType="VARCHAR" />
-        <result column="updateBy" jdbcType="VARCHAR" />
-        <result column="updateTime" jdbcType="VARCHAR" />
-        <result column="isEff" jdbcType="VARCHAR" />
+        <result column="placeId" jdbcType="VARCHAR"/>
+        <result column="placeName" jdbcType="VARCHAR"/>
+        <result column="placeType" jdbcType="VARCHAR"/>
+        <result column="createBy" jdbcType="VARCHAR"/>
+        <result column="createTime" jdbcType="VARCHAR"/>
+        <result column="updateBy" jdbcType="VARCHAR"/>
+        <result column="updateTime" jdbcType="VARCHAR"/>
+        <result column="isEff" jdbcType="VARCHAR"/>
     </resultMap>
     <!--添加-->
     <insert id="createPlace">
@@ -20,27 +20,34 @@
     <update id="modifyPlace">
         update t_place as tp set
             tp.place_name=#{placeName},
-            tp.place_type=#{placeType}
+            tp.place_type=#{placeType},
+            tp.update_by=#{updateBy},
+            tp.update_time=#{updateTime}
         where tp.place_id=#{placeId}
     </update>
     <!--删除资源-->
     <update id="deletePlace">
         update t_place as tp set
             tp.is_eff=#{isEff},
+            tp.update_by=#{updateBy},
+            tp.update_time=#{updateTime}
         where tp.place_id=#{placeId}
     </update>
     <!--获取资源清单-->
     <select id="getPlaceListByPage" resultType="com.springboot.demo.entity.Place">
-            select
-                   tp.place_id as placeId,
-                   tp.place_name as placeName,
-                   tp.place_type as placeType,
-                   tp.create_by as createBy,
-                   tp.create_time as createTime,
-                   tp.update_by as updateBy,
-                   tp.update_time as updateTime
-            from t_place as tp
-            where tp.is_eff !=1
+        select
+               tp.place_id as placeId,
+               tp.place_name as placeName,
+               tp.place_type as placeType,
+               tp.create_by as createBy,
+               date_format(tp.create_time ,'%Y-%m-%d')
+               as createTime,
+               tp.update_by as updateBy,
+               date_format(tp.update_time ,'%Y-%m-%d')
+               as updateTime,
+               tp.is_eff as isEff
+        from t_place as tp
+        order by tp.update_time desc
     </select>
     <!--获取资源列表-->
     <select id="getPlaceList" resultType="com.springboot.demo.entity.Place">
@@ -50,10 +57,19 @@
                 tp.is_eff as isEff
             from t_place as tp
             where tp.is_eff != 1
+
     </select>
-
-
-
+    <select id="findPlaceById" resultType="com.springboot.demo.entity.Place">
+        select place_id placeId,
+               place_name placeName,
+               place_type placeType,
+               create_by createBy,
+               create_time createTime,
+               update_by updateBy,
+               update_time updateTime
+        from t_place tp
+        where tp.place_id = #{placeId}
+    </select>
 
 
 </mapper>
