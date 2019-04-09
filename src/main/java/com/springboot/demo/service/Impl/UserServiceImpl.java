@@ -91,28 +91,22 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public String register(User user) {
-        String result = null;
-
-        if (user != null) {
-            //生成userID
-            String id = String.valueOf(snowFlake.nextId());
-            user.setUserId(id);
-            //密码加密
-            try {
-                user.setPassword(MD5.EncoderByMd5(user.getPassword()));
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            //插入记录(user、user_role、user_group)
-            userMapper.createUser(user);
-            userMapper.addUserRole(id);
-            userMapper.addUserGroup(id);
-            result = "SUCCESS";
-        } else {
-            result = "JSON_IS_NULL";
+        //生成userID
+        user.setUserId(String.valueOf(snowFlake.nextId()));
+        //密码加密
+        try {
+            user.setPassword(MD5.EncoderByMd5(user.getPassword()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+        user.setCreateTime(TimeHelper.getNowTime());
+        //插入记录(user、user_role、user_group)
+        userMapper.createUser(user);
+        userMapper.addUserRole(user);
+        userMapper.addUserGroup(user);
+        String result = null;
         return result;
     }
 

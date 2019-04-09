@@ -76,15 +76,15 @@ public interface UserMapper {
 
     /**
      * 2.注册 - 角色表
-     * @param id
+     * @param user
      */
-    void addUserRole(String id);
+    void addUserRole(User user);
 
     /**
      * 3.注册 - 组织表
-     * @param id
+     * @param user
      */
-    void addUserGroup(String id);
+    void addUserGroup(User user);
 
 
     /**

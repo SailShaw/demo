@@ -76,13 +76,18 @@ public class UserController {
      */
     @Operation(value = "根据ID修改用户信息")
     @RequestMapping(value = "/modifyUserInfoById")
-    public String modifyUserInfoById(User user) {
-
+    public String modifyUserInfoById(HttpServletRequest request,User user) throws IllegalAccessException {
         String result = null;
 
-        if (user != null) {
+        User userInfo = (User) request.getSession().getAttribute("user");
+        //判空
+        if (ObjectHandle.reflectFieldIsNotALLNull(user,new String[]{"serialVersionUID"})){
+            user.setUserId(userInfo.getUserId());
             result = userService.modifyUserInfoById(user);
-        } else {
+            request.getSession().removeAttribute("user");
+            User reUser = userMapper.findUserByUser(user);
+            request.getSession().setAttribute("user",reUser);
+        }else{
             result = "JSON_IS_NULL";
         }
         return result;
@@ -130,20 +135,17 @@ public class UserController {
      * @return
      */
     @Operation(value = "修改密码")
-    @RequestMapping("updatePassword")
+    @RequestMapping("/updatePassword")
     public String updatePasswordByUser(HttpServletRequest request) {
         String result = null;
-
         //获取session
         User censor = (User) request.getSession().getAttribute("user");
         //获取完整信息
         User user = userMapper.findUserByUser(censor);
-
         //获取输入的旧密码
         String oldPassword = request.getParameter("oldPassword");
         //获取输入的新密码
         String newPassword = request.getParameter("newPassword");
-
         //验证旧密码是否与数据库中相同
         boolean flag = false;
         try {
@@ -161,7 +163,6 @@ public class UserController {
         } else {
             result = "PASSWORD_NOT_MATCH";
         }
-
         return result;
     }
 

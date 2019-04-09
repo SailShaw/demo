@@ -28,13 +28,14 @@
     <select id="lastWeekNumCount" resultType="java.util.Map">
         SELECT * from last_week_application
     </select>
+    <!--分类查询-->
     <select id="typeCount" resultType="java.util.Map">
         select tca.verifyStatus,
                tca.total
         from type_count_application as tca
         order by tca.verifyStatus
     </select>
-    <!--分类查询-->
+
 
 
 

@@ -5,6 +5,7 @@ import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
 import com.springboot.demo.util.MD5;
+import com.springboot.demo.util.ObjectHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -40,22 +41,21 @@ public class LoginController {
 
 
     @RequestMapping("/register")
-    public String register(User user){
+    public String register(User user) throws IllegalAccessException {
         String result = null;
-
         //小写转换
         user.setAccount(user.getAccount().toLowerCase());
         user.setEmail(user.getEmail().toLowerCase());
         user.setPassword(user.getPassword().toLowerCase());
-
         //已注册查询
         User censor = userMapper.findUserByUser(user);
-        if (censor != null) {
+        //判空
+        if (ObjectHandle.reflectFieldIsNotALLNull(censor, new String[]{"serialVersionUID"})) {
             logger.error("register() -> USER_IS_EXIST");
             result =  "USER_IS_EXIST";
         }else {
-            userService.register(user);
-            result =  "SUCCESS";
+
+            result = userService.register(user); ;
         }
         return result;
     }
@@ -64,19 +64,18 @@ public class LoginController {
     @RequestMapping("/login")
     public String login(HttpServletRequest request, User user)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
-
         String result = null;
         //账号是否存在
         User censor = userMapper.findUserByUser(user);
         if (censor == null) {
-            logger.error("用户名不存在");
+            logger.error("login() -> USER_NOT_EXIST");
             return "USER_NOT_EXIST";
         }else {
             boolean flag= MD5.checkpassword(user.getPassword(),censor.getPassword());
             if (flag == true) {
                 //记录登录日期
                 userService.recordLoginTime(censor);
-                //存入session前将密码置为null
+                //将密码置为null
                 censor.setPassword(null);
                 //存入session
                 request.getSession().setAttribute("user",censor);
@@ -167,6 +166,7 @@ public class LoginController {
         //移除session
         request.getSession().removeAttribute("user");
         result =  "SUCCESS";
+        logger.info("loginOut() -> User Login Out");
         return result;
     }
 

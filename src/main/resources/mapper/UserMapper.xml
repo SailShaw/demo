@@ -90,7 +90,8 @@
         update t_user set
             zn_name=#{znName},
             email=#{email},
-            telphone=#{telphone}
+            telphone=#{telphone},
+            group_desc=#{groupDesc}
         where user_id = #{userId}
     </update>
 
@@ -126,16 +127,16 @@
 
     <!--注册1.用户表-->
     <insert id="createUser">
-        insert into t_user(user_id,account,email,group_desc,password)
-        values (#{userId},#{account},#{email},#{groupDesc},#{password})
+        insert into t_user(user_id,account,email,group_desc,password,create_time)
+        values (#{userId},#{account},#{email},#{groupDesc},#{password},#{createTime})
     </insert>
     <!--注册2.用户部门表-->
     <insert id="addUserGroup">
-        insert into t_user_group(user_id) values (#{userID})
+        insert into t_user_group(user_id,create_time) values (#{userId},#{createTime})
     </insert>
     <!--注册3.用户角色表-->
     <insert id="addUserRole">
-        insert into t_user_role(user_id) values (#{userID})
+        insert into t_user_role(user_id,create_time) values (#{userId},#{createTime})
     </insert>
 
     <!-- 重置密码 -->
