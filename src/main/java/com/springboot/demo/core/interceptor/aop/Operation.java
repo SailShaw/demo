@@ -1,4 +1,4 @@
-package com.springboot.demo.core.interceptor.aop.annotation;
+package com.springboot.demo.core.interceptor.aop;
 
 import java.lang.annotation.*;
 

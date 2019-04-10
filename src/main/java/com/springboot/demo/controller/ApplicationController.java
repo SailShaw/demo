@@ -1,6 +1,7 @@
 package com.springboot.demo.controller;
 
-import com.springboot.demo.core.interceptor.aop.annotation.Operation;
+import com.springboot.demo.core.interceptor.aop.Operation;
+import com.springboot.demo.core.interceptor.aop.Validate;
 import com.springboot.demo.core.model.PageBean;
 import com.springboot.demo.entity.Application;
 import com.springboot.demo.entity.User;
@@ -39,6 +40,7 @@ public class ApplicationController {
      * @param application
      * @return
      */
+    @Validate
     @Operation(value = "获取本部门下所有记录")
     @RequestMapping(value = "/getFormListByDept")
     public PageBean<Application> getFormListByDept(HttpServletRequest request, Application application) {

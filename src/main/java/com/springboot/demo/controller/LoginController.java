@@ -62,6 +62,7 @@ public class LoginController {
     }
 
 
+
     @RequestMapping("/login")
     public String login(HttpServletRequest request, User user)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {

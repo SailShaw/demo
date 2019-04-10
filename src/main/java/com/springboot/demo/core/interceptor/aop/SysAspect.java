@@ -1,7 +1,6 @@
 package com.springboot.demo.core.interceptor.aop;
 
 import cn.hutool.system.SystemUtil;
-import com.springboot.demo.core.interceptor.aop.annotation.Operation;
 import com.springboot.demo.entity.SysLog;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.ISysLogService;
@@ -34,7 +33,7 @@ public class SysAspect {
 
     //定义切点 @Pointcut
     //在注解的位置切入代码
-    @Pointcut("@annotation(com.springboot.demo.core.interceptor.aop.annotation.Operation)")
+    @Pointcut("@annotation(com.springboot.demo.core.interceptor.aop.Operation)")
     public void logPointCut(){
     }
 

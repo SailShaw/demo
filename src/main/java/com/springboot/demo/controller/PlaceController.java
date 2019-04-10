@@ -1,7 +1,7 @@
 package com.springboot.demo.controller;
 
 import com.springboot.demo.core.model.PageBean;
-import com.springboot.demo.core.interceptor.aop.annotation.Operation;
+import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IPlaceService;
