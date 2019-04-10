@@ -1,7 +1,13 @@
 package com.springboot.demo;
 
-import com.springboot.demo.entity.User;
-import com.springboot.demo.util.ObjectHandle;
+import com.springboot.demo.entity.Menu;
+import com.springboot.demo.mapper.MenuMapper;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Create By SINYA
@@ -9,6 +15,9 @@ import com.springboot.demo.util.ObjectHandle;
  * Description:
  */
 public class TestHuTools {
+
+    @Resource
+    private static MenuMapper menuMapper;
 
 
     public static void main(String[] args) throws IllegalAccessException {
@@ -24,15 +33,39 @@ public class TestHuTools {
 //                        "<p>CAMS 支持</p>";
 //        MailUtil.send("ShawSail@live.cn",title,content,true);
 
-        User user = new User();
-        String re = null;
-        user.setUserId("1");
-        if(ObjectHandle.reflectFieldIsNotALLNull(user,new String[]{"serialVersionUID"})){
-            //不为空
-        }else {
-            //为空;
-        }
+        String local = "http://localhost:8888/application/getFormByUser";
 
-        System.out.println(re);
+        System.out.println();
+
+        Menu menu = new Menu();
+        menu.setRoleId("1");
+        List<Map<String,String>> lis = new ArrayList<>();
+
+        Map<String,String> map1 = new HashMap<>();
+        map1.put("permitUrl","application/getFormByUser");
+
+        Map<String,String> map2 = new HashMap<>();
+        map2.put("permitUrl","/application/getFormListByDept");
+
+        Map<String,String> map3 = new HashMap<>();
+        map3.put("permitUrl","/application/verifyFormById");
+        //数据处理
+        String url= local.substring(21);
+        lis.add(map1);
+        lis.add(map2);
+        lis.add(map3);
+
+        Map<String,String> map4 = new HashMap<>();
+        map4.put("permitUrl","/application/verifyFormById");
+        //遍历
+        for (int i = 0; i < lis.size(); i++) {
+            if (lis.contains(map4)) {
+                System.out.println("有权限");
+                break;
+            }else {
+                System.out.println("无权限");
+                break;
+            }
+        }
     }
 }

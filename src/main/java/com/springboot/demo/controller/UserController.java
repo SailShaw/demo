@@ -1,7 +1,7 @@
 package com.springboot.demo.controller;
 
 import com.springboot.demo.core.model.PageBean;
-import com.springboot.demo.core.interceptor.aop.Operation;
+import com.springboot.demo.core.interceptor.aop.annotation.Operation;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
@@ -46,7 +46,7 @@ public class UserController {
      * @param user
      * @return
      */
-//    @Operation(value = "获取用户管理列表")
+    @Operation(value = "获取用户管理列表")
     @RequestMapping("/getURGInfoListByPage")
     public PageBean<User> getURGInfoListByPage(HttpServletRequest request, User user) {
         logger.info("getURGInfoListByPage()" + "Begin:");

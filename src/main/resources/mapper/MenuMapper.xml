@@ -7,7 +7,7 @@
         <result column="permitId" jdbcType="VARCHAR" />
         <result column="permitType" jdbcType="VARCHAR" />
         <result column="permitDesc" jdbcType="VARCHAR" />
-        <result column="permitIcon" jdbcType="VARCHAR" />
+        <result column="parentNode" jdbcType="VARCHAR" />
         <result column="permitUrl" jdbcType="VARCHAR" />
         <result column="orderNum" jdbcType="VARCHAR" />
         <result column="createBy" jdbcType="VARCHAR" />
@@ -17,17 +17,14 @@
     <!--根据角色获取菜单列表-->
     <select id="getMenuListByRole" resultType="com.springboot.demo.entity.Menu">
         select
-              trp.role_id as roleId,
-              trp.permit_id as permitId,
-              tp.permit_desc as permitDesc,
-              tp.permit_url as permitUrl,
-              tp.permit_icon as permitIcon,
-              tp.order_num as orderNum
-        from t_role_permit as trp
-               left join t_permit as tp on trp.permit_id = tp.permit_id
-               left join t_role as tr on trp.role_id = tr.role_id
-        where trp.role_id = #{roleId}
-        order by tp.order_num
+       concat((
+         case when tp.parent_node = '' or tp.parent_node is null
+         then '' else  tp.parent_node
+         end),tp.permit_url) as permitUrl
+from t_role_permit as trp
+            left join t_permit as tp on trp.permit_id = tp.permit_id
+            left join t_role as tr on trp.role_id = tr.role_id
+where trp.role_id = #{roleId}
     </select>
 
 

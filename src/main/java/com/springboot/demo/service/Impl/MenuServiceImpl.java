@@ -22,15 +22,21 @@ public class MenuServiceImpl implements IMenuService {
     @Resource
     private MenuMapper menuMapper;
 
-
-    /**
-     * 根据ID获取菜单列表
-     * @param menu
-     * @return
-     */
     @Override
     public List<Menu> getMenuListByRole(Menu menu) {
-        List<Menu> result = menuMapper.getMenuListByRole(menu);
-        return result;
+        return null;
     }
+
+
+//    /**
+//     * 根据ID获取菜单列表
+//     * @param menu
+//     * @return
+//     */
+//    @Override
+//    public List<Menu> getMenuListByRole(Menu menu) {
+//        return
+//        List<Menu> result = menuMapper.getMenuListByRole();
+//        return result;
+//    }
 }

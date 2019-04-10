@@ -19,7 +19,7 @@ public class Menu implements Serializable {
     private String permitId;//权限ID
     private String permitType;//权限名称
     private String permitDesc;//权限名称
-    private String permitIcon;//权限地址
+    private String parentNode;//权限地址
     private String permitUrl;//权限类型
     private String orderNum;//权限类型
     private String createBy;//创建时间
@@ -69,13 +69,14 @@ public class Menu implements Serializable {
         this.permitDesc = permitDesc;
     }
 
-    public String getPermitIcon() {
-        return permitIcon;
+    public String getParentNode() {
+        return parentNode;
     }
 
-    public void setPermitIcon(String permitIcon) {
-        this.permitIcon = permitIcon;
+    public void setParentNode(String parentNode) {
+        this.parentNode = parentNode;
     }
+
 
     public String getPermitUrl() {
         return permitUrl;

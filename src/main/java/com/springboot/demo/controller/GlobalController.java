@@ -1,6 +1,6 @@
 package com.springboot.demo.controller;
 
-import com.springboot.demo.core.interceptor.aop.Operation;
+import com.springboot.demo.core.interceptor.aop.annotation.Operation;
 import com.springboot.demo.entity.Menu;
 import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
@@ -55,8 +55,6 @@ public class GlobalController {
         List<Menu> result = new ArrayList<>();
         //获取登录用户的信息
         User userInfo = (User) request.getSession().getAttribute("user");
-        //设置
-        menu.setRoleId(userInfo.getRoleId());
         //执行
         result  = menuService.getMenuListByRole(menu);
 

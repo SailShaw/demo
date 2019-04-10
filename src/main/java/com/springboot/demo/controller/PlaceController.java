@@ -1,7 +1,7 @@
 package com.springboot.demo.controller;
 
 import com.springboot.demo.core.model.PageBean;
-import com.springboot.demo.core.interceptor.aop.Operation;
+import com.springboot.demo.core.interceptor.aop.annotation.Operation;
 import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IPlaceService;
@@ -115,7 +115,7 @@ public class PlaceController {
      * @param place
      * @return
      */
-    @Operation("逻辑删除资源")
+    @Operation("删除资源")
     @RequestMapping("/deletePlace")
     public String deletePlace(HttpServletRequest request,Place place) throws IllegalAccessException {
         //从session里获取当前用户的名字
@@ -132,6 +132,7 @@ public class PlaceController {
         return result;
     }
 
+    @Operation("获取资源详情")
     @RequestMapping("/findPlaceById")
     public Place findPlaceById(HttpServletRequest request,Place place) throws IllegalAccessException {
         if (ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})) {

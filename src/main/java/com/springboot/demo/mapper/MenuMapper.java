@@ -16,7 +16,7 @@ import java.util.List;
 @Mapper
 public interface MenuMapper {
 
-    List<Menu> getMenuListByRole(Menu menu);
+    List<Menu> getMenuListByRole(String roleId);
 
 
 }
