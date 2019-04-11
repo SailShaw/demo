@@ -27,21 +27,21 @@ public interface IPlaceService {
      * @param place
      * @return
      */
-    String createPlace(Place place);
+    void createPlace(Place place);
 
     /**
      * 修改资源信息
      * @param place
      * @return
      */
-    String modifyPlace(Place place);
+    void modifyPlace(Place place);
 
     /**
      * 逻辑删除资源
      * @param place
      * @return
      */
-    String deletePlace(Place place);
+    void deletePlace(Place place);
 
     Place findPlaceById(Place place);
 }

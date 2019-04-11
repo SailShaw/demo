@@ -2,6 +2,7 @@ package com.springboot.demo.controller;
 
 import com.springboot.demo.core.model.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
+import com.springboot.demo.core.model.ResultData;
 import com.springboot.demo.entity.Place;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IPlaceService;
@@ -41,22 +42,24 @@ public class PlaceController {
      */
     @Operation("获取资源清单")
     @RequestMapping("/getPlaceListByPage")
-    public PageBean<Place> getPlaceListByPage(HttpServletRequest request, Place place) {
+    public ResultData getPlaceListByPage(HttpServletRequest request, Place place) {
+        logger.info("getPlaceListByPage() -> Begin");
         //定义数据集
+        ResultData resultData = new ResultData();
         List<Place> resultList = null;
-        //分页
         try {
             // 获取分页参数
             Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
             Integer pageSize = 9;
             resultList = placeService.getPlaceListByPage(pageNum, pageSize, place);
         } catch (Exception e) {
-            //logger
             logger.error("getPlaceListByPage" + e);
         }
         //Page对象
         PageBean<Place> pageBean = new PageBean<>(resultList);
-        return pageBean;
+        resultData.setData(pageBean);
+        logger.info("getPlaceListByPage() -> End");
+        return resultData;
     }
 
     /**
@@ -68,20 +71,24 @@ public class PlaceController {
      */
     @Operation("添加资源")
     @RequestMapping("/createPlace")
-    public String createPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
+    public ResultData createPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
+        logger.info("createPlace() -> Begin");
+        ResultData resultData = new ResultData();
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
-        String result = "";
         //判空
-        if(ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})){
+        if (ObjectHandle.reflectFieldIsNotALLNull(place, new String[]{"serialVersionUID"})) {
             //设置创建者
             place.setCreateBy(userInfo.getZnName());
-            result = placeService.createPlace(place);
-        }else {
-            logger.error("createPlace() -> Json is null");
-            result = "JSON_IS_NULL";
+            placeService.createPlace(place);
+            resultData.setMassage("添加成功");
+        } else {
+            logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
+            resultData.setCode(10001);
+            resultData.setMassage("未登录");
         }
-        return result;
+        logger.info("getPlaceListByPage() -> End");
+        return resultData;
     }
 
 
@@ -93,20 +100,24 @@ public class PlaceController {
      */
     @Operation("修改资源信息")
     @RequestMapping("/modifyPlace")
-    public String modifyPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
+    public ResultData modifyPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
+        logger.info("modifyPlace() -> Begin");
+        ResultData resultData = new ResultData();
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
-        //执行
-        String result = "";
         //判空
-        if (ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})){
+        if (ObjectHandle.reflectFieldIsNotALLNull(place, new String[]{"serialVersionUID"})) {
             //设置更新者
             place.setUpdateBy(userInfo.getZnName());
-            result = placeService.modifyPlace(place);
-        }else{
-            result = "JSON_IS_NULL";
+            placeService.modifyPlace(place);
+            resultData.setMassage("修改成功");
+        } else {
+            logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
+            resultData.setCode(10001);
+            resultData.setMassage("未登录");
         }
-        return result;
+        logger.info("modifyPlace() -> End");
+        return resultData;
     }
 
     /**
@@ -117,28 +128,50 @@ public class PlaceController {
      */
     @Operation("删除资源")
     @RequestMapping("/deletePlace")
-    public String deletePlace(HttpServletRequest request,Place place) throws IllegalAccessException {
+    public ResultData deletePlace(HttpServletRequest request, Place place) throws IllegalAccessException {
+        logger.info(" -> Begin");
+        ResultData resultData = new ResultData();
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
-        //执行
-        String result = "";
-        if (ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})) {
+        //判空
+        if (ObjectHandle.reflectFieldIsNotALLNull(place, new String[]{"serialVersionUID"})) {
             //设置更新者
             place.setUpdateBy(userInfo.getZnName());
-            result = placeService.deletePlace(place);
-        }else {
-            result = "JSON_IS_NULL";
+            placeService.deletePlace(place);
+            resultData.setMassage("删除成功");
+        } else {
+            logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
+            resultData.setCode(10001);
+            resultData.setMassage("未登录");
         }
-        return result;
+        logger.info("modifyPlace() -> End");
+        return resultData;
     }
 
+    /**
+     * 根据ID获取资源详情
+     *
+     * @param request
+     * @param place
+     * @return
+     * @throws IllegalAccessException
+     */
     @Operation("获取资源详情")
     @RequestMapping("/findPlaceById")
-    public Place findPlaceById(HttpServletRequest request,Place place) throws IllegalAccessException {
-        if (ObjectHandle.reflectFieldIsNotALLNull(place,new String[]{"serialVersionUID"})) {
-            return placeService.findPlaceById(place);
-        }else {
-            return  null;
+    public ResultData findPlaceById(HttpServletRequest request, Place place) throws IllegalAccessException {
+        logger.info(" -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("user");
+        //判空
+        if (ObjectHandle.reflectFieldIsNotALLNull(place, new String[]{"serialVersionUID"})) {
+            placeService.findPlaceById(place);
+        } else {
+            logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
+            resultData.setCode(10001);
+            resultData.setMassage("未登录");
         }
+        logger.info("findPlaceById() -> End");
+        return resultData;
     }
 }
