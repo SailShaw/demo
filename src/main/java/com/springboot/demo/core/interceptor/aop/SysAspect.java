@@ -9,6 +9,8 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -27,6 +29,8 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class SysAspect {
+
+    private final static Logger logger = LoggerFactory.getLogger(SysAspect.class);
 
     @Resource
     private ISysLogService sysLogService;
@@ -80,14 +84,23 @@ public class SysAspect {
         //判空
         if (!StringUtils.isEmpty(request)) {
             userInfo = (User) request.getSession().getAttribute("user");
+            try {
+                if (userInfo != null) {
+                    //username应从session里取出
+                    sysLog.setUserName(userInfo.getZnName());
+                    sysLog.setUserIp(SystemUtil.getHostInfo().getAddress());
+                    sysLog.setRequestMethod(className + "." + methodName);
+                    //调用service保存SysLog实体类到数据库
+                    sysLogService.saveLog(sysLog);
+                }
+
+            }catch (NullPointerException e){
+                logger.error("未登录"+e);
+                e.printStackTrace();
+            }
         }
         //注入Syslog对象
-        //username应从session里取出
-        sysLog.setUserName(userInfo.getZnName());
-        sysLog.setUserIp(SystemUtil.getHostInfo().getAddress());
-        sysLog.setRequestMethod(className + "." + methodName);
-        //调用service保存SysLog实体类到数据库
-        sysLogService.saveLog(sysLog);
+
     }
 
 }

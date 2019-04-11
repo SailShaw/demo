@@ -1,6 +1,7 @@
 package com.springboot.demo.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import com.springboot.demo.core.model.ResultData;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
@@ -42,134 +43,139 @@ public class LoginController {
 
 
     @RequestMapping("/register")
-    public String register(User user) throws IllegalAccessException {
-        String result = null;
+    public ResultData register(User user) throws IllegalAccessException {
+        ResultData resultData = new ResultData();
         //小写转换
         user.setAccount(user.getAccount().toLowerCase());
         user.setEmail(user.getEmail().toLowerCase());
-        user.setPassword(user.getPassword().toLowerCase());
         //已注册查询
         User censor = userMapper.findUserByUser(user);
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(censor, new String[]{"serialVersionUID"})) {
-            logger.error("register() -> USER_IS_EXIST");
-            result =  "USER_IS_EXIST";
-        }else {
-
-            result = userService.register(user); ;
+            logger.info("register() -> 10002:USER_IS_EXIST");
+            resultData.setCode(10002);
+            resultData.setMassage("账号已存在");
+        } else {
+            //执行注册
+            logger.info("register() -> SUCCESS");
+            userService.register(user);
         }
-        return result;
+        return resultData;
     }
 
 
-
     @RequestMapping("/login")
-    public String login(HttpServletRequest request, User user)
+    public ResultData login(HttpServletRequest request, User user)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        String result = null;
+        ResultData resultData = new ResultData();
         //账号是否存在
         User censor = userMapper.findUserByUser(user);
         if (censor == null) {
-            logger.error("login() -> USER_NOT_EXIST");
-            return "USER_NOT_EXIST";
-        }else {
-            boolean flag= MD5.checkpassword(user.getPassword(),censor.getPassword());
-            if (flag == true) {
-                //记录登录日期
-                userService.recordLoginTime(censor);
-                //将密码置为null
-                censor.setPassword(null);
-                //存入session
-                request.getSession().setAttribute("user",censor);
-                result =  "SUCCESS";
-            }else {
-                logger.error("login() -> PASSWORD_NOT_MATCH");
-                result =  "PASSWORD_NOT_MATCH";
-            }
+            logger.info("login() -> 10003:USER_NOT_EXIST");
+            resultData.setCode(10003);
+            resultData.setMassage("用户不存在");
+            return resultData;
         }
-        return result;
+        boolean flag = MD5.checkpassword(user.getPassword(), censor.getPassword());
+        if (!flag) {
+            logger.info("login() -> PASSWORD_NOT_MATCH");
+            resultData.setCode(10004);
+            resultData.setMassage("密码不正确");
+            return resultData;
+        }
+        //记录登录日期
+        userService.recordLoginTime(censor);
+        //存入session前将密码置为null
+        censor.setPassword(null);
+        //存入session
+        request.getSession().setAttribute("user", censor);
+        resultData.setMassage("登录成功");
+        logger.info("login() -> SUCCESS");
+        return resultData;
     }
 
     /**
      * 获取邮箱发送验证码
+     *
      * @Descript:使用session存储user对象和验证码
      */
     @RequestMapping("/sendResetPasswordLink")
-    public String sendResetPasswordLink(HttpServletRequest request,User user){
-        String result = null;
+    public ResultData sendResetPasswordLink(HttpServletRequest request, User user) throws IllegalAccessException {
+        ResultData resultData = new ResultData();
+        Map<String, Object> map = new HashMap<>();
         //验证码
-        int verifyCode = RandomUtil.randomInt(100000,999999);
-        Map<String,Object> map = new HashMap<>();
+        int verifyCode = RandomUtil.randomInt(100000, 999999);
         //获取邮箱地址
         String account = request.getParameter("account").toLowerCase();
         String email = request.getParameter("email").toLowerCase();
         //注入对象
-        user.setAccount(account);user.setEmail(email);
+        user.setAccount(account);
+        user.setEmail(email);
         //判空(空指针异常处理)
-        try{
-            //查询账号信息(账号邮箱不匹配时user为空)
-            User userInfo = userMapper.findUserByUser(user);
-            map.put("verifyCode",verifyCode);
-            map.put("userInfo",userInfo);
+        //查询账号信息(账号邮箱不匹配时user为空)
+        User userInfo = userMapper.findUserByUser(user);
+        if (!ObjectHandle.reflectFieldIsNotALLNull(userInfo, new String[]{"serialVersionUID"})) {
+            logger.debug("findUserByEmail() -> 10006:ACCOUNT_NOT_MATCH_EMAIL");
+            resultData.setCode(10006);
+            resultData.setMassage("账号与邮箱不匹配,请注意大小写");
+        }else{
+            map.put("verifyCode", verifyCode);
+            map.put("userInfo", userInfo);
             //存入session
-            request.getSession().setAttribute("content",map);
+            request.getSession().setAttribute("content", map);
             //发送
-            userService.sendVerificationCode(verifyCode,userInfo);
-            logger.info("sendResetPasswordLink -> 成功");
-            result =  "SUCCESS";
-        }catch (NullPointerException e){
-            logger.error("findUserByEmail() -> NullPointerException");
-            result =  "ACCOUNT_NOT_MATCH_EMAIL";
-            //移除session
-            request.getSession().removeAttribute("content");
-        }finally {
-            return result;
+            userService.sendVerificationCode(verifyCode, userInfo);
+            logger.info("sendResetPasswordLink() -> SUCCESS");
         }
+        return resultData;
     }
 
     /**
      * 根据验证码重置密码
+     *
      * @param request
      * @return
      */
     @RequestMapping("/resetPasswordByCode")
-    public String resetPasswordByCode(HttpServletRequest request){
-        String result = null;
-        //获取session中的数据
-        Map<String,Object> map = new HashMap<>();
+    public ResultData resetPasswordByCode(HttpServletRequest request) {
+        ResultData resultData = new ResultData();
+        //1获取session中的数据
+        Map<String, Object> map = new HashMap<>();
         map = (Map<String, Object>) request.getSession().getAttribute("content");
-
+        //2接收数据
         String verifyCode = request.getParameter("verifyCode");
-        String password = request.getParameter("passcode");
+        String password = request.getParameter("password");
         User userInfo = (User) map.get("userInfo");
-        //注入对象(判空处理)
-        if ((!StringUtils.isEmpty(verifyCode)) && verifyCode.equals(map.get("verifyCode") + "")) {
+        //3注入对象(判空处理)
+        if (!StringUtils.isEmpty(verifyCode) && verifyCode.equals(map.get("verifyCode") + "")) {
+            //4修改密码
             userInfo.setPassword(password);
             userService.resetPassword(userInfo);
             //移除session
             request.getSession().removeAttribute("content");
-            result =  "SUCCESS";
-
+            logger.info("resetPasswordByCode() -> SUCCESS");
         }else{
-            logger.error("resetPasswordByCode():error->"+verifyCode);
-            result =  "VERIFYCODE_NOT_MATCH";
+            logger.debug("resetPasswordByCode() -> 10007:VERIFYCODE_NOT_MATCH");
+            resultData.setCode(10007);
+            resultData.setMassage("验证码不正确");
         }
-        return result;
+        return resultData;
     }
 
     /**
      * 注销
+     *
      * @param request
      * @return
      */
     @RequestMapping("/loginOut")
-    public String logout(HttpServletRequest request){
-        String result = null;
+    public ResultData logout(HttpServletRequest request) {
         //移除session
         request.getSession().removeAttribute("user");
-        result =  "SUCCESS";
         logger.info("loginOut() -> User Login Out");
-        return result;
+        ResultData resultData = new ResultData();
+        resultData.setMassage("注销成功");
+        return resultData;
     }
 
 

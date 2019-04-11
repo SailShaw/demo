@@ -28,7 +28,7 @@ public interface IUserService {
     String deleteUserByID(User user);
 
     //注册
-    String register(User user);
+    void register(User user);
 
     //用户管理
     String modifyURGInfoById(User user);

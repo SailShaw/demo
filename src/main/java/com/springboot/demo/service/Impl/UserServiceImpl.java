@@ -86,11 +86,10 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 注册
-     *
      * @param user
      */
     @Override
-    public String register(User user) {
+    public void register(User user) {
         //生成userID
         user.setUserId(String.valueOf(snowFlake.nextId()));
         //密码加密
@@ -106,13 +105,10 @@ public class UserServiceImpl implements IUserService {
         userMapper.createUser(user);
         userMapper.addUserRole(user);
         userMapper.addUserGroup(user);
-        String result = null;
-        return result;
     }
 
     /**
      * 分配角色和部门
-     *
      * @param user
      */
     @Override
@@ -154,10 +150,10 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public void resetPassword(User user) {
-
+        String newPassword = user.getPassword();
         //密码加密
         try {
-            user.setPassword(MD5.EncoderByMd5(user.getPassword()));
+            user.setPassword(MD5.EncoderByMd5(newPassword));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
