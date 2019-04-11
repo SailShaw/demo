@@ -22,13 +22,25 @@ public class ResultData {
      */
     private String massage;
 
+    public static int SUCCESS_CODE = 200;
+    private String SUCCESS_MSG = "操作成功";
+
     /* ConStructor */
     public ResultData() {
+        this.code = SUCCESS_CODE;
+        this.massage = SUCCESS_MSG;
+
     }
 
     public ResultData(int code, String massage) {
         this.code = code;
         this.massage = massage;
+    }
+
+    public ResultData(Object data) {
+        this.code=SUCCESS_CODE;
+        this.massage = SUCCESS_MSG;
+        this.data = data;
     }
 
     public ResultData(int code, Object data, String massage) {
