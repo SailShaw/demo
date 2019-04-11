@@ -36,6 +36,7 @@ public class ValidateAspect {
     @Resource
     private MenuMapper menuMapper;
 
+
     @Around(value = "@annotation(com.springboot.demo.core.interceptor.aop.Validate)")
     public Object doBefore(ProceedingJoinPoint pjp) throws Throwable {
         logger.info("拦截请求");
@@ -53,19 +54,35 @@ public class ValidateAspect {
         Object object = null;
         //获取当前用户权限列表
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null || user.getRoleId()==null){
-            logger.error("未登录");
-            response.setStatus(403);
-            return "403";
-        }
-        List<Menu> roleList = menuMapper.getMenuListByRole(user.getRoleId());
-
-        for (Menu m:roleList) {
-            if (url.equals(m.getPermitUrl())) {
-                object =  pjp.proceed();
-                break;
+        //判空
+        if (user == null || user.getRoleId() == null) {
+            resultData.setCode(101);
+            resultData.setMassage("未登录");
+            object = resultData;
+        } else {
+            //获取该角色可访问权限清单
+            List<Menu> roleList = menuMapper.getMenuListByRole(user.getRoleId());
+            //判断结果标记
+            boolean flag = false;
+            for (int i = 0; i < roleList.size(); i++) {
+                if (!url.equals(roleList.get(i).getPermitUrl())) {
+                    //不满足，继续判断，并标记
+                    flag = false;
+                    continue;
+                }
+            }
+            //循环完成后，根据标记判断是否有权限
+            if (flag == true) {
+                //继续执行
+                object = pjp.proceed();
+            }else {
+                //返回403
+                resultData.setCode(403);
+                resultData.setMassage("无权访问");
+                object = resultData;
             }
         }
+        logger.info("拦截结束，返回结果");
         return object;
     }
 
