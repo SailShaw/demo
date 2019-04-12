@@ -36,14 +36,14 @@ public interface IApplicationService {
      *
      * @param application
      */
-    boolean verifyFormById(Application application);
+    void verifyFormById(Application application);
 
     /**
      * 修改表单信息
      *
      * @param application
      */
-    boolean modifyFormById(Application application);
+    void modifyFormById(Application application);
 
 
     /**
@@ -51,7 +51,7 @@ public interface IApplicationService {
      *
      * @param application
      */
-    boolean createAppForm(Application application);
+    void createAppForm(Application application);
 
 
     /**
@@ -68,7 +68,7 @@ public interface IApplicationService {
      * @param application
      * @return
      */
-    String closeFormById(Application application);
+    void closeFormById(Application application);
 
     /**
      * 删除表单
@@ -76,6 +76,6 @@ public interface IApplicationService {
      * @param application
      * @return
      */
-    String deleteFormById(Application application);
+    void deleteFormById(Application application);
 
 }

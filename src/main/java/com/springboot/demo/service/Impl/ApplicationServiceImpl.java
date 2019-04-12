@@ -69,7 +69,7 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @param application
      */
     @Override
-    public boolean verifyFormById(Application application) {
+    public void verifyFormById(Application application) {
         //获取该表单所属用户的邮箱
         User user = new User();
         boolean flag;
@@ -83,14 +83,9 @@ public class ApplicationServiceImpl implements IApplicationService {
         //设置审核时间
         application.setVerifyTime(TimeHelper.getNowTime());
         //修改审核状态
-        if (applicationMapper.verifyFormById(application)) {
-            flag = true;
-        } else {
-            flag = false;
-        }
+        applicationMapper.verifyFormById(application);
         //发送邮件(邮箱地址,标题,正文,是否是html)
         MailUtil.send(recipient, mailTitle, mailText, true);
-        return flag;
     }
 
     /**
@@ -99,12 +94,9 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @param application
      */
     @Override
-    public boolean modifyFormById(Application application) {
-        if (applicationMapper.modifyFormById(application)) {
-            return true;
-        } else {
-            return false;
-        }
+    public void modifyFormById(Application application) {
+        application.setUpdateTime(TimeHelper.getNowTime());
+        applicationMapper.modifyFormById(application);
     }
 
     /**
@@ -113,16 +105,11 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @param application
      */
     @Override
-    public boolean createAppForm(Application application) {
+    public void createAppForm(Application application) {
         //表单ID自动生成
         application.setFormId(String.valueOf(snowFlake.nextId()));
-
         //执行新增操作
-        if (applicationMapper.createAppForm(application)) {
-            return true;
-        } else {
-            return false;
-        }
+        applicationMapper.createAppForm(application);
 
     }
 
@@ -144,14 +131,8 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @return
      */
     @Override
-    public String closeFormById(Application application) {
-        String result = null;
-        if (applicationMapper.closeFormById(application)) {
-            result = "SUCCESS";
-        } else {
-            result = "ERROR";
-        }
-        return result;
+    public void closeFormById(Application application) {
+        applicationMapper.closeFormById(application);
     }
 
     /**
@@ -161,14 +142,7 @@ public class ApplicationServiceImpl implements IApplicationService {
      * @return
      */
     @Override
-    public String deleteFormById(Application application) {
-        String result = null;
-
-        if (applicationMapper.deleteFormById(application)) {
-            result = "SUCCESS";
-        } else {
-            result = "ERROR";
-        }
-        return result;
+    public void deleteFormById(Application application) {
+        applicationMapper.deleteFormById(application);
     }
 }

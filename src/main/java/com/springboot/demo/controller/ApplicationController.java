@@ -3,6 +3,7 @@ package com.springboot.demo.controller;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.core.interceptor.aop.Validate;
 import com.springboot.demo.core.model.PageBean;
+import com.springboot.demo.core.model.ResultData;
 import com.springboot.demo.entity.Application;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.service.IApplicationService;
@@ -29,6 +30,8 @@ import java.util.List;
 @RequestMapping("/application")
 public class ApplicationController {
 
+    //业务类错误提示
+    private final static String ERROR_INFO = "20001:JSON_IS_NULL";
     private final static Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
     @Resource
@@ -43,9 +46,11 @@ public class ApplicationController {
     @Validate
     @Operation(value = "获取本部门下所有记录")
     @RequestMapping(value = "/getFormListByDept")
-    public PageBean<Application> getFormListByDept(HttpServletRequest request, Application application) {
+    public ResultData getFormListByDept(HttpServletRequest request, Application application) {
+        logger.info(" getFormListByDept() -> Begin");
         //定义数据集
         List<Application> resultList = null;
+        ResultData resultData = new ResultData();
         //获取登陆用户信息
         User user = (User) request.getSession().getAttribute("user");
         //设置查询条件
@@ -56,11 +61,13 @@ public class ApplicationController {
             Integer pageSize = 9;
             resultList = applicationService.getFormListByDept(pageNum, pageSize, application);
         } catch (Exception e) {
-            logger.error("getFormListByDept()" + e);
+            logger.error(" getFormListByDept()" + e);
         }
         //Page对象
         PageBean<Application> pageBean = new PageBean<>(resultList);
-        return pageBean;
+        resultData.setData(pageBean);
+        logger.info(" getFormListByDept() -> End");
+        return resultData;
     }
 
     /**
@@ -69,10 +76,13 @@ public class ApplicationController {
      * @param application
      * @return
      */
+    @Validate
     @Operation(value = "获取本人所有申请记录")
     @RequestMapping(value = "/getFormListByUser")
-    public PageBean<Application> getFormListByUser(HttpServletRequest request, Application application) {
+    public ResultData getFormListByUser(HttpServletRequest request, Application application) {
+        logger.info(" getFormListByUser() -> Begin");
         //定义数据集
+        ResultData resultData = new ResultData();
         List<Application> resultList = null;
         //获取登陆用户信息
         User user = (User) request.getSession().getAttribute("user");
@@ -85,152 +95,208 @@ public class ApplicationController {
             Integer pageSize = 9;
             resultList = applicationService.getFormListByUser(pageNum, pageSize, application);
         } catch (Exception e) {
-            logger.error("getFormListByUser" + e);
+            logger.error(" getFormListByUser" + e);
         }
         //Page对象
         PageBean<Application> pageBean = new PageBean<>(resultList);
-        return pageBean;
+        resultData.setData(pageBean);
+        logger.info("getFormListByUser() -> End");
+        return resultData;
     }
 
     /**
      * 审核申请表
+     * 检测接收到的Json是否为空
      *
      * @param application
      */
+    @Validate
     @Operation(value = "审核申请表")
     @RequestMapping(value = "/verifyFormById")
-    public String verifyFormById(HttpServletRequest request, Application application) throws IllegalAccessException {
-        String result = "";
+    public ResultData verifyFormById(HttpServletRequest request, Application application) throws IllegalAccessException {
+        logger.info("verifyFormById() -> Begin");
+        ResultData resultData = new ResultData();
         //获取登陆用户信息
         User user = (User) request.getSession().getAttribute("user");
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             application.setReviewer(user.getZnName());
-            if (applicationService.verifyFormById(application)) {
-                result = "SUCCESS";
-            } else {
-                result = "ERROR";
-            }
+            applicationService.verifyFormById(application);
         } else {
-            logger.error("verifyFormById() -> Json is Null");
-            result = "JSON_IS_NULL";
+            logger.error(" verifyFormById() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-
-
-        return result;
+        logger.info(" verifyFormById() -> End");
+        return resultData;
     }
 
 
     /**
      * 修改申请表
+     * 检测接收到的Json是否为空
      *
      * @param application
      */
+    @Validate
     @Operation(value = "修改申请表")
     @RequestMapping(value = "/modifyFormById")
-    public String modifyFormById(Application application) throws IllegalAccessException {
-        String result = "";
+    public ResultData modifyFormById(HttpServletRequest request, Application application) throws IllegalAccessException {
+        logger.info(" modifyFormById() -> Begin");
+        ResultData resultData = new ResultData();
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
-            if (applicationService.modifyFormById(application)) {
-                result = "SUCCESS";
-            } else {
-                result = "ERROR";
-            }
+            //执行
+            applicationService.modifyFormById(application);
+            resultData.setMassage("修改成功");
         } else {
-            logger.error("modifyFormById() -> Json is Null");
-            result = "JSON_IS_NULL";
+            logger.error(" modifyFormById() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        return result;
+        logger.info(" modifyFormById() -> End");
+        return resultData;
     }
 
     /**
      * 新增申请表
+     * 检测接收到的Json是否为空
      *
      * @param application
      */
+    @Validate
     @Operation(value = "添加申请表")
     @RequestMapping(value = "/createAppForm")
-    public String createAppForm(HttpServletRequest request, Application application) throws IllegalAccessException {
-        String result = "";
-        //获取session中的用户信息
-        User user = (User) request.getSession().getAttribute("user");
+    public ResultData createAppForm(HttpServletRequest request, Application application) throws IllegalAccessException {
+        logger.info(" createAppForm() -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("user");
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             //注入对象
-            application.setUserId(user.getUserId());
-            application.setGroupId(user.getGroupId());
-            if (applicationService.createAppForm(application)) {
-                result = "success";
-            } else {
-                result = "error";
-            }
+            application.setUserId(userInfo.getUserId());
+            application.setGroupId(userInfo.getGroupId());
+            //执行
+            applicationService.createAppForm(application);
+            resultData.setMassage("修改成功");
         } else {
-            logger.error("createAppForm() -> Json is Null");
-            result = "JSON_IS_NULL";
+            logger.error("createPlace() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        //返回结果
-        return result;
+        logger.info(" createAppForm() -> End");
+        return resultData;
     }
 
+    /**
+     * 关闭表单:关闭后只能查看不能编辑
+     *
+     * @param application
+     * @return
+     * @throws IllegalAccessException
+     */
+    @Validate
     @Operation("关闭表单")
     @RequestMapping("/closeFormById")
-    public String closeFormById(Application application) {
-        String result = null;
-
-        if (application != null) {
-            result = applicationService.closeFormById(application);
+    public ResultData closeFormById(Application application) throws IllegalAccessException {
+        logger.info(" closeFormById() -> Begin");
+        ResultData resultData = new ResultData();
+        //判空
+        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
+            //执行
+            applicationService.closeFormById(application);
+            resultData.setMassage("关闭成功");
         } else {
-            logger.error("closeFormById() -> Object is Null");
-            result = "JSON_IS_NULL";
+            logger.error(" closeFormById() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        return result;
+        logger.info(" closeFormById() -> End");
+        return resultData;
     }
 
+    /**
+     * 删除表单:逻辑删除表单
+     *
+     * @param application
+     * @return
+     * @throws IllegalAccessException
+     */
     @Operation("删除表单")
     @RequestMapping("/deleteFormById")
-    public String deleteFormById(Application application) throws IllegalAccessException {
-        String result = null;
-
+    public ResultData deleteFormById(Application application) throws IllegalAccessException {
+        logger.info(" deleteFormById() -> Begin");
+        ResultData resultData = new ResultData();
+        //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
-            result = applicationService.deleteFormById(application);
+            //执行
+            applicationService.deleteFormById(application);
+            resultData.setMassage("修改成功");
         } else {
-            logger.error("closeFormById() -> Object is Null");
-            result = "JSON_IS_NULL";
+            logger.error(" deleteFormById() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        return result;
+        logger.info(" deleteFormById() -> End");
+        return resultData;
     }
 
+    /**
+     * 根据表单ID查询数据并存入Session
+     *
+     * @param request
+     * @param application
+     * @return
+     * @throws IllegalAccessException
+     */
     @Operation("查询表单详情")
     @RequestMapping("/getDetailToCache")
-    public String getDetailToCache(HttpServletRequest request, Application application) throws IllegalAccessException {
-        String result = null;
+    public ResultData getDetailToCache(HttpServletRequest request, Application application) throws IllegalAccessException {
+        logger.info(" getDetailToCache() -> Begin");
+        ResultData resultData = new ResultData();
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             //查询
             Application cache = applicationService.getFormInfoByFormId(application);
             //存入session
             request.getSession().setAttribute("cache", cache);
-            result = "SUCCESS";
+            resultData.setMassage("修改成功");
         } else {
-            logger.error("getDetailToCache() -> Json is null");
-            result = "JSON_IS_NULL";
+            logger.error("getDetailToCache() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        return result;
+        logger.info(" getDetailToCache() -> End");
+        return resultData;
     }
 
+    /**
+     * 从Session中获取表单数据
+     *
+     * @param request
+     * @return
+     * @throws IllegalAccessException
+     */
     @Operation("获取表单详情")
     @RequestMapping("/getDetailOnCache")
-    public Application getDetailOnCache(HttpServletRequest request) throws IllegalAccessException {
-        Application result = null;
-        result = (Application) request.getSession().getAttribute("cache");
+    public ResultData getDetailOnCache(HttpServletRequest request) throws IllegalAccessException {
+        logger.info(" getDetailOnCache() -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
+        Application application = (Application) request.getSession().getAttribute("cache");
+
         //判空
-        if (ObjectHandle.reflectFieldIsNotALLNull(result, new String[]{"serialVersionUID"})) {
-            return result;
+        if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
+            //执行
+            resultData.setData(application);
         } else {
-            logger.error("getDetailOnCache() -> Session is null");
-            return null;
+            logger.error("getDetailOnCache() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
+        logger.info(" getDetailOnCache() -> End");
+        return resultData;
     }
 
 }
