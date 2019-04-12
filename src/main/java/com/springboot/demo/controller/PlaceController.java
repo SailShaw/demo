@@ -1,5 +1,6 @@
 package com.springboot.demo.controller;
 
+import com.springboot.demo.core.interceptor.aop.Validate;
 import com.springboot.demo.core.model.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
 import com.springboot.demo.core.model.ResultData;
@@ -40,6 +41,7 @@ public class PlaceController {
      *
      * @return
      */
+    @Validate
     @Operation("获取资源清单")
     @RequestMapping("/getPlaceListByPage")
     public ResultData getPlaceListByPage(HttpServletRequest request, Place place) {
@@ -69,6 +71,7 @@ public class PlaceController {
      * @param place
      * @return
      */
+    @Validate
     @Operation("添加资源")
     @RequestMapping("/createPlace")
     public ResultData createPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
@@ -98,6 +101,7 @@ public class PlaceController {
      * @param place
      * @return
      */
+    @Validate
     @Operation("修改资源信息")
     @RequestMapping("/modifyPlace")
     public ResultData modifyPlace(HttpServletRequest request, Place place) throws IllegalAccessException {
@@ -126,6 +130,7 @@ public class PlaceController {
      * @param place
      * @return
      */
+    @Validate
     @Operation("删除资源")
     @RequestMapping("/deletePlace")
     public ResultData deletePlace(HttpServletRequest request, Place place) throws IllegalAccessException {
@@ -156,6 +161,7 @@ public class PlaceController {
      * @return
      * @throws IllegalAccessException
      */
+    @Validate
     @Operation("获取资源详情")
     @RequestMapping("/findPlaceById")
     public ResultData findPlaceById(HttpServletRequest request, Place place) throws IllegalAccessException {
@@ -165,7 +171,7 @@ public class PlaceController {
         User userInfo = (User) request.getSession().getAttribute("user");
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(place, new String[]{"serialVersionUID"})) {
-            placeService.findPlaceById(place);
+            resultData.setData(placeService.findPlaceById(place));
         } else {
             logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
             resultData.setCode(10001);

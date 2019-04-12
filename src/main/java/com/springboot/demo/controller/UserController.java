@@ -3,6 +3,7 @@ package com.springboot.demo.controller;
 import com.springboot.demo.core.interceptor.aop.Validate;
 import com.springboot.demo.core.model.PageBean;
 import com.springboot.demo.core.interceptor.aop.Operation;
+import com.springboot.demo.core.model.ResultData;
 import com.springboot.demo.entity.User;
 import com.springboot.demo.mapper.UserMapper;
 import com.springboot.demo.service.IUserService;
@@ -32,6 +33,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    private final static String ERROR_INFO = "20001:JSON_IS_NULL";
+    private final static String ERROR_PassWord = "10004:PASSWORD_NOT_MATCH";
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Resource
@@ -51,24 +54,26 @@ public class UserController {
     @Validate
     @Operation(value = "获取用户管理列表")
     @RequestMapping("/getURGInfoListByPage")
-    public PageBean<User> getURGInfoListByPage(HttpServletRequest request, User user) {
-        logger.info("getURGInfoListByPage()" + "Begin:");
+    public ResultData getURGInfoListByPage(HttpServletRequest request, User user) {
+        logger.info(" getURGInfoListByPage() -> Begin");
         //定义数据集
+        ResultData resultData = new ResultData();
         List<User> resultList = null;
         //分页
         try {
             // 获取分页参数
             Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
             Integer pageSize = 9;
-
             resultList = userService.getURGInfoListByPage(pageNum, pageSize, user);
         } catch (Exception e) {
             //logger
-            logger.error("getURGInfoListByPage" + e);
+            logger.error(" getURGInfoListByPage()->" + e);
         }
         //Page对象
         PageBean<User> pageBean = new PageBean<>(resultList);
-        return pageBean;
+        resultData.setData(pageBean);
+        logger.info(" getURGInfoListByPage() -> End");
+        return resultData;
     }
 
 
@@ -79,55 +84,65 @@ public class UserController {
      */
     @Operation(value = "根据ID修改用户信息")
     @RequestMapping(value = "/modifyUserInfoById")
-    public String modifyUserInfoById(HttpServletRequest request,User user) throws IllegalAccessException {
-        String result = null;
-
+    public ResultData modifyUserInfoById(HttpServletRequest request,User user) throws IllegalAccessException {
+        logger.info(" modifyUserInfoById() -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(user,new String[]{"serialVersionUID"})){
             user.setUserId(userInfo.getUserId());
-            result = userService.modifyUserInfoById(user);
+            userService.modifyUserInfoById(user);
             request.getSession().removeAttribute("user");
             User reUser = userMapper.findUserByUser(user);
             request.getSession().setAttribute("user",reUser);
         }else{
-            result = "JSON_IS_NULL";
+            logger.error("createPlace() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        return result;
+        logger.info(" () -> End");
+        return resultData;
     }
 
 
     @Operation("查询用户信息")
-    @RequestMapping("/getUserToFind")
-    public String getUserToFind(HttpServletRequest request, User user) throws IllegalAccessException {
-        String result = null;
+    @RequestMapping("/getUserToCache")
+    public ResultData getUserToCache(HttpServletRequest request, User user) throws IllegalAccessException {
+        logger.info(" () -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("user");
         //判空
         if (!ObjectHandle.reflectFieldIsNotALLNull(user, new String[]{"serialVersionUID"})) {
-            result = "JSON_IS_NULL";
+            logger.error(" () ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         } else {
-            //查询
+            //执行查询
             User cache = userMapper.findUserByUser(user);
             //存入session
             request.getSession().setAttribute("cache", cache);
-            result = "SUCCESS";
+            resultData.setMassage("修改成功");
         }
-        return result;
+        return resultData;
     }
 
     @Operation("获取用户信息")
     @RequestMapping("/getUserOnCache")
-    public User getUserOnCache(HttpServletRequest request) {
-        User result = null;
-        //空指针异常处理
-        try {
-            result = (User) request.getSession().getAttribute("cache");
-        } catch (NullPointerException e) {
-            logger.error("getUserOnCache()" + e);
-            result = null;
-        } finally {
-//            request.getSession().removeAttribute("cache");
-            return result;
+    public ResultData getUserOnCache(HttpServletRequest request) throws IllegalAccessException {
+        logger.info(" getUserOnCache() -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("cache");
+        //判空
+        if (!ObjectHandle.reflectFieldIsNotALLNull(userInfo, new String[]{"serialVersionUID"})) {
+            logger.error(" getUserOnCache() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
+        logger.info(" getUserOnCache() -> End");
+        return resultData;
     }
 
 
@@ -139,8 +154,9 @@ public class UserController {
      */
     @Operation(value = "修改密码")
     @RequestMapping("/updatePassword")
-    public String updatePasswordByUser(HttpServletRequest request) {
-        String result = null;
+    public ResultData updatePasswordByUser(HttpServletRequest request) {
+        logger.info(" () -> Begin");
+        ResultData resultData = new ResultData();
         //获取session
         User censor = (User) request.getSession().getAttribute("user");
         //获取完整信息
@@ -162,11 +178,12 @@ public class UserController {
             //执行密码修改
             user.setPassword(newPassword);
             userService.updatePassword(user);
-            result = "SUCCESS";
         } else {
-            result = "PASSWORD_NOT_MATCH";
+            logger.error(" () ->" + ERROR_PassWord);
+            resultData.setCode(10004);
+            resultData.setMassage("密码不匹配");
         }
-        return result;
+        return resultData;
     }
 
     /**
@@ -178,21 +195,23 @@ public class UserController {
      */
     @Operation(value = "修改用户角色与部门信息")
     @RequestMapping("/modifyURGInfo")
-    public String modifyURGInfoById(HttpServletRequest request, User user) {
-
-        String result = null;
-
-        //获取当前用户
-        User censor = (User) request.getSession().getAttribute("user");
+    public ResultData modifyURGInfoById(HttpServletRequest request, User user) throws IllegalAccessException {
+        logger.info(" modifyURGInfoById() -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("user");
         //判空
-        if (user != null) {
-            //设置更新者
-            user.setUpdateBy(censor.getZnName());
-            result = userService.modifyURGInfoById(user);
+        if (ObjectHandle.reflectFieldIsNotALLNull(userInfo, new String[]{"serialVersionUID"})) {
+            //注入对象
+            user.setUpdateBy(userInfo.getZnName());
+            userService.modifyURGInfoById(user);
         } else {
-            result = "JSON_IS_NULL";
+            logger.error(" modifyURGInfoById() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        return result;
+        logger.info(" modifyURGInfoById() -> End");
+        return resultData;
     }
 
     /**
@@ -202,19 +221,23 @@ public class UserController {
      */
     @Operation(value = "删除用户")
     @RequestMapping("/deleteUserByID")
-    public String deleteUserByID(HttpServletRequest request, User user) {
-
-        String result = null;
-
-        User operator = (User) request.getSession().getAttribute("user");
-
-        if (user != null) {
-            //设置更新者
-            user.setUpdateBy(operator.getZnName());
-            result = userService.deleteUserByID(user);
+    public ResultData deleteUserByID(HttpServletRequest request, User user) throws IllegalAccessException {
+        logger.info(" deleteUserByID() -> Begin");
+        ResultData resultData = new ResultData();
+        //从session里获取当前用户的名字
+        User userInfo = (User) request.getSession().getAttribute("user");
+        //判空
+        if (ObjectHandle.reflectFieldIsNotALLNull(userInfo, new String[]{"serialVersionUID"})) {
+            //注入对象
+            user.setUpdateBy(userInfo.getZnName());
+            //执行
+            userService.deleteUserByID(user);
         } else {
-            result = "JSON_IS_NULL";
+            logger.error(" deleteUserByID() ->" + ERROR_INFO);
+            resultData.setCode(20001);
+            resultData.setMassage("接收到的数据为空");
         }
-        return result;
+        logger.info(" deleteUserByID() -> End");
+        return resultData;
     }
 }

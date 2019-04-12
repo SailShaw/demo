@@ -35,7 +35,7 @@ public interface UserMapper {
 
     //修改账号信息
 
-    boolean modifyUserInfoById(User user);
+    void modifyUserInfoById(User user);
 
     /**
      * 逻辑删除用户
@@ -43,7 +43,7 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    boolean deleteUserByID(User user);
+    void deleteUserByID(User user);
 
 
 
@@ -52,15 +52,7 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    boolean modifyGroupByUser(User user);
-
-
-    /**
-     * 2.修改用户所属角色
-     * @param user
-     * @return
-     */
-    boolean modifyRoleByUser(User user);
+    void modifyRoleAndGroupByUser(User user);
 
     //获取角色下拉列表
     List<User> getRoleList();
@@ -104,5 +96,5 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    boolean updatePassword(User user);
+    void updatePassword(User user);
 }

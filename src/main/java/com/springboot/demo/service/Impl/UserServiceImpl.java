@@ -38,17 +38,8 @@ public class UserServiceImpl implements IUserService {
      * @param user
      */
     @Override
-    public String modifyUserInfoById(User user) {
-
-        String result = null;
-        //执行判断
-        if (userMapper.modifyUserInfoById(user)) {
-            result = "SUCCESS";
-        } else {
-            result = "ERROR";
-        }
-
-        return result;
+    public void modifyUserInfoById(User user) {
+        userMapper.modifyUserInfoById(user);
     }
 
     /**
@@ -71,21 +62,14 @@ public class UserServiceImpl implements IUserService {
      * @param user
      */
     @Override
-    public String deleteUserByID(User user) {
-
-        String result = null;
-        //判断执行
-        if (userMapper.deleteUserByID(user)) {
-            result = "SUCCESS";
-        } else {
-            result = "ERROR";
-        }
-        return result;
+    public void deleteUserByID(User user) {
+        userMapper.deleteUserByID(user);
     }
 
 
     /**
      * 注册
+     *
      * @param user
      */
     @Override
@@ -109,19 +93,12 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 分配角色和部门
+     *
      * @param user
      */
     @Override
-    public String modifyURGInfoById(User user) {
-
-        String result = null;
-
-        if (userMapper.modifyRoleByUser(user) && (userMapper.modifyGroupByUser(user))) {
-            result = "SUCCESS";
-        } else {
-            result = "ERROR";
-        }
-        return result;
+    public void modifyURGInfoById(User user) {
+        userMapper.modifyRoleAndGroupByUser(user);
     }
 
     /**
@@ -181,14 +158,7 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     @Override
-    public String updatePassword(User user) {
-        String result = null;
-
-        if (userMapper.updatePassword(user)) {
-            result = "SUCCESS";
-        } else {
-            result = "ERROR";
-        }
-        return result;
+    public void updatePassword(User user) {
+        userMapper.updatePassword(user);
     }
 }

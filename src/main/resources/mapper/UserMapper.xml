@@ -95,18 +95,14 @@
         where user_id = #{userId}
     </update>
 
-    <!--1.修改用户所属部门-->
-    <update id="modifyGroupByUser">
-        update t_user_group set
-            group_id=#{groupId}
-        where user_id=#{userId}
-    </update>
-
-    <!--2.修改用户所属角色-->
-    <update id="modifyRoleByUser">
-        update t_user_role set
-            role_id=#{roleId}
-        where user_id=#{userId}
+    <!--修改用户所属部门-->
+    <update id="modifyRoleAndGroupByUser">
+        update t_user tu
+        left join t_user_role tur on tu.user_id = tur.user_id
+        left join t_user_group tug on tu.user_id = tug.user_id
+        set
+               tur.role_id = #{roleId}, tug.group_id = #{groupId}
+        where tu.user_id = #{userId}
     </update>
 
     <!--获取角色列表-->

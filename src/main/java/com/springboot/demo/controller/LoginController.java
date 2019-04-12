@@ -118,7 +118,7 @@ public class LoginController {
             logger.debug("findUserByEmail() -> 10006:ACCOUNT_NOT_MATCH_EMAIL");
             resultData.setCode(10006);
             resultData.setMassage("账号与邮箱不匹配,请注意大小写");
-        }else{
+        } else {
             map.put("verifyCode", verifyCode);
             map.put("userInfo", userInfo);
             //存入session
@@ -154,7 +154,7 @@ public class LoginController {
             //移除session
             request.getSession().removeAttribute("content");
             logger.info("resetPasswordByCode() -> SUCCESS");
-        }else{
+        } else {
             logger.debug("resetPasswordByCode() -> 10007:VERIFYCODE_NOT_MATCH");
             resultData.setCode(10007);
             resultData.setMassage("验证码不正确");

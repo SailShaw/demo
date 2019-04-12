@@ -1,6 +1,8 @@
 package com.springboot.demo.controller;
 
+import com.springboot.demo.core.interceptor.aop.Validate;
 import com.springboot.demo.core.model.PageBean;
+import com.springboot.demo.core.model.ResultData;
 import com.springboot.demo.entity.SysLog;
 import com.springboot.demo.service.ISysLogService;
 import org.slf4j.Logger;
@@ -32,33 +34,31 @@ public class SysController {
 
     /**
      * 获取系统日志记录
+     *
      * @param request
      * @param sysLog
      * @return
      */
+    @Validate
     @RequestMapping(value = "/getSysLogListByPage")
-    public PageBean<SysLog> getSysLogListByPage(HttpServletRequest request, SysLog sysLog){
-
+    public ResultData getSysLogListByPage(HttpServletRequest request, SysLog sysLog) {
+        logger.info("getSysLogListByPage() -> Begin");
         //定义数据集
+        ResultData resultData = new ResultData();
         List<SysLog> resultList = null;
-        //分页
-        try{
+        try {
             // 获取分页参数
             Integer pageNum = StringUtils.isEmpty(request.getParameter("pageNum")) ? 1 : Integer.parseInt(request.getParameter("pageNum"));
             Integer pageSize = 9;
-
-            resultList = sysLogService.getSysLogListByPage(pageNum,pageSize,sysLog);
-        }catch(Exception e){
-            //logger
-            logger.error("分页异常");
+            resultList = sysLogService.getSysLogListByPage(pageNum, pageSize, sysLog);
+        } catch (Exception e) {
+            logger.error("getSysLogListByPage" + e);
         }
         //Page对象
         PageBean<SysLog> pageBean = new PageBean<>(resultList);
-        return pageBean;
+        resultData.setData(pageBean);
+        logger.info("getSysLogListByPage() -> End");
+        return resultData;
     }
-
-
-
-
 
 }

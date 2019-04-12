@@ -41,7 +41,7 @@ public class GlobalController {
      *
      * @return
      */
-//    @Validate
+    @Validate
     @RequestMapping("/dataStatistics")
     public ResultData dataStatistics() {
         /**
