@@ -69,10 +69,13 @@ public class ValidateAspect {
                     //不满足，继续判断，并标记
                     flag = false;
                     continue;
+                }else {
+                    flag = true;
+                    break;
                 }
             }
             //循环完成后，根据标记判断是否有权限
-            if (flag == true) {
+            if (flag) {
                 //继续执行
                 object = pjp.proceed();
             }else {
