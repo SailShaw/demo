@@ -111,13 +111,29 @@ public class GlobalController {
             resultData.setData(user);
         } else {
             resultData.setData(null);
-            resultData.setMassage("未登录");
+            resultData.setMessage("未登录");
         }
         return resultData;
     }
 
+
     /**
-     * 邮箱测试功能
+     * 控制邮箱测试页面
+     *
+     * @param request
+     * @return
+     */
+    @Validate
+    @RequestMapping("/emailTestPage")
+    public ResultData emailTestPage(HttpServletRequest request) {
+        ResultData resultData = new ResultData();
+        //页面访问权限控制
+        return resultData;
+    }
+
+
+    /**
+     * 邮箱发信
      *
      * @param request
      * @return
@@ -136,10 +152,10 @@ public class GlobalController {
         String mailContent = request.getParameter("mailContent");
         //发送
         if (globalService.sendEmailOfTest(recipient, mailTitle, mailContent)) {
-            resultData.setMassage("发送成功，若长时间未收到请将“test_cams@126.com”加入收信白名单");
+            resultData.setMessage("发送成功，若长时间未收到请将“test_cams@126.com”加入收信白名单");
         } else {
             logger.error("sendEmailOfTest() -> SendEmail Fail");
-            resultData.setMassage("发送失败，未知错误");
+            resultData.setMessage("发送失败，未知错误");
         }
         return resultData;
     }

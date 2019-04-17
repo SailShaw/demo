@@ -125,7 +125,7 @@ public class ApplicationController {
         } else {
             logger.error(" verifyFormById() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" verifyFormById() -> End");
         return resultData;
@@ -148,11 +148,11 @@ public class ApplicationController {
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             //执行
             applicationService.modifyFormById(application);
-            resultData.setMassage("修改成功");
+            resultData.setMessage("修改成功");
         } else {
             logger.error(" modifyFormById() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" modifyFormById() -> End");
         return resultData;
@@ -177,44 +177,43 @@ public class ApplicationController {
             //注入对象
             application.setUserId(userInfo.getUserId());
             application.setGroupId(userInfo.getGroupId());
+            application.setZnName(userInfo.getZnName());
             //执行
             applicationService.createAppForm(application);
-            resultData.setMassage("修改成功");
+            resultData.setMessage("修改成功");
         } else {
             logger.error("createPlace() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" createAppForm() -> End");
         return resultData;
     }
 
-    /**
-     * 关闭表单:关闭后只能查看不能编辑
-     *
-     * @param application
-     * @return
-     * @throws IllegalAccessException
-     */
     @Validate
     @Operation("关闭表单")
     @RequestMapping("/closeFormById")
     public ResultData closeFormById(Application application) throws IllegalAccessException {
-        logger.info(" closeFormById() -> Begin");
+        logger.info(" () -> Begin");
         ResultData resultData = new ResultData();
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             //执行
+            application.setIsOff("1");
             applicationService.closeFormById(application);
-            resultData.setMassage("关闭成功");
         } else {
-            logger.error(" closeFormById() ->" + ERROR_INFO);
+            logger.error("createPlace() -> 20001:JSON_IS_NULL ");
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
-        logger.info(" closeFormById() -> End");
+        logger.info(" () -> End");
         return resultData;
     }
+
+
+
+
+
 
     /**
      * 删除表单:逻辑删除表单
@@ -223,6 +222,7 @@ public class ApplicationController {
      * @return
      * @throws IllegalAccessException
      */
+    @Validate
     @Operation("删除表单")
     @RequestMapping("/deleteFormById")
     public ResultData deleteFormById(Application application) throws IllegalAccessException {
@@ -231,12 +231,13 @@ public class ApplicationController {
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(application, new String[]{"serialVersionUID"})) {
             //执行
+            application.setIsEff("1");
             applicationService.deleteFormById(application);
-            resultData.setMassage("修改成功");
+            resultData.setMessage("修改成功");
         } else {
             logger.error(" deleteFormById() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" deleteFormById() -> End");
         return resultData;
@@ -250,6 +251,7 @@ public class ApplicationController {
      * @return
      * @throws IllegalAccessException
      */
+    @Validate
     @Operation("查询表单详情")
     @RequestMapping("/getDetailToCache")
     public ResultData getDetailToCache(HttpServletRequest request, Application application) throws IllegalAccessException {
@@ -261,11 +263,11 @@ public class ApplicationController {
             Application cache = applicationService.getFormInfoByFormId(application);
             //存入session
             request.getSession().setAttribute("cache", cache);
-            resultData.setMassage("修改成功");
+            resultData.setMessage("修改成功");
         } else {
             logger.error("getDetailToCache() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" getDetailToCache() -> End");
         return resultData;
@@ -278,6 +280,7 @@ public class ApplicationController {
      * @return
      * @throws IllegalAccessException
      */
+    @Validate
     @Operation("获取表单详情")
     @RequestMapping("/getDetailOnCache")
     public ResultData getDetailOnCache(HttpServletRequest request) throws IllegalAccessException {
@@ -293,7 +296,7 @@ public class ApplicationController {
         } else {
             logger.error("getDetailOnCache() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" getDetailOnCache() -> End");
         return resultData;

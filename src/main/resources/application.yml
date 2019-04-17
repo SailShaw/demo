@@ -1,6 +1,11 @@
 server:
   #设置端口
   port: 8888
+  max-http-header-size: 8192
+  tomcat:
+    remote-ip-header: x-forward-for
+    uri-encoding: UTF-8
+    max-threads: 1000
 
 #spring配置
 spring:
@@ -13,6 +18,7 @@ spring:
     url: jdbc:mysql://localhost:3306/cams?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true
     username: root
     password: 1009
+#    password: Fan.1009
     type: com.alibaba.druid.pool.DruidDataSource
       #druid 设置
     druid:

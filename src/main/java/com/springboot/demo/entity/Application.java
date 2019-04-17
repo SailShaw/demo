@@ -17,7 +17,7 @@ public class Application implements Serializable {
     private String formId;//表单ID
     private String userId;//用户ID
     private String groupId;//部门ID
-    private String palceId;//资源ID
+    private String placeId;//资源ID
 
     private String activityTitle;//活动描述
     private String activityContent;//场地ID
@@ -70,12 +70,12 @@ public class Application implements Serializable {
         this.groupId = groupId;
     }
 
-    public String getPalceId() {
-        return palceId;
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setPalceId(String palceId) {
-        this.palceId = palceId;
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 
     public String getActivityTitle() {

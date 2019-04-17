@@ -91,17 +91,22 @@ public class UserController {
         User userInfo = (User) request.getSession().getAttribute("user");
         //判空
         if (ObjectHandle.reflectFieldIsNotALLNull(user,new String[]{"serialVersionUID"})){
+            //设置id
             user.setUserId(userInfo.getUserId());
+            //执行修改
             userService.modifyUserInfoById(user);
+            //Session替换
             request.getSession().removeAttribute("user");
             User reUser = userMapper.findUserByUser(user);
+            //移除密码
+            reUser.setPassword(null);
             request.getSession().setAttribute("user",reUser);
         }else{
-            logger.error("createPlace() ->" + ERROR_INFO);
+            logger.error(" modifyUserInfoById() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
-        logger.info(" () -> End");
+        logger.info(" modifyUserInfoById() -> End");
         return resultData;
     }
 
@@ -109,21 +114,21 @@ public class UserController {
     @Operation("查询用户信息")
     @RequestMapping("/getUserToCache")
     public ResultData getUserToCache(HttpServletRequest request, User user) throws IllegalAccessException {
-        logger.info(" () -> Begin");
+        logger.info(" getUserToCache() -> Begin");
         ResultData resultData = new ResultData();
         //从session里获取当前用户的名字
         User userInfo = (User) request.getSession().getAttribute("user");
         //判空
         if (!ObjectHandle.reflectFieldIsNotALLNull(user, new String[]{"serialVersionUID"})) {
-            logger.error(" () ->" + ERROR_INFO);
+            logger.error(" getUserToCache() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         } else {
             //执行查询
             User cache = userMapper.findUserByUser(user);
             //存入session
             request.getSession().setAttribute("cache", cache);
-            resultData.setMassage("修改成功");
+            resultData.setMessage("修改成功");
         }
         return resultData;
     }
@@ -139,7 +144,10 @@ public class UserController {
         if (!ObjectHandle.reflectFieldIsNotALLNull(userInfo, new String[]{"serialVersionUID"})) {
             logger.error(" getUserOnCache() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setData(null);
+            resultData.setMessage("接收到的数据为空");
+        }else {
+            resultData.setData(userInfo);
         }
         logger.info(" getUserOnCache() -> End");
         return resultData;
@@ -152,10 +160,11 @@ public class UserController {
      * @param request
      * @return
      */
+    @Validate
     @Operation(value = "修改密码")
     @RequestMapping("/updatePassword")
     public ResultData updatePasswordByUser(HttpServletRequest request) {
-        logger.info(" () -> Begin");
+        logger.info(" updatePasswordByUser() -> Begin");
         ResultData resultData = new ResultData();
         //获取session
         User censor = (User) request.getSession().getAttribute("user");
@@ -165,6 +174,12 @@ public class UserController {
         String oldPassword = request.getParameter("oldPassword");
         //获取输入的新密码
         String newPassword = request.getParameter("newPassword");
+        String reNewPassword = request.getParameter("reNewPassword");
+        if (!newPassword.equals(reNewPassword)){
+            resultData.setCode(10004);
+            resultData.setMessage("两次输入的密码不一致");
+            return resultData;
+        }
         //验证旧密码是否与数据库中相同
         boolean flag = false;
         try {
@@ -174,14 +189,14 @@ public class UserController {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        if (flag == true) {
+        if (flag) {
             //执行密码修改
             user.setPassword(newPassword);
             userService.updatePassword(user);
         } else {
-            logger.error(" () ->" + ERROR_PassWord);
+            logger.error(" updatePasswordByUser() ->" + ERROR_PassWord);
             resultData.setCode(10004);
-            resultData.setMassage("密码不匹配");
+            resultData.setMessage("旧密码不匹配");
         }
         return resultData;
     }
@@ -208,7 +223,7 @@ public class UserController {
         } else {
             logger.error(" modifyURGInfoById() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" modifyURGInfoById() -> End");
         return resultData;
@@ -235,7 +250,7 @@ public class UserController {
         } else {
             logger.error(" deleteUserByID() ->" + ERROR_INFO);
             resultData.setCode(20001);
-            resultData.setMassage("接收到的数据为空");
+            resultData.setMessage("接收到的数据为空");
         }
         logger.info(" deleteUserByID() -> End");
         return resultData;

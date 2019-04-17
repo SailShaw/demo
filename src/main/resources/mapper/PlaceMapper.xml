@@ -47,6 +47,7 @@
                as updateTime,
                tp.is_eff as isEff
         from t_place as tp
+        where tp.is_eff!=1
         order by tp.update_time desc
     </select>
     <!--获取资源列表-->

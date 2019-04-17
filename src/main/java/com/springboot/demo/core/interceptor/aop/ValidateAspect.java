@@ -57,7 +57,7 @@ public class ValidateAspect {
         //判空
         if (user == null || user.getRoleId() == null) {
             resultData.setCode(101);
-            resultData.setMassage("未登录");
+            resultData.setMessage("未登录");
             object = resultData;
         } else {
             //获取该角色可访问权限清单
@@ -81,7 +81,7 @@ public class ValidateAspect {
             }else {
                 //返回403
                 resultData.setCode(403);
-                resultData.setMassage("无权访问");
+                resultData.setMessage("无权访问");
                 object = resultData;
             }
         }

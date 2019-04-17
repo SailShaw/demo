@@ -29,6 +29,7 @@
         tu.zn_name as znName,
         tu.email as email,
         tu.telphone as telphone,
+        tu.group_desc as groupDesc,
         tu.create_time as createTime,
         tr.role_id   as roleId,
         tr.role_name as roleName,

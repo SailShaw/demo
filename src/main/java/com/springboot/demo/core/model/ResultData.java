@@ -20,7 +20,7 @@ public class ResultData {
     /**
      * 自定义消息
      */
-    private String massage;
+    private String message;
 
     public static int SUCCESS_CODE = 200;
     private String SUCCESS_MSG = "操作成功";
@@ -28,25 +28,25 @@ public class ResultData {
     /* ConStructor */
     public ResultData() {
         this.code = SUCCESS_CODE;
-        this.massage = SUCCESS_MSG;
+        this.message = SUCCESS_MSG;
 
     }
 
-    public ResultData(int code, String massage) {
+    public ResultData(int code, String message) {
         this.code = code;
-        this.massage = massage;
+        this.message = message;
     }
 
     public ResultData(Object data) {
         this.code=SUCCESS_CODE;
-        this.massage = SUCCESS_MSG;
+        this.message = SUCCESS_MSG;
         this.data = data;
     }
 
-    public ResultData(int code, Object data, String massage) {
+    public ResultData(int code, Object data, String message) {
         this.code = code;
         this.data = data;
-        this.massage = massage;
+        this.message = message;
     }
 
     /* Getter & Setter */
@@ -67,11 +67,11 @@ public class ResultData {
         this.data = data;
     }
 
-    public String getMassage() {
-        return massage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMassage(String massage) {
-        this.massage = massage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

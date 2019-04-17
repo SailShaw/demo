@@ -63,19 +63,14 @@ public interface IApplicationService {
     Application getFormInfoByFormId(Application application);
 
     /**
-     * 关闭表单
-     *
-     * @param application
-     * @return
-     */
-    void closeFormById(Application application);
-
-    /**
      * 删除表单
      *
      * @param application
      * @return
      */
     void deleteFormById(Application application);
+
+
+    void closeFormById(Application application);
 
 }

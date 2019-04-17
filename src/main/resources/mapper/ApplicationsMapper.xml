@@ -5,7 +5,7 @@
         <result column="formId" jdbcType="VARCHAR"/>
         <result column="userId" jdbcType="VARCHAR"/>
         <result column="groupId" jdbcType="VARCHAR"/>
-        <result column="palceId" jdbcType="VARCHAR"/>
+        <result column="placeId" jdbcType="VARCHAR"/>
         <result column="activityTitle" jdbcType="VARCHAR"/>
         <result column="activityContent" jdbcType="VARCHAR"/>
         <result column="attendance" jdbcType="VARCHAR"/>
@@ -98,7 +98,7 @@
           form_id, user_id, group_id, place_id,
           activity_title, activity_content, attendance,
           start_date, end_date,create_time
-        ) values(#{formId},#{userId},#{groupId},#{palceId},
+        ) values(#{formId},#{userId},#{groupId},#{placeId},
         #{activityTitle},#{activityContent},#{attendance},
         #{startDate},#{endDate},#{createTime})
     </insert>

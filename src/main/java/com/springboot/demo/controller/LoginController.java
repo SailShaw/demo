@@ -54,7 +54,7 @@ public class LoginController {
         if (ObjectHandle.reflectFieldIsNotALLNull(censor, new String[]{"serialVersionUID"})) {
             logger.info("register() -> 10002:USER_IS_EXIST");
             resultData.setCode(10002);
-            resultData.setMassage("账号已存在");
+            resultData.setMessage("账号已存在");
         } else {
             //执行注册
             logger.info("register() -> SUCCESS");
@@ -73,14 +73,14 @@ public class LoginController {
         if (censor == null) {
             logger.info("login() -> 10003:USER_NOT_EXIST");
             resultData.setCode(10003);
-            resultData.setMassage("用户不存在");
+            resultData.setMessage("用户不存在");
             return resultData;
         }
         boolean flag = MD5.checkpassword(user.getPassword(), censor.getPassword());
         if (!flag) {
             logger.info("login() -> PASSWORD_NOT_MATCH");
             resultData.setCode(10004);
-            resultData.setMassage("密码不正确");
+            resultData.setMessage("密码不正确");
             return resultData;
         }
         //记录登录日期
@@ -89,7 +89,7 @@ public class LoginController {
         censor.setPassword(null);
         //存入session
         request.getSession().setAttribute("user", censor);
-        resultData.setMassage("登录成功");
+        resultData.setMessage("登录成功");
         logger.info("login() -> SUCCESS");
         return resultData;
     }
@@ -117,7 +117,7 @@ public class LoginController {
         if (!ObjectHandle.reflectFieldIsNotALLNull(userInfo, new String[]{"serialVersionUID"})) {
             logger.debug("findUserByEmail() -> 10006:ACCOUNT_NOT_MATCH_EMAIL");
             resultData.setCode(10006);
-            resultData.setMassage("账号与邮箱不匹配,请注意大小写");
+            resultData.setMessage("账号与邮箱不匹配,请注意大小写");
         } else {
             map.put("verifyCode", verifyCode);
             map.put("userInfo", userInfo);
@@ -157,7 +157,7 @@ public class LoginController {
         } else {
             logger.debug("resetPasswordByCode() -> 10007:VERIFYCODE_NOT_MATCH");
             resultData.setCode(10007);
-            resultData.setMassage("验证码不正确");
+            resultData.setMessage("验证码不正确");
         }
         return resultData;
     }
@@ -174,7 +174,7 @@ public class LoginController {
         request.getSession().removeAttribute("user");
         logger.info("loginOut() -> User Login Out");
         ResultData resultData = new ResultData();
-        resultData.setMassage("注销成功");
+        resultData.setMessage("注销成功");
         return resultData;
     }
 

@@ -84,11 +84,11 @@ public class PlaceController {
             //设置创建者
             place.setCreateBy(userInfo.getZnName());
             placeService.createPlace(place);
-            resultData.setMassage("添加成功");
+            resultData.setMessage("添加成功");
         } else {
             logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
             resultData.setCode(10001);
-            resultData.setMassage("未登录");
+            resultData.setMessage("未登录");
         }
         logger.info("getPlaceListByPage() -> End");
         return resultData;
@@ -114,11 +114,11 @@ public class PlaceController {
             //设置更新者
             place.setUpdateBy(userInfo.getZnName());
             placeService.modifyPlace(place);
-            resultData.setMassage("修改成功");
+            resultData.setMessage("修改成功");
         } else {
             logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
             resultData.setCode(10001);
-            resultData.setMassage("未登录");
+            resultData.setMessage("未登录");
         }
         logger.info("modifyPlace() -> End");
         return resultData;
@@ -142,12 +142,13 @@ public class PlaceController {
         if (ObjectHandle.reflectFieldIsNotALLNull(place, new String[]{"serialVersionUID"})) {
             //设置更新者
             place.setUpdateBy(userInfo.getZnName());
+            place.setIsEff("1");
             placeService.deletePlace(place);
-            resultData.setMassage("删除成功");
+            resultData.setMessage("删除成功");
         } else {
             logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
             resultData.setCode(10001);
-            resultData.setMassage("未登录");
+            resultData.setMessage("未登录");
         }
         logger.info("modifyPlace() -> End");
         return resultData;
@@ -175,7 +176,7 @@ public class PlaceController {
         } else {
             logger.error("createPlace() -> 10001:USER_NOT_LOGIN");
             resultData.setCode(10001);
-            resultData.setMassage("未登录");
+            resultData.setMessage("未登录");
         }
         logger.info("findPlaceById() -> End");
         return resultData;

@@ -65,6 +65,8 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     /**
      * 审核申请表
+     * 1.审核通过后执行关闭表单
+     * 2.不通过直接忽略
      *
      * @param application
      */
@@ -84,6 +86,9 @@ public class ApplicationServiceImpl implements IApplicationService {
         application.setVerifyTime(TimeHelper.getNowTime());
         //修改审核状态
         applicationMapper.verifyFormById(application);
+        if (application.getVerifyStatus() == "1") {
+            applicationMapper.closeFormById(application);
+        }
         //发送邮件(邮箱地址,标题,正文,是否是html)
         MailUtil.send(recipient, mailTitle, mailText, true);
     }
@@ -108,6 +113,8 @@ public class ApplicationServiceImpl implements IApplicationService {
     public void createAppForm(Application application) {
         //表单ID自动生成
         application.setFormId(String.valueOf(snowFlake.nextId()));
+        //设定提交事件
+        application.setCreateTime(TimeHelper.getNowTime());
         //执行新增操作
         applicationMapper.createAppForm(application);
 
@@ -124,16 +131,6 @@ public class ApplicationServiceImpl implements IApplicationService {
         return details;
     }
 
-    /**
-     * 关闭表单
-     *
-     * @param application
-     * @return
-     */
-    @Override
-    public void closeFormById(Application application) {
-        applicationMapper.closeFormById(application);
-    }
 
     /**
      * 删除表单
@@ -145,4 +142,17 @@ public class ApplicationServiceImpl implements IApplicationService {
     public void deleteFormById(Application application) {
         applicationMapper.deleteFormById(application);
     }
+
+    /**
+     * 关闭表单
+     *
+     * @param application
+     * @return
+     */
+    @Override
+    public void closeFormById(Application application) {
+        applicationMapper.closeFormById(application);
+    }
+
+
 }
