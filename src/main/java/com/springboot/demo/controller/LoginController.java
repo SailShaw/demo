@@ -83,6 +83,13 @@ public class LoginController {
             resultData.setMessage("密码不正确");
             return resultData;
         }
+        //身份验证
+        if(censor.getRoleId() == null){
+            logger.info("login() -> NO_ROLE");
+            resultData.setCode(10010);
+            resultData.setMessage("管理员为您分配角色后，您才可以进入系统");
+            return resultData;
+        }
         //记录登录日期
         userService.recordLoginTime(censor);
         //存入session前将密码置为null
